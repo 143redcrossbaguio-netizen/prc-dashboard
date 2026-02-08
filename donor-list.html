@@ -60,7 +60,7 @@ table {
 }
 
 table, th, td { border: 1px solid #ccc; }
-th, td { padding: 8px; text-align: left; font-size: 14px; }
+th, td { padding: 6px; text-align: left; font-size: 12px; }
 
 th { background: #c62828; color: #fff; }
 
@@ -69,8 +69,12 @@ th { background: #c62828; color: #fff; }
 .blood-AB { background: #ffadad; }
 .blood-O { background: #fff; }
 
+.action-col { text-align: center; }
+
 @media print {
-  button, .action-col { display: none; }
+  button, .action-col, .filters { display: none; }
+  @page { size: A4 landscape; margin: 10mm; }
+  body { font-size: 11px; }
 }
 </style>
 </head>
@@ -102,8 +106,8 @@ th { background: #c62828; color: #fff; }
         <option value="O-">O-</option>
       </select>
     </label>
-    <label>Search Name:
-      <input type="text" id="searchName" oninput="renderTable()">
+    <label>Search:
+      <input type="text" id="searchAll" oninput="renderTable()" placeholder="Search all data">
     </label>
   </div>
 
@@ -145,14 +149,23 @@ let donors = JSON.parse(localStorage.getItem('donors') || '[]');
 function renderTable() {
   const tbody = document.querySelector('#donorTable tbody');
   tbody.innerHTML = '';
-  const bloodFilter = document.getElementById('filterBlood').value;
-  const nameSearch = document.getElementById('searchName').value.toLowerCase();
+  const bloodFilter = document.getElementById('filterBlood').value.toUpperCase();
+  const search = document.getElementById('searchAll').value.toLowerCase();
   
   let count = 0;
   donors.forEach((d,i)=>{
-    if(bloodFilter && d.bloodType !== bloodFilter) return;
-    if(nameSearch && !(d.firstName.toLowerCase().includes(nameSearch) || d.surname.toLowerCase().includes(nameSearch))) return;
+    // Blood type filter
+    if(bloodFilter && d.bloodType.toUpperCase() !== bloodFilter) return;
+    // Search all fields
+    const values = Object.values(d).join(" ").toLowerCase();
+    if(search && !values.includes(search)) return;
+
     count++;
+    // Abbreviate Bag Used / Bag Type / Amount for printing
+    const bagUsed = d.bagUsed.toLowerCase()==="karmi"?"K":d.bagUsed.toLowerCase()==="terumo"?"T":d.bagUsed;
+    const bagType = d.bagType.toLowerCase()==="single"?"S":d.bagType.toLowerCase()==="double"?"D":d.bagType.toLowerCase()==="triple"?"T":d.bagType;
+    const amount = d.amount.toLowerCase()==="450ml"?"4":d.amount.toUpperCase();
+
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${count}</td>
@@ -170,9 +183,9 @@ function renderTable() {
       <td>${d.serial}</td>
       <td class="blood-${d.bloodType[0]}">${d.bloodType}</td>
       <td>${d.times}</td>
-      <td>${d.bagUsed}</td>
-      <td>${d.bagType}</td>
-      <td>${d.amount}</td>
+      <td>${bagUsed}</td>
+      <td>${bagType}</td>
+      <td>${amount}</td>
       <td>${d.timeStart}</td>
       <td>${d.timeEnd}</td>
       <td class="action-col">
@@ -186,11 +199,8 @@ function renderTable() {
 
 // Edit donor
 function editDonor(index) {
-  const donor = donors[index];
   localStorage.setItem('editIndex', index);
-  // redirect to donor entry page
   location.href='donor-entry.html';
-  // Donor Entry page should detect editIndex and pre-fill the form
 }
 
 // Delete donor
@@ -202,12 +212,15 @@ function deleteDonor(index) {
   }
 }
 
-// Export to CSV
+// Export to CSV (for Google Sheets)
 function exportToCSV() {
   let csv = "data:text/csv;charset=utf-8,";
   csv += ["No","Date","Donor Type","Suffix","Surname","First Name","Middle Name","Birthday","Age","Contact","Address","City","Serial","Blood Type","Times Donated","Bag Used","Bag Type","Amount","Time Started","Time Ended"].join(",") + "\n";
   donors.forEach((d,i)=>{
-    csv += [i+1,d.date,d.donorType,d.suffix,d.surname,d.firstName,d.middleName,d.birthday,d.age,d.contact,d.address,d.city,d.serial,d.bloodType,d.times,d.bagUsed,d.bagType,d.amount,d.timeStart,d.timeEnd].join(",") + "\n";
+    const bagUsed = d.bagUsed.toLowerCase()==="karmi"?"K":d.bagUsed.toLowerCase()==="terumo"?"T":d.bagUsed;
+    const bagType = d.bagType.toLowerCase()==="single"?"S":d.bagType.toLowerCase()==="double"?"D":d.bagType.toLowerCase()==="triple"?"T":d.bagType;
+    const amount = d.amount.toLowerCase()==="450ml"?"4":d.amount.toUpperCase();
+    csv += [i+1,d.date,d.donorType,d.suffix,d.surname,d.firstName,d.middleName,d.birthday,d.age,d.contact,d.address,d.city,d.serial,d.bloodType,d.times,bagUsed,bagType,amount,d.timeStart,d.timeEnd].join(",") + "\n";
   });
   const link = document.createElement("a");
   link.setAttribute("href", encodeURI(csv));
