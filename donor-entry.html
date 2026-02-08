@@ -76,7 +76,8 @@ input[type="submit"]:hover, button:hover { background:#a11212; }
 <input type="text" id="contact2" maxlength="3" placeholder="XXX" style="width:50px">
 <input type="text" id="contact3" maxlength="4" placeholder="XXXX" style="width:60px">
 <label>Serial Number</label>
-<input type="text" id="serial" value="PRC2600-" style="width:120px">
+<input type="text" value="PRC2600-" readonly style="width:90px">
+<input type="text" id="serialNumber" placeholder="Enter Number" style="width:80px">
 </div>
 
 <!-- Blood Type + Times Donated -->
@@ -105,7 +106,9 @@ input[type="submit"]:hover, button:hover { background:#a11212; }
 <input type="submit" value="Submit">
 </div>
 
-<!-- Navigation Buttons -->
+</form>
+
+<!-- Navigation Buttons OUTSIDE the form so they don't submit -->
 <div class="center-btn">
 <button onclick="window.location.href='donor-list.html'">Go to Donor List</button>
 <button onclick="window.location.href='index.html'">Back to Homepage</button>
@@ -218,7 +221,8 @@ document.getElementById("donorForm").addEventListener("submit", function(e){
         contact1:contact1.value,
         contact2:contact2.value,
         contact3:contact3.value,
-        serial:document.getElementById("serial").value,
+        serialPrefix:"PRC2600-",
+        serialNumber:document.getElementById("serialNumber").value,
         bloodType:document.getElementById("bloodType").value,
         numDonations:document.getElementById("numDonations").value,
         bloodBag:bloodBag.value,
