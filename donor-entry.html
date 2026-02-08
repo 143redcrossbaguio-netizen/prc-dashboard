@@ -34,21 +34,21 @@ label { width:130px; }
 
 <form id="donorForm">
 
-<!-- Row 0: Date Today -->
+<!-- Date -->
 <div class="row">
 <label>Date:</label>
 <input type="date" id="entryDate">
 </div>
 
-<!-- Row 1: Donor Type -->
+<!-- Donor Type -->
 <div class="row">
 <label>Donor Type:</label>
 <input type="text" id="donorType" maxlength="1" placeholder="W/M/P">
-<input type="text" id="donorTypeAuto" readonly class="text" placeholder="Walk-in/MBD/Patient Directed">
-<input type="text" id="extraType" placeholder="Specify if MBD or Patient Directed">
+<input type="text" id="donorTypeAuto" readonly class="text" placeholder="">
+<input type="text" id="extraType" placeholder="Specify if MBD/Patient Directed">
 </div>
 
-<!-- Row 2: Suffix + Name -->
+<!-- Name Row -->
 <div class="row">
 <label>Suffix:</label>
 <input type="text" id="suffix" maxlength="4" class="small">
@@ -60,7 +60,7 @@ label { width:130px; }
 <input type="text" id="middleName" class="auto-resize">
 </div>
 
-<!-- Row 3: Birthday + Age -->
+<!-- Birthday + Age -->
 <div class="row">
 <label>Birthday:</label>
 <input type="text" id="bdayDay" class="mini" placeholder="DD" maxlength="2">
@@ -70,7 +70,7 @@ label { width:130px; }
 <input type="text" id="age" readonly class="small">
 </div>
 
-<!-- Row 4: Address + City -->
+<!-- Address + City -->
 <div class="row">
 <label>Address:</label>
 <input type="text" id="address" class="auto-resize">
@@ -78,7 +78,7 @@ label { width:130px; }
 <input type="text" id="city" class="auto-resize" maxlength="15">
 </div>
 
-<!-- Row 5: Contact Number -->
+<!-- Contact Number -->
 <div class="row">
 <label>Contact Number:</label>
 <input type="text" id="contact1" maxlength="4" class="mini"> -
@@ -86,14 +86,14 @@ label { width:130px; }
 <input type="text" id="contact3" maxlength="4" class="mini">
 </div>
 
-<!-- Row 6: Serial Number -->
+<!-- Serial Number -->
 <div class="row">
 <label>Serial Number:</label>
 <input type="text" class="serial-prefix" value="PRC2600-" readonly>
 <input type="text" id="serialNum" maxlength="10" class="small">
 </div>
 
-<!-- Row 7: Blood Type + Times Donated -->
+<!-- Blood Type + Times Donated -->
 <div class="row">
 <label>Blood Type:</label>
 <input type="text" id="bloodType" maxlength="3" class="blood-type">
@@ -101,7 +101,7 @@ label { width:130px; }
 <input type="number" id="timesDonated" min="1" class="small" value="1">
 </div>
 
-<!-- Row 8: Blood Bag & Amount -->
+<!-- Blood Bag -->
 <div class="row">
 <label>Blood Bag Used:</label>
 <input type="text" id="bagUsed" maxlength="1" class="small" placeholder="K/T">
@@ -111,7 +111,7 @@ label { width:130px; }
 <input type="text" id="amount" maxlength="1" class="small" placeholder="4/Q/U">
 </div>
 
-<!-- Row 9: Time Started / Ended -->
+<!-- Time Started/Ended -->
 <div class="row">
 <label>Time Started:</label>
 <input type="text" id="timeStartHH" maxlength="2" class="mini" placeholder="HH">
@@ -131,11 +131,11 @@ label { width:130px; }
 </form>
 
 <script>
-// Date Today
+// Prefill Date Today
 const today = new Date().toISOString().split('T')[0];
 document.getElementById("entryDate").value = today;
 
-// Donor Type autofill & extra box
+// Donor Type autofill
 document.getElementById("donorType").addEventListener("input", function(){
     const val = this.value.toUpperCase();
     const auto = document.getElementById("donorTypeAuto");
@@ -146,11 +146,11 @@ document.getElementById("donorType").addEventListener("input", function(){
     else { auto.value=""; extra.style.display="none"; }
 });
 
-// Birthday -> Age + cursor move
+// Birthday -> Age + auto cursor
 function calcAgeAndMove(e){
     const day=document.getElementById("bdayDay");
     const month=document.getElementById("bdayMonth");
-    let year=document.getElementById("bdayYear");
+    const year=document.getElementById("bdayYear");
     if(year.value.length===2) year.value="19"+year.value;
     const birth=new Date(year.value,month.value-1,day.value);
     const today=new Date();
@@ -167,27 +167,34 @@ function calcAgeAndMove(e){
 
 // Blood Type autofill
 document.getElementById("bloodType").addEventListener("input", function(){
-    const val=this.value.toUpperCase();
     const map={"AP":"A+","AN":"A-","BP":"B+","BN":"B-","ABP":"AB+","ABN":"AB-","OP":"O+","ON":"O-"};
+    const val=this.value.toUpperCase();
     if(map[val]) this.value=map[val];
 });
 
-// Blood Bag / Bag Type / Amount
-document.getElementById("bagUsed").addEventListener("input",function(){
-    const val=this.value.toUpperCase(); if(val==="K") this.value="Karmi"; else if(val==="T") this.value="Terumo";
+// Blood Bag, Bag Type, Amount
+document.getElementById("bagUsed").addEventListener("input", function(){
+    const val=this.value.toUpperCase();
+    if(val==="K") this.value="Karmi";
+    else if(val==="T") this.value="Terumo";
 });
-document.getElementById("bagType").addEventListener("input",function(){
+document.getElementById("bagType").addEventListener("input", function(){
     const map={"S":"Single","D":"Double","T":"Triple","Q":"Quadruple"};
-    const val=this.value.toUpperCase(); if(map[val]) this.value=map[val];
+    const val=this.value.toUpperCase();
+    if(map[val]) this.value=map[val];
 });
-document.getElementById("amount").addEventListener("input",function(){
+document.getElementById("amount").addEventListener("input", function(){
     const map={"4":"450ml","Q":"QNS","U":"UB"};
-    const val=this.value.toUpperCase(); if(map[val]) this.value=map[val];
+    const val=this.value.toUpperCase();
+    if(map[val]) this.value=map[val];
 });
 
-// Time fields auto-cursor
+// Auto cursor for Time fields
 ["timeStartHH","timeStartMM","timeEndHH","timeEndMM"].forEach((id,index,arr)=>{
-    document.getElementById(id).addEventListener("input",function(){
+    document.getElementById(id).addEventListener("input", function(){
+        let val = parseInt(this.value);
+        if((id.includes("HH") && val>12) this.value="") ;
+        if((id.includes("MM") && val>60) this.value="") ;
         if(this.value.length===2 && index<arr.length-1) document.getElementById(arr[index+1]).focus();
     });
 });
@@ -216,20 +223,19 @@ function submitDonor(){
         timeStart: document.getElementById("timeStartHH").value+":"+document.getElementById("timeStartMM").value,
         timeEnd: document.getElementById("timeEndHH").value+":"+document.getElementById("timeEndMM").value
     };
-    let donors=JSON.parse(localStorage.getItem("donors")||"[]");
+    let donors = JSON.parse(localStorage.getItem("donors") || "[]");
     donors.push(donor);
-    localStorage.setItem("donors",JSON.stringify(donors));
+    localStorage.setItem("donors", JSON.stringify(donors));
     alert("Donor saved!");
     document.getElementById("donorForm").reset();
     document.getElementById("donorTypeAuto").value="";
     document.getElementById("extraType").style.display="none";
-    document.getElementById("entryDate").value=today;
+    document.getElementById("entryDate").value = today;
 }
 
 // Navigation
 function goHome(){ window.location.href="index.html"; }
 function goDonorList(){ window.location.href="donor-list.html"; }
-
 </script>
 
 </body>
