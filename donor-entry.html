@@ -2,157 +2,152 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Donor Entry | Philippine Red Cross</title>
+<title>Donor Entry | PRC Baguio</title>
 
 <style>
-:root {
-  --prc-red: #c62828;
-  --border: #dcdcdc;
-  --bg-soft: #f7f9fb;
-  --text-dark: #263238;
-  --text-muted: #607d8b;
+:root{
+  --prc-red:#c62828;
+  --gray-900:#263238;
+  --gray-700:#546e7a;
+  --gray-300:#cfd8dc;
+  --gray-200:#eceff1;
+  --gray-100:#f7f9fb;
 }
 
-body {
-  margin: 0;
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: #ffffff;
-  color: var(--text-dark);
+body{
+  margin:0;
+  font-family:"Inter","Segoe UI",Arial,sans-serif;
+  background:#fff;
+  color:var(--gray-900);
 }
 
 /* HEADER */
-header {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 28px;
-  border-bottom: 2px solid var(--prc-red);
+header{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:14px 28px;
+  border-bottom:1px solid var(--gray-300);
 }
 
-header img {
-  height: 48px;
+header img{height:46px;}
+header h2{
+  margin:0;
+  font-size:18px;
+  font-weight:700;
+  color:var(--prc-red);
 }
 
-header h2 {
-  margin: 0;
-  font-size: 18px;
-  color: var(--prc-red);
-  font-weight: 700;
+/* PAGE */
+.container{
+  max-width:1280px;
+  margin:24px auto;
+  padding:0 24px;
 }
 
-/* CONTAINER */
-.container {
-  max-width: 1280px;
-  margin: 24px auto;
-  padding: 0 24px;
+/* CARD */
+.section{
+  background:#fff;
+  border:1px solid var(--gray-300);
+  border-radius:6px;
+  padding:18px 20px;
+  margin-bottom:20px;
 }
 
-/* SECTION */
-.section {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 18px 20px;
-  margin-bottom: 20px;
+.section-title{
+  font-size:13px;
+  font-weight:700;
+  color:var(--gray-700);
+  text-transform:uppercase;
+  margin-bottom:14px;
+  letter-spacing:.5px;
 }
 
-.section-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--prc-red);
-  margin-bottom: 14px;
-  text-transform: uppercase;
-}
-
-/* ROW */
-.row {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
+/* FORM ROW */
+.row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:12px;
+  flex-wrap:wrap;
 }
 
 /* LABEL */
-label {
-  min-width: 140px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-muted);
+label{
+  min-width:140px;
+  font-size:13px;
+  font-weight:600;
+  color:var(--gray-700);
 }
 
 /* INPUT */
-input {
-  padding: 7px 9px;
-  font-size: 13px;
-  border: 1px solid var(--border);
-  border-radius: 4px;
+input{
+  background:#fff;
+  border:1px solid var(--gray-300);
+  padding:7px 9px;
+  border-radius:4px;
+  font-size:13px;
+  color:var(--gray-900);
 }
 
-input:focus {
-  outline: none;
-  border-color: var(--prc-red);
+input:focus{
+  outline:none;
+  border-color:var(--prc-red);
+  box-shadow:0 0 0 1px rgba(198,40,40,.15);
 }
 
-/* SIZES */
-.auto { flex: 1; min-width: 160px; }
-.small { width: 120px; }
-.mini { width: 72px; }
+/* WIDTH HELPERS */
+.auto{flex:1;min-width:160px;}
+.small{width:120px;}
+.mini{width:72px;}
 
-/* SERIAL */
-.serial-prefix {
-  background: var(--bg-soft);
-  padding: 7px 10px;
-  border-radius: 4px;
-  border: 1px solid var(--border);
-  font-weight: 600;
+/* SERIAL PREFIX */
+.serial-prefix{
+  background:var(--gray-100);
+  border:1px solid var(--gray-300);
+  padding:6px 10px;
+  border-radius:4px;
+  font-weight:600;
+  color:var(--gray-700);
 }
 
 /* BUTTONS */
-.buttons {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 24px;
-  padding-top: 14px;
-  border-top: 1px solid var(--border);
+.buttons{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:26px;
+  padding-top:14px;
+  border-top:1px solid var(--gray-300);
 }
 
-.center-buttons {
-  display: flex;
-  gap: 10px;
+.center-buttons{
+  display:flex;
+  gap:10px;
 }
 
-button {
-  padding: 9px 18px;
-  border-radius: 4px;
-  border: none;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
+button{
+  border:none;
+  border-radius:4px;
+  padding:9px 18px;
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
 }
 
-.primary {
-  background: var(--prc-red);
-  color: #fff;
+.primary{
+  background:var(--prc-red);
+  color:#fff;
 }
+.primary:hover{background:#b71c1c;}
 
-.primary:hover {
-  background: #b71c1c;
+.secondary{
+  background:var(--gray-200);
+  color:var(--gray-900);
 }
+.secondary:hover{background:#dde3e7;}
 
-.secondary {
-  background: #f1f3f5;
-  color: #333;
-}
-
-.secondary:hover {
-  background: #e0e0e0;
-}
-
-#donorExtra {
-  display: none;
-}
+#donorExtra{display:none;}
 </style>
 </head>
 
@@ -178,7 +173,7 @@ button {
   <div class="row">
     <label>Donor Type</label>
     <input id="donorType" class="small">
-    <input id="donorExtra" class="auto" placeholder="Specify (MBD / Patient)">
+    <input id="donorExtra" class="auto" placeholder="Specify if required">
   </div>
 </div>
 
@@ -279,52 +274,45 @@ button {
 </div>
 
 <script>
-// Date
-entryDate.value = new Date().toISOString().split("T")[0];
+/* LOGIC – UNCHANGED */
+entryDate.value=new Date().toISOString().split("T")[0];
 
-// Donor Type
-donorType.oninput = () => {
-  const v = donorType.value.toUpperCase();
-  donorExtra.style.display = (v === "M" || v === "P") ? "inline-block" : "none";
-  if (v === "W") donorType.value = "Walk-in";
-  if (v === "M") donorType.value = "MBD";
-  if (v === "P") donorType.value = "Patient Directed";
+donorType.oninput=()=>{
+  const v=donorType.value.toUpperCase();
+  donorExtra.style.display=(v==="M"||v==="P")?"inline-block":"none";
+  if(v==="W") donorType.value="Walk-in";
+  if(v==="M") donorType.value="MBD";
+  if(v==="P") donorType.value="Patient Directed";
 };
 
-// Birthday
-bd.oninput = () => bd.value.length === 2 && bm.focus();
-bm.oninput = () => bm.value.length === 2 && by.focus();
-by.oninput = () => {
-  if (by.value.length === 2) by.value = "19" + by.value;
-  age.value = new Date().getFullYear() - new Date(by.value, bm.value - 1, bd.value).getFullYear();
+bd.oninput=()=>bd.value.length===2&&bm.focus();
+bm.oninput=()=>bm.value.length===2&&by.focus();
+by.oninput=()=>{
+  if(by.value.length===2) by.value="19"+by.value;
+  age.value=new Date().getFullYear()-new Date(by.value,bm.value-1,bd.value).getFullYear();
 };
 
-// Contact
-c1.oninput = () => c1.value.length === 4 && c2.focus();
-c2.oninput = () => c2.value.length === 3 && c3.focus();
+c1.oninput=()=>c1.value.length===4&&c2.focus();
+c2.oninput=()=>c2.value.length===3&&c3.focus();
 
-// Blood Type
-bloodType.oninput = () => {
-  const map = {AP:"A+",AN:"A-",BP:"B+",BN:"B-",ABP:"AB+",ABN:"AB-",OP:"O+",ON:"O-"};
-  const v = bloodType.value.toUpperCase();
-  if (map[v]) bloodType.value = map[v];
+bloodType.oninput=()=>{
+  const map={AP:"A+",AN:"A-",BP:"B+",BN:"B-",ABP:"AB+",ABN:"AB-",OP:"O+",ON:"O-"};
+  if(map[bloodType.value.toUpperCase()]) bloodType.value=map[bloodType.value.toUpperCase()];
 };
 
-// Bags
-bagUsed.oninput = () => bagUsed.value = bagUsed.value.toUpperCase()==="K"?"Karmi":bagUsed.value.toUpperCase()==="T"?"Terumo":bagUsed.value;
-bagType.oninput = () => bagType.value = {S:"Single",D:"Double",T:"Triple"}[bagType.value.toUpperCase()] || bagType.value;
-amount.oninput = () => amount.value = {4:"450mL",Q:"QNS",U:"UB"}[amount.value.toUpperCase()] || amount.value;
+bagUsed.oninput=()=>bagUsed.value=bagUsed.value.toUpperCase()==="K"?"Karmi":bagUsed.value.toUpperCase()==="T"?"Terumo":bagUsed.value;
+bagType.oninput=()=>bagType.value={S:"Single",D:"Double",T:"Triple"}[bagType.value.toUpperCase()]||bagType.value;
+amount.oninput=()=>amount.value={4:"450mL",Q:"QNS",U:"UB"}[amount.value.toUpperCase()]||amount.value;
 
-// Time
-sh.oninput = () => sh.value.length===2 && sm.focus();
-sm.oninput = () => sm.value.length===2 && eh.focus();
-eh.oninput = () => eh.value.length===2 && em.focus();
+sh.oninput=()=>sh.value.length===2&&sm.focus();
+sm.oninput=()=>sm.value.length===2&&eh.focus();
+eh.oninput=()=>eh.value.length===2&&em.focus();
 
-function saveDonor() {
-  alert("Donor entry saved successfully");
+function saveDonor(){
+  alert("Donor entry saved");
   donorForm.reset();
-  entryDate.value = new Date().toISOString().split("T")[0];
-  donorExtra.style.display = "none";
+  entryDate.value=new Date().toISOString().split("T")[0];
+  donorExtra.style.display="none";
 }
 </script>
 
