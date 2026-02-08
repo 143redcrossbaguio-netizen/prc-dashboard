@@ -5,194 +5,201 @@
 <title>Donor Entry | PRC Baguio</title>
 
 <style>
-:root{
-  --prc-red:#c62828;
-  --gray-900:#263238;
-  --gray-700:#546e7a;
-  --gray-300:#cfd8dc;
-  --gray-200:#eceff1;
-  --gray-100:#f7f9fb;
+:root {
+  --prc-red: #c62828;
+  --gray-900: #263238;
+  --gray-700: #546e7a;
+  --gray-400: #b0bec5;
+  --gray-200: #eceff1;
+  --gray-100: #f7f9fb;
+  --input-bg: #fff;
 }
 
-body{
-  margin:0;
-  font-family:"Inter","Segoe UI",Arial,sans-serif;
-  background:#fff;
-  color:var(--gray-900);
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--gray-100);
+  margin: 0;
+  color: var(--gray-900);
 }
 
 /* HEADER */
-header{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  padding:14px 28px;
-  border-bottom:1px solid var(--gray-300);
+header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 30px;
+  border-bottom: 4px solid var(--prc-red);
+  background: var(--gray-100);
 }
 
-header img{height:46px;}
-header h2{
-  margin:0;
-  font-size:18px;
-  font-weight:700;
-  color:var(--prc-red);
+header img {
+  height: 55px;
 }
 
-/* PAGE */
-.container{
-  max-width:1280px;
-  margin:24px auto;
-  padding:0 24px;
+header h2 {
+  color: var(--prc-red);
+  margin: 0;
+  font-weight: 700;
+  font-size: 20px;
 }
 
-/* CARD */
-.section{
-  background:#fff;
-  border:1px solid var(--gray-300);
-  border-radius:6px;
-  padding:18px 20px;
-  margin-bottom:20px;
+/* CONTAINER */
+.container {
+  max-width: 1200px;
+  margin: 25px auto;
+  padding: 20px;
 }
 
-.section-title{
-  font-size:13px;
-  font-weight:700;
-  color:var(--gray-700);
-  text-transform:uppercase;
-  margin-bottom:14px;
-  letter-spacing:.5px;
+/* SECTION CARD */
+.section {
+  background: var(--input-bg);
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border-left: 6px solid var(--prc-red);
 }
 
-/* FORM ROW */
-.row{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-bottom:12px;
-  flex-wrap:wrap;
+.section-title {
+  color: var(--prc-red);
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+
+/* ROW */
+.row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
 }
 
 /* LABEL */
-label{
-  min-width:140px;
-  font-size:13px;
-  font-weight:600;
-  color:var(--gray-700);
+label {
+  font-weight: 600;
+  color: var(--gray-700);
+  min-width: 130px;
 }
 
 /* INPUT */
-input{
-  background:#fff;
-  border:1px solid var(--gray-300);
-  padding:7px 9px;
-  border-radius:4px;
-  font-size:13px;
-  color:var(--gray-900);
+input {
+  border: 1px solid var(--gray-400);
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  background: var(--input-bg);
+  color: var(--gray-900);
 }
 
-input:focus{
-  outline:none;
-  border-color:var(--prc-red);
-  box-shadow:0 0 0 1px rgba(198,40,40,.15);
+input:focus {
+  outline: none;
+  border-color: var(--prc-red);
+  box-shadow: 0 0 0 2px rgba(198,40,40,0.1);
 }
 
 /* WIDTH HELPERS */
-.auto{flex:1;min-width:160px;}
-.small{width:120px;}
-.mini{width:72px;}
+.auto { flex: 1; min-width: 160px; }
+.small { width: 120px; }
+.mini { width: 72px; }
 
 /* SERIAL PREFIX */
-.serial-prefix{
-  background:var(--gray-100);
-  border:1px solid var(--gray-300);
-  padding:6px 10px;
-  border-radius:4px;
-  font-weight:600;
-  color:var(--gray-700);
+.serial-prefix {
+  background: var(--gray-200);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  color: var(--gray-700);
 }
 
 /* BUTTONS */
-.buttons{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-top:26px;
-  padding-top:14px;
-  border-top:1px solid var(--gray-300);
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 28px;
 }
 
-.center-buttons{
-  display:flex;
-  gap:10px;
+.center-btns {
+  display: flex;
+  gap: 12px;
 }
 
-button{
-  border:none;
-  border-radius:4px;
-  padding:9px 18px;
-  font-size:13px;
-  font-weight:600;
-  cursor:pointer;
+button {
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-.primary{
-  background:var(--prc-red);
-  color:#fff;
+button.primary {
+  background: var(--prc-red);
+  color: #fff;
 }
-.primary:hover{background:#b71c1c;}
+button.primary:hover { background: #a91f1f; }
 
-.secondary{
-  background:var(--gray-200);
-  color:var(--gray-900);
+button.secondary {
+  background: var(--gray-200);
+  color: var(--gray-900);
 }
-.secondary:hover{background:#dde3e7;}
+button.secondary:hover { background: var(--gray-300); }
 
-#donorExtra{display:none;}
+#donorExtra { display: none; }
+
+/* RESPONSIVE ADJUST */
+@media(max-width: 900px){
+  label { min-width: 100px; }
+  .row { gap: 8px; }
+  .auto { min-width: 120px; }
+}
 </style>
 </head>
 
 <body>
 
 <header>
-  <img src="assets/logo.png">
+  <img src="assets/logo.png" alt="PRC Logo">
   <h2>Philippine Red Cross – Baguio City Chapter</h2>
 </header>
 
 <div class="container">
+
 <form id="donorForm">
 
 <!-- BASIC -->
 <div class="section">
   <div class="section-title">Basic Information</div>
-
   <div class="row">
-    <label>Date Today</label>
+    <label>Date</label>
     <input type="date" id="entryDate">
   </div>
 
   <div class="row">
     <label>Donor Type</label>
-    <input id="donorType" class="small">
-    <input id="donorExtra" class="auto" placeholder="Specify if required">
+    <input id="donorType" class="small" placeholder="W/M/P">
+    <input id="donorExtra" class="auto" placeholder="Specify if MBD or Patient Directed">
   </div>
 </div>
 
 <!-- NAME -->
 <div class="section">
   <div class="section-title">Donor Name</div>
-
   <div class="row">
-    <input id="suffix" class="mini" placeholder="Suffix">
-    <input id="surname" class="auto" placeholder="Surname">
-    <input id="firstName" class="auto" placeholder="First Name">
-    <input id="middleName" class="auto" placeholder="Middle Name">
+    <input id="suffix" placeholder="Suffix" class="mini">
+    <input id="surname" placeholder="Surname" class="auto">
+    <input id="firstName" placeholder="First Name" class="auto">
+    <input id="middleName" placeholder="Middle Name" class="auto">
   </div>
 </div>
 
 <!-- BIRTH -->
 <div class="section">
   <div class="section-title">Birth Information</div>
-
   <div class="row">
     <label>Birthday</label>
     <input id="bd" class="mini" maxlength="2" placeholder="DD">
@@ -206,14 +213,12 @@ button{
 <!-- CONTACT -->
 <div class="section">
   <div class="section-title">Contact Details</div>
-
   <div class="row">
     <input id="address" class="auto" placeholder="Address">
     <input id="city" class="small" maxlength="15" placeholder="City / Region">
   </div>
-
   <div class="row">
-    <label>Contact No.</label>
+    <label>Contact</label>
     <input id="c1" class="mini" maxlength="4">
     <input id="c2" class="mini" maxlength="3">
     <input id="c3" class="mini" maxlength="4">
@@ -223,9 +228,8 @@ button{
 <!-- BLOOD -->
 <div class="section">
   <div class="section-title">Blood Collection</div>
-
   <div class="row">
-    <label>Serial No.</label>
+    <label>Serial</label>
     <span class="serial-prefix">PRC2600-</span>
     <input id="serial" class="auto">
   </div>
@@ -233,7 +237,7 @@ button{
   <div class="row">
     <label>Blood Type</label>
     <input id="bloodType" class="small">
-    <label>No. of Donations</label>
+    <label>Times Donated</label>
     <input id="times" class="mini">
   </div>
 
@@ -258,15 +262,11 @@ button{
 
 <!-- BUTTONS -->
 <div class="buttons">
-  <button type="button" class="secondary" onclick="location.href='dashboard.html'">
-    Back to Homepage
-  </button>
+  <button type="button" class="secondary" onclick="location.href='dashboard.html'">Back to Homepage</button>
 
-  <div class="center-buttons">
+  <div class="center-btns">
     <button type="button" class="primary" onclick="saveDonor()">Submit</button>
-    <button type="button" class="secondary" onclick="location.href='donor-list.html'">
-      Go to Donor List
-    </button>
+    <button type="button" class="secondary" onclick="location.href='donor-list.html'">Go to Donor List</button>
   </div>
 </div>
 
@@ -274,12 +274,12 @@ button{
 </div>
 
 <script>
-/* LOGIC – UNCHANGED */
-entryDate.value=new Date().toISOString().split("T")[0];
+/* LOGIC */
+entryDate.value = new Date().toISOString().split("T")[0];
 
-donorType.oninput=()=>{
-  const v=donorType.value.toUpperCase();
-  donorExtra.style.display=(v==="M"||v==="P")?"inline-block":"none";
+donorType.oninput = () => {
+  const v = donorType.value.toUpperCase();
+  donorExtra.style.display = (v === "M" || v === "P") ? "inline-block" : "none";
   if(v==="W") donorType.value="Walk-in";
   if(v==="M") donorType.value="MBD";
   if(v==="P") donorType.value="Patient Directed";
@@ -309,7 +309,7 @@ sm.oninput=()=>sm.value.length===2&&eh.focus();
 eh.oninput=()=>eh.value.length===2&&em.focus();
 
 function saveDonor(){
-  alert("Donor entry saved");
+  alert("Donor saved successfully!");
   donorForm.reset();
   entryDate.value=new Date().toISOString().split("T")[0];
   donorExtra.style.display="none";
