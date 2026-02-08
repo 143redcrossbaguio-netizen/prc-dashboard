@@ -13,76 +13,55 @@
   </header>
 
   <main>
-    <h2>Donor Data Entry</h2>
-    
     <form id="donorForm">
-      <label for="entryDate">Date:</label>
-      <input type="date" id="entryDate" name="entryDate">
+      <h2>Donor Data Entry</h2>
+      <label>Date:</label>
+      <input type="date" id="entryDate">
 
       <p>Type of Donor:</p>
-      <label><input type="radio" name="donorType" value="W"> Walk-in (W)</label>
+      <label><input type="radio" name="donorType" value="W"> Walk-in</label>
       <label><input type="radio" name="donorType" value="M"> MBD</label>
       <input type="text" id="mbdName" placeholder="If MBD, enter name" style="display:none;">
       <label><input type="radio" name="donorType" value="P"> Patient Directed</label>
       <input type="text" id="patientName" placeholder="If Patient Directed, enter name" style="display:none;">
 
-      <label for="surname">Surname:</label>
-      <input type="text" id="surname" name="surname">
+      <label>Surname:</label>
+      <input type="text" id="surname">
+      <label>First Name:</label>
+      <input type="text" id="firstname">
+      <label>Middle Name:</label>
+      <input type="text" id="middlename">
 
-      <label for="firstname">First Name:</label>
-      <input type="text" id="firstname" name="firstname">
+      <label>Birthdate:</label>
+      <input type="date" id="birthdate">
+      <label>Age:</label>
+      <input type="text" id="age" readonly>
 
-      <label for="middlename">Middle Name:</label>
-      <input type="text" id="middlename" name="middlename">
-
-      <label for="birthdate">Birthdate:</label>
-      <input type="date" id="birthdate" name="birthdate">
-
-      <label for="age">Age:</label>
-      <input type="text" id="age" name="age" readonly>
-
-      <label for="address">Street Address:</label>
-      <input type="text" id="address" name="address">
-
-      <label for="city">City/Region:</label>
-      <input type="text" id="city" name="city">
+      <label>Street Address:</label>
+      <input type="text" id="address">
+      <label>City/Region:</label>
+      <input type="text" id="city">
 
       <p>Contact Number:</p>
       <input type="text" id="contact1" maxlength="4" size="4"> -
       <input type="text" id="contact2" maxlength="3" size="3"> -
       <input type="text" id="contact3" maxlength="4" size="4">
 
-      <label for="serial">Serial Number:</label>
+      <label>Serial Number:</label>
       <input type="text" id="serialPrefix" value="PRC2600-" readonly>
       <input type="text" id="serialNumber">
 
       <p>Blood Type:</p>
-      <input type="text" id="bloodType" maxlength="3" placeholder="AP, AN, BP, BN...">
+      <input type="text" id="bloodType" maxlength="3" placeholder="AP, AN, BP...">
 
-      <label for="donationCount">Number of Times Donated:</label>
+      <label>Number of Times Donated:</label>
       <input type="number" id="donationCount" value="1">
-
-      <p>Blood Bag Used:</p>
-      <input type="text" id="bagUsed" maxlength="1" placeholder="K/T">
-
-      <p>Blood Bag Type:</p>
-      <input type="text" id="bagType" maxlength="1" placeholder="S/D/T/Q">
-
-      <p>Amount Collected:</p>
-      <input type="text" id="amountCollected" maxlength="2" placeholder="4/Q/U">
-
-      <label for="timeStart">Time Started:</label>
-      <input type="time" id="timeStart">
-
-      <label for="timeEnd">Time Ended:</label>
-      <input type="time" id="timeEnd">
 
       <button type="submit">Add Donor</button>
     </form>
 
     <h2>Donor Records</h2>
     <input type="text" id="searchInput" placeholder="Search donor..." onkeyup="searchDonors()">
-
     <table id="donorTable">
       <thead>
         <tr>
