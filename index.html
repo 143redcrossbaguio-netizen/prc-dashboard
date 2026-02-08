@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRC Baguio - Dashboard</title>
+<title>PRC Dashboard</title>
 <style>
 body { font-family: Arial; margin:0; background:#fff; color:#b71c1c; }
 header { background:#b71c1c; color:white; padding:10px 20px; display:flex; align-items:center; }
 header img { height:50px; margin-right:15px; }
 .container { padding:20px; display:flex; flex-wrap:wrap; gap:20px; justify-content:center; }
-.panel { width:200px; height:100px; background:white; color:#b71c1c; border:2px solid #b71c1c; display:flex; justify-content:center; align-items:center; cursor:pointer; font-weight:bold; border-radius:10px; }
+.panel { width:200px; height:100px; background:white; color:#b71c1c; border:2px solid #b71c1c; display:flex; justify-content:center; align-items:center; cursor:pointer; font-weight:bold; border-radius:10px; text-align:center; }
 .panel:hover { background:#b71c1c; color:white; }
 </style>
 </head>
@@ -29,9 +29,9 @@ header img { height:50px; margin-right:15px; }
 </div>
 
 <script>
-// Check login session
+// Ensure user is logged in
 if(sessionStorage.getItem("loggedIn") !== "true"){
-    window.location.href="login.html"; // redirect if not logged in
+    window.location.href="login.html";
 }
 </script>
 
