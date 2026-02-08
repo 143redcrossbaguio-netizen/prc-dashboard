@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRC Baguio - Donor List</title>
+<style>
+body { font-family: Arial; background:#fff; color:#b71c1c; margin:0; }
+header { background:#b71c1c; color:white; padding:10px 20px; display:flex; align-items:center;}
+header img { height:50px; margin-right:15px; }
+h1,h2 { margin:5px 0; }
+.container { padding:20px; max-width:1000px; margin:auto; }
+input[type="text"] { padding:5px; margin:5px 0; width:300px; }
+button { padding:8px 15px; background:#b71c1c; color:white; border:none; cursor:pointer; margin:5px; }
+table { width:100%; border-collapse: collapse; margin-top:10px; }
+table, th, td { border:1px solid #b71c1c; }
+th, td { padding:5px; font-size:12px; text-align:center; }
+th { background:#f5f5f5; }
+</style>
+</head>
+<body>
+
+<header>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/f/f5/Philippine_Red_Cross_logo.svg" alt="PRC Logo">
+    <div>
+        <h1>Philippine Red Cross</h1>
+        <h2>Baguio City Chapter - Donor List</h2>
+    </div>
+</header>
+
+<div class="container">
+    <input type="text" id="searchBox" placeholder="Search donor (name, blood type...)">
+    <button onclick="exportTableToExcel('donorTable','donor-list')">Export to Excel</button>
+    <button onclick="printTable()">Print Donor List</button>
+    <a href="donor-entry.html"><button>Go to Donor Entry</button></a>
+
+    <table id="donorTable">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Extra</th>
+                <th>Surname</th>
+                <th>Suffix</th>
+                <th>First Name</th>
+                <th>Middle Name</th>
+                <th>Age</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>Contact</th>
+                <th>Serial</th>
+                <th>Blood Type</th>
+                <th># Donations</th>
+                <th>Bag Used</th>
+                <th>Bag Type</th>
+                <th>Amount</th>
+                <th>Time Started</th>
+                <th>Time Ended</th>
+            </tr>
+        </thead>
+        <tbody id="donorBody">
+            <!-- Donor rows will appear here -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+// Load donors from localStorage
+function loadDonors() {
+    let donors = JSON.parse(localStorage.getItem("donors") || "[]");
+    let tbody = document.getElementById("donorBody");
+    tbody.innerHTML = "";
+
+    donors.forEach(d => {
+        let tr = document.createElement("tr");
+        for(let key of ["date","donorType","extra","surname","suffix","fname","mname","age",
+                        "address","city","contact","serial","bloodType","numDonations",
+                        "bagUsed","bagType","amount","startTime","endTime"]) {
+            let td = document.createElement("td");
+            td.textContent = d[key];
+            tr.appendChild(td);
+        }
+        tbody.appendChild(tr);
+    });
+}
+loadDonors();
+
+// Search/filter
+document.getElementById("searchBox").addEventListener("input", function(){
+    let filter = this.value.toUpperCase();
+    let trs = document.querySelectorAll("#donorBody tr");
+    trs.forEach(tr => {
+        tr.style.display = Array.from(tr.cells).some(td=>td.textContent.toUpperCase().includes(filter)) ? "" : "none";
+    });
+});
+
+// Export to Excel
+function exportTableToExcel(tableID, filename = ''){
+    let table = document.getElementById(tableID);
+    let wb = XLSX.utils.table_to_book(table, {sheet:"Donor List"});
+    XLSX.writeFile(wb, filename ? filename + ".xlsx" : "donor-list.xlsx");
+}
+
+// Print only table
+function printTable(){
+    let table = document.getElementById("donorTable").outerHTML;
+    let newWin = window.open("");
+    newWin.document.write("<html><head><title>Donor List</title></head><body>");
+    newWin.document.write(table);
+    newWin.document.write("</body></html>");
+    newWin.document.close();
+    newWin.print();
+}
+</script>
+
+<!-- Include SheetJS for Excel export -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+</body>
+</html>
