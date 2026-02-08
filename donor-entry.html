@@ -35,7 +35,7 @@ input {
 }
 
 .auto { flex: 1; }
-.big { flex: 3; }
+.medium { flex: 1.5; }
 .small { width: 80px; }
 .mini { width: 50px; }
 
@@ -43,6 +43,10 @@ input {
   width: 100px;
   background: #eee;
   text-align: center;
+}
+
+#donorExtra {
+  display: none;
 }
 
 button {
@@ -76,6 +80,7 @@ button:hover { background: #a11212; }
 <div class="row">
   <label>Donor Type</label>
   <input id="donorType" class="small">
+  <input id="donorExtra" class="auto" placeholder="Specify (MBD / Patient Directed)">
 </div>
 
 <!-- NAME -->
@@ -98,7 +103,7 @@ button:hover { background: #a11212; }
 
 <!-- ADDRESS -->
 <div class="row">
-  <input id="address" placeholder="Address" class="big">
+  <input id="address" placeholder="Address" class="medium">
   <input id="city" placeholder="City/Region" maxlength="15" class="small">
 </div>
 
@@ -114,7 +119,7 @@ button:hover { background: #a11212; }
 <div class="row">
   <label>Serial</label>
   <input class="serial-prefix" value="PRC2600-" readonly>
-  <input id="serial" class="small">
+  <input id="serial" class="auto">
 </div>
 
 <!-- BLOOD -->
@@ -159,18 +164,27 @@ button:hover { background: #a11212; }
 const today = new Date().toISOString().split("T")[0];
 entryDate.value = today;
 
-// Donor Type autofill
+// Donor Type logic
 donorType.oninput = () => {
   const v = donorType.value.toUpperCase();
-  if(v==="W") donorType.value="Walk-in";
-  if(v==="M") donorType.value="MBD";
-  if(v==="P") donorType.value="Patient Directed";
+  if (v === "W") {
+    donorType.value = "Walk-in";
+    donorExtra.style.display = "none";
+  }
+  if (v === "M") {
+    donorType.value = "MBD";
+    donorExtra.style.display = "inline-block";
+  }
+  if (v === "P") {
+    donorType.value = "Patient Directed";
+    donorExtra.style.display = "inline-block";
+  }
 };
 
 // Birthday + Age
-bd.oninput=()=>bd.value.length===2&&bm.focus();
-bm.oninput=()=>bm.value.length===2&&by.focus();
-by.oninput=()=>{
+bd.oninput = ()=>bd.value.length===2 && bm.focus();
+bm.oninput = ()=>bm.value.length===2 && by.focus();
+by.oninput = ()=>{
   if(by.value.length===2) by.value="19"+by.value;
   const d=new Date(by.value,bm.value-1,bd.value);
   age.value=new Date().getFullYear()-d.getFullYear();
@@ -180,14 +194,14 @@ by.oninput=()=>{
 c1.oninput=()=>c1.value.length===4&&c2.focus();
 c2.oninput=()=>c2.value.length===3&&c3.focus();
 
-// Blood type autofill
+// Blood type
 bloodType.oninput=()=>{
   const v=bloodType.value.toUpperCase();
   const map={AP:"A+",AN:"A-",BP:"B+",BN:"B-",ABP:"AB+",ABN:"AB-",OP:"O+",ON:"O-"};
   if(map[v]) bloodType.value=map[v];
 };
 
-// Bags autofill
+// Bags
 bagUsed.oninput=()=>bagUsed.value=bagUsed.value.toUpperCase()==="K"?"Karmi":bagUsed.value.toUpperCase()==="T"?"Terumo":bagUsed.value;
 bagType.oninput=()=>bagType.value={S:"Single",D:"Double",T:"Triple"}[bagType.value.toUpperCase()]||bagType.value;
 amount.oninput=()=>amount.value={4:"450mL",Q:"QNS",U:"UB"}[amount.value.toUpperCase()]||amount.value;
@@ -201,6 +215,7 @@ function saveDonor(){
   alert("Donor saved ✔");
   donorForm.reset();
   entryDate.value=today;
+  donorExtra.style.display="none";
 }
 </script>
 
