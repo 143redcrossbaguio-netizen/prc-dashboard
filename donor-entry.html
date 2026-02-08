@@ -216,13 +216,12 @@ bloodType.oninput=()=>{
 /* BAG USED / TYPE / AMOUNT FIXED */
 bagUsed.oninput=()=>{
   const v = bagUsed.value.toUpperCase();
-  if(v==="K") bagUsed.value="K"; 
-  else if(v==="T") bagUsed.value="T"; 
-  else bagUsed.value=v;
+  if(v==="K") bagUsed.value="Karmi";
+  else if(v==="T") bagUsed.value="Terumo";
 };
 bagType.oninput=()=>{
   const v = bagType.value.toUpperCase();
-  bagType.value = {S:"S",D:"D",T:"T"}[v] || bagType.value;
+  bagType.value = {S:"Single",D:"Double",T:"Triple"}[v] || bagType.value;
 };
 amount.oninput=()=>amount.value={4:"450mL",Q:"QNS",U:"UB"}[amount.value.toUpperCase()]||amount.value;
 
