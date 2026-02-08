@@ -7,9 +7,9 @@
 
 <style>
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
-  background: #f4f4f4;
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
 }
 
 header {
@@ -25,96 +25,88 @@ header img {
   margin-right: 15px;
 }
 
-.container {
-  padding: 20px;
-  background: white;
+.main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  padding: 15px;
 }
 
-h2 {
+.panel {
+  background: white;
+  padding: 15px;
+  border-radius: 6px;
+  border: 2px solid #c62828;
+}
+
+h3 {
   color: #c62828;
+  margin-top: 0;
 }
 
 label {
   font-weight: bold;
+  margin-top: 6px;
   display: block;
-  margin-top: 10px;
 }
 
-input, select {
-  padding: 8px;
-  margin-top: 4px;
+input {
+  padding: 6px;
+  margin-top: 3px;
   width: 100%;
   box-sizing: border-box;
 }
 
-input[type="checkbox"] {
-  width: auto;
-}
+.small { width: 80px; }
+.city { width: 150px; }
+.contact { width: 70px; }
 
 .row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.row-2 {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 10px;
-}
-
-.small {
-  width: 100px;
-}
-
-.serial-box {
   display: flex;
+  gap: 6px;
   align-items: center;
 }
 
-.serial-box span {
-  background: #eee;
-  padding: 8px;
-  border: 1px solid #ccc;
-}
-
-.blood {
-  font-weight: bold;
-  padding: 8px;
-  text-align: center;
-}
-
-.A { background: #bbdefb; }
-.B { background: #fff59d; }
-.AB { background: #f8bbd0; }
-.O { background: #ffffff; }
-
-.buttons {
-  margin-top: 20px;
-  display: flex;
-  gap: 10px;
-}
+.hidden { display: none; }
 
 button {
-  padding: 12px;
+  padding: 10px;
   border: none;
   cursor: pointer;
-  font-size: 14px;
 }
 
 .submit {
   background: #c62828;
   color: white;
+  width: 100%;
+  margin-top: 10px;
 }
 
-.print {
+.export, .print {
   background: #555;
+  color: white;
+  margin-right: 5px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 5px;
+}
+
+th {
+  background: #c62828;
   color: white;
 }
 
 @media print {
-  @page { size: landscape; }
   button { display: none; }
+  body { background: white; }
 }
 </style>
 </head>
@@ -126,39 +118,43 @@ button {
   <h2>Philippine Red Cross – Baguio City Chapter</h2>
 </header>
 
-<div class="container">
+<div class="main">
 
-<h2>Donor Data Entry</h2>
+<!-- ================= LEFT PANEL ================= -->
+<div class="panel">
+<h3>Donor Data Entry</h3>
 
 <label>Date</label>
 <input type="date" id="date">
 
-<label>Type of Donor</label>
-<input type="checkbox" onclick="setType('W')"> Walk-in
-<input type="checkbox" onclick="setType('M')"> MBD
-<input type="checkbox" onclick="setType('P')"> Patient Directed
-<input id="donorType" placeholder="Auto code (W / M / P)">
+<label>Donor Type (W / M / P)</label>
+<input id="donorType" onkeyup="setDonorType()">
+
+<input id="extraBox" class="hidden" placeholder="MBD / Patient Info">
 
 <div class="row">
-  <div>
+  <div style="flex:1">
     <label>Surname</label>
     <input id="surname">
   </div>
   <div>
-    <label>First Name</label>
-    <input id="firstname">
-  </div>
-  <div>
-    <label>Middle Name</label>
-    <input id="middlename">
+    <label>Suffix</label>
+    <input id="suffix" maxlength="3" class="small">
   </div>
 </div>
 
-<label>Suffix</label>
-<input id="suffix">
+<label>First Name</label>
+<input id="fname">
 
-<label>Birthdate (MM/DD/YYYY)</label>
-<input id="birthdate" placeholder="MM/DD/YY or YYYY" onblur="computeAge()">
+<label>Middle Name</label>
+<input id="mname">
+
+<label>Birthdate</label>
+<div class="row">
+  <input id="mm" placeholder="MM" maxlength="2" class="small" onkeyup="calcAge()">
+  <input id="dd" placeholder="DD" maxlength="2" class="small" onkeyup="calcAge()">
+  <input id="yy" placeholder="YY/YYYY" maxlength="4" class="small" onkeyup="calcAge()">
+</div>
 
 <label>Age</label>
 <input id="age" readonly>
@@ -167,91 +163,132 @@ button {
 <input id="address">
 
 <label>City / Region</label>
-<input id="city">
+<input id="city" maxlength="15" class="city">
 
 <label>Contact Number</label>
 <div class="row">
-  <input maxlength="4">
-  <input maxlength="3">
-  <input maxlength="4">
+  <input maxlength="4" class="contact">
+  <input maxlength="3" class="contact">
+  <input maxlength="4" class="contact">
 </div>
 
-<label>Serial Number</label>
-<div class="serial-box">
-  <span>PRC2600-</span>
-  <input>
+<label>Blood Bag Used (K / T)</label>
+<input id="bagUsed" onkeyup="fillBagUsed()">
+
+<label>Blood Bag Type (S / D / T)</label>
+<input id="bagType" onkeyup="fillBagType()">
+
+<label>Amount Collected (4 / Q / U)</label>
+<input id="amount" onkeyup="fillAmount()">
+
+<label>Time Started</label>
+<div class="row">
+  <input placeholder="HH" maxlength="2" class="small">
+  <input placeholder="MM" maxlength="2" class="small">
 </div>
 
-<label>Blood Type (AP, AN, BP, BN, ABP, ABN, OP, ON)</label>
-<input id="bloodInput" onkeyup="setBlood()">
-<div id="bloodDisplay" class="blood"></div>
+<label>Time Ended</label>
+<div class="row">
+  <input placeholder="HH" maxlength="2" class="small">
+  <input placeholder="MM" maxlength="2" class="small">
+</div>
 
-<label>Number of Times Donated</label>
-<input id="donations" onfocus="storeDonation()" onkeydown="moveNext(event,'bagUsed')">
+<button class="submit" onclick="saveDonor()">SUBMIT</button>
+</div>
 
-<label>Blood Bag Used (K/T)</label>
-<input id="bagUsed" onkeydown="moveNext(event,'bagType')">
+<!-- ================= RIGHT PANEL ================= -->
+<div class="panel">
+<h3>Donor List</h3>
 
-<label>Blood Bag Type (S/D/T/Q)</label>
-<input id="bagType" onkeydown="moveNext(event,'amount')">
+<button class="export" onclick="exportCSV()">EXPORT EXCEL</button>
+<button class="print" onclick="window.print()">PRINT</button>
 
-<label>Amount Collected (4=450ml, Q=QNS, U=UB)</label>
-<input id="amount" onkeydown="moveNext(event,'timeStart')">
-
-<label>Time Started (HH:MM)</label>
-<input id="timeStart" onkeydown="moveNext(event,'timeEnd')">
-
-<label>Time Ended (HH:MM)</label>
-<input id="timeEnd">
-
-<div class="buttons">
-  <button class="submit">SUBMIT</button>
-  <button class="print" onclick="window.print()">PRINT</button>
+<table id="table">
+<thead>
+<tr>
+<th>Date</th><th>Type</th><th>Name</th><th>Age</th><th>City</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
 </div>
 
 </div>
 
 <script>
 document.getElementById("date").valueAsDate = new Date();
+let donors = JSON.parse(localStorage.getItem("donors")) || [];
 
-let baseDonation = 0;
-
-function storeDonation(){
-  baseDonation = parseInt(donations.value) || 0;
+function setDonorType(){
+  let v = donorType.value.toUpperCase();
+  if(v === "W") donorType.value = "WALK-IN";
+  if(v === "M"){ donorType.value = "MBD"; extraBox.classList.remove("hidden"); }
+  if(v === "P"){ donorType.value = "PATIENT DIRECTED"; extraBox.classList.remove("hidden"); }
 }
 
-function setType(val){
-  donorType.value = val;
-}
-
-function computeAge(){
-  let val = birthdate.value;
-  let parts = val.split("/");
-  let year = parts[2];
-  if(year.length === 2) year = "19" + year;
-  let ageCalc = new Date().getFullYear() - parseInt(year);
-  age.value = ageCalc;
-}
-
-function setBlood(){
-  let map = {
-    AP:"A+", AN:"A-", BP:"B+", BN:"B-",
-    ABP:"AB+", ABN:"AB-", OP:"O+", ON:"O-"
-  };
-  let v = bloodInput.value.toUpperCase();
-  let type = map[v] || "";
-  bloodDisplay.innerText = type;
-  bloodDisplay.className = "blood " + (type.startsWith("A") && !type.startsWith("AB") ? "A" :
-    type.startsWith("B") ? "B" :
-    type.startsWith("AB") ? "AB" :
-    type.startsWith("O") ? "O" : "");
-}
-
-function moveNext(e,next){
-  if(e.key === "Enter"){
-    e.preventDefault();
-    document.getElementById(next).focus();
+function calcAge(){
+  let y = yy.value;
+  if(y.length === 2) y = "19" + y;
+  if(y.length === 4){
+    age.value = new Date().getFullYear() - parseInt(y);
   }
+}
+
+function fillBagUsed(){
+  if(bagUsed.value.toUpperCase() === "K") bagUsed.value = "KARMI";
+  if(bagUsed.value.toUpperCase() === "T") bagUsed.value = "TERUMO";
+}
+
+function fillBagType(){
+  let v = bagType.value.toUpperCase();
+  if(v === "S") bagType.value = "SINGLE";
+  if(v === "D") bagType.value = "DOUBLE";
+  if(v === "T") bagType.value = "TRIPLE";
+}
+
+function fillAmount(){
+  let v = amount.value.toUpperCase();
+  if(v === "4") amount.value = "450mL";
+  if(v === "Q") amount.value = "QNS";
+  if(v === "U") amount.value = "UB";
+}
+
+function saveDonor(){
+  donors.push({
+    date: date.value,
+    type: donorType.value,
+    name: surname.value + ", " + fname.value,
+    age: age.value,
+    city: city.value
+  });
+  localStorage.setItem("donors", JSON.stringify(donors));
+  render();
+}
+
+function render(){
+  let tbody = document.querySelector("#table tbody");
+  tbody.innerHTML = "";
+  donors.forEach(d=>{
+    tbody.innerHTML += `<tr>
+      <td>${d.date}</td>
+      <td>${d.type}</td>
+      <td>${d.name}</td>
+      <td>${d.age}</td>
+      <td>${d.city}</td>
+    </tr>`;
+  });
+}
+render();
+
+function exportCSV(){
+  let csv = "Date,Type,Name,Age,City\n";
+  donors.forEach(d=>{
+    csv += `${d.date},${d.type},${d.name},${d.age},${d.city}\n`;
+  });
+  let a = document.createElement("a");
+  a.href = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
+  a.download = "donors.csv";
+  a.click();
 }
 </script>
 
