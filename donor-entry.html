@@ -5,21 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Donor Entry - PRC</title>
 <style>
-body { font-family: Arial; margin:20px; background:#fff; color:#b71c1c; }
-header { display:flex; align-items:center; gap:10px; margin-bottom:20px; }
-header img { height:50px; }
+body { font-family: Arial, sans-serif; background:#fff; color:#b71c1c; margin:20px; }
+header { text-align:center; margin-bottom:20px; }
+header img { height:80px; display:block; margin:auto; }
 h2 { text-align:center; margin-bottom:20px; }
-form { display:flex; flex-direction:column; gap:10px; max-width:950px; margin:auto; }
-.row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+form { max-width: 1000px; margin:auto; display:flex; flex-direction:column; gap:10px; }
+.row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
 input, select { padding:5px; font-size:14px; }
 input.text { flex:1; min-width:80px; }
 input.small { width:60px; }
 input.mini { width:40px; }
-button { padding:10px; background:#b71c1c; color:white; border:none; cursor:pointer; border-radius:5px; }
+input.auto-resize { min-width:100px; flex:1; }
+button { padding:10px 20px; background:#b71c1c; color:white; border:none; cursor:pointer; border-radius:5px; }
 button:hover { background:#a11212; }
-#donorType { width:150px; }
-.blood-type { width:60px; text-align:center; }
-.age-box { width:50px; text-align:center; }
+label { width:130px; }
 .serial-prefix { width:80px; text-align:center; background:#eee; border:none; }
 #extraType { display:none; width:150px; }
 </style>
@@ -34,7 +33,8 @@ button:hover { background:#a11212; }
 <h2>Philippine Red Cross - Baguio City Chapter</h2>
 
 <form id="donorForm">
-<!-- Row 0: Date of Entry -->
+
+<!-- Row 0: Date Today -->
 <div class="row">
 <label>Date:</label>
 <input type="date" id="entryDate">
@@ -53,11 +53,11 @@ button:hover { background:#a11212; }
 <label>Suffix:</label>
 <input type="text" id="suffix" maxlength="4" class="small">
 <label>Surname:</label>
-<input type="text" id="surname" class="text">
+<input type="text" id="surname" class="auto-resize">
 <label>First Name:</label>
-<input type="text" id="firstName" class="text">
+<input type="text" id="firstName" class="auto-resize">
 <label>Middle Name:</label>
-<input type="text" id="middleName" class="text">
+<input type="text" id="middleName" class="auto-resize">
 </div>
 
 <!-- Row 3: Birthday + Age -->
@@ -67,15 +67,15 @@ button:hover { background:#a11212; }
 <input type="text" id="bdayMonth" class="mini" placeholder="MM" maxlength="2">
 <input type="text" id="bdayYear" class="mini" placeholder="YY/YYYY" maxlength="4">
 <label>Age:</label>
-<input type="text" id="age" readonly class="age-box">
+<input type="text" id="age" readonly class="small">
 </div>
 
 <!-- Row 4: Address + City -->
 <div class="row">
 <label>Address:</label>
-<input type="text" id="address" class="text">
+<input type="text" id="address" class="auto-resize">
 <label>City/Region:</label>
-<input type="text" id="city" class="text">
+<input type="text" id="city" class="auto-resize" maxlength="15">
 </div>
 
 <!-- Row 5: Contact Number -->
@@ -90,7 +90,7 @@ button:hover { background:#a11212; }
 <div class="row">
 <label>Serial Number:</label>
 <input type="text" class="serial-prefix" value="PRC2600-" readonly>
-<input type="text" id="serialNum" maxlength="10" class="text">
+<input type="text" id="serialNum" maxlength="10" class="small">
 </div>
 
 <!-- Row 7: Blood Type + Times Donated -->
@@ -127,17 +127,13 @@ button:hover { background:#a11212; }
 <button type="button" onclick="goDonorList()">Go to Donor List</button>
 <button type="button" onclick="goHome()">Back to Homepage</button>
 </div>
+
 </form>
 
 <script>
-// Set default date today
+// Date Today
 const today = new Date().toISOString().split('T')[0];
 document.getElementById("entryDate").value = today;
-
-// Login check
-if(sessionStorage.getItem("loggedIn") !== "true"){
-    window.location.href="login.html";
-}
 
 // Donor Type autofill & extra box
 document.getElementById("donorType").addEventListener("input", function(){
@@ -150,60 +146,49 @@ document.getElementById("donorType").addEventListener("input", function(){
     else { auto.value=""; extra.style.display="none"; }
 });
 
-// Birthday -> Auto-age & cursor move
+// Birthday -> Age + cursor move
 function calcAgeAndMove(e){
-    const d = document.getElementById("bdayDay").value;
-    const m = document.getElementById("bdayMonth").value;
-    let y = document.getElementById("bdayYear").value;
-    if(y.length===2) y="19"+y;
-    const birth = new Date(y,m-1,d);
-    const today = new Date();
-    let age = today.getFullYear() - birth.getFullYear();
-    const mDiff = today.getMonth() - birth.getMonth();
-    if(mDiff<0 || (mDiff===0 && today.getDate()<birth.getDate())) age--;
+    const day=document.getElementById("bdayDay");
+    const month=document.getElementById("bdayMonth");
+    let year=document.getElementById("bdayYear");
+    if(year.value.length===2) year.value="19"+year.value;
+    const birth=new Date(year.value,month.value-1,day.value);
+    const today=new Date();
+    let age=today.getFullYear()-birth.getFullYear();
+    if(today.getMonth()<birth.getMonth() || (today.getMonth()===birth.getMonth() && today.getDate()<birth.getDate())) age--;
     if(!isNaN(age)) document.getElementById("age").value=age;
 
-    // Auto cursor move
-    if(e.target.id==="bdayDay" && d.length===2) document.getElementById("bdayMonth").focus();
-    if(e.target.id==="bdayMonth" && m.length===2) document.getElementById("bdayYear").focus();
+    if(e.target.id==="bdayDay" && day.value.length===2) month.focus();
+    if(e.target.id==="bdayMonth" && month.value.length===2) year.focus();
 });
 ["bdayDay","bdayMonth","bdayYear"].forEach(id=>{
     document.getElementById(id).addEventListener("input",calcAgeAndMove);
 });
 
-// Blood Type
+// Blood Type autofill
 document.getElementById("bloodType").addEventListener("input", function(){
     const val=this.value.toUpperCase();
-    const colorMap={"A+":"#ADD8E6","A-":"#ADD8E6","B+":"#FFFF99","B-":"#FFFF99",
-                    "AB+":"#FFC0CB","AB-":"#FFC0CB","O+":"#FFFFFF","O-":"#FFFFFF"};
-    const shortcut={"AP":"A+","AN":"A-","BP":"B+","BN":"B-","ABP":"AB+","ABN":"AB-","OP":"O+","ON":"O-"};
-    if(shortcut[val]) this.value=shortcut[val];
-    this.style.background=colorMap[this.value]||"white";
+    const map={"AP":"A+","AN":"A-","BP":"B+","BN":"B-","ABP":"AB+","ABN":"AB-","OP":"O+","ON":"O-"};
+    if(map[val]) this.value=map[val];
 });
 
-// Blood Bag, Bag Type, Amount
-document.getElementById("bagUsed").addEventListener("input", function(){
-    const val=this.value.toUpperCase();
-    if(val==="K") this.value="Karmi";
-    else if(val==="T") this.value="Terumo";
+// Blood Bag / Bag Type / Amount
+document.getElementById("bagUsed").addEventListener("input",function(){
+    const val=this.value.toUpperCase(); if(val==="K") this.value="Karmi"; else if(val==="T") this.value="Terumo";
 });
-document.getElementById("bagType").addEventListener("input", function(){
-    const val=this.value.toUpperCase();
+document.getElementById("bagType").addEventListener("input",function(){
     const map={"S":"Single","D":"Double","T":"Triple","Q":"Quadruple"};
-    if(map[val]) this.value=map[val];
+    const val=this.value.toUpperCase(); if(map[val]) this.value=map[val];
 });
-document.getElementById("amount").addEventListener("input", function(){
-    const val=this.value.toUpperCase();
+document.getElementById("amount").addEventListener("input",function(){
     const map={"4":"450ml","Q":"QNS","U":"UB"};
-    if(map[val]) this.value=map[val];
+    const val=this.value.toUpperCase(); if(map[val]) this.value=map[val];
 });
 
-// Time auto cursor
-const timeFields=["timeStartHH","timeStartMM","timeEndHH","timeEndMM"];
-timeFields.forEach((id,index)=>{
+// Time fields auto-cursor
+["timeStartHH","timeStartMM","timeEndHH","timeEndMM"].forEach((id,index,arr)=>{
     document.getElementById(id).addEventListener("input",function(){
-        if(this.value.length===2 && index<timeFields.length-1)
-            document.getElementById(timeFields[index+1]).focus();
+        if(this.value.length===2 && index<arr.length-1) document.getElementById(arr[index+1]).focus();
     });
 });
 
@@ -231,13 +216,12 @@ function submitDonor(){
         timeStart: document.getElementById("timeStartHH").value+":"+document.getElementById("timeStartMM").value,
         timeEnd: document.getElementById("timeEndHH").value+":"+document.getElementById("timeEndMM").value
     };
-    let donors = JSON.parse(localStorage.getItem("donors") || "[]");
+    let donors=JSON.parse(localStorage.getItem("donors")||"[]");
     donors.push(donor);
-    localStorage.setItem("donors", JSON.stringify(donors));
+    localStorage.setItem("donors",JSON.stringify(donors));
     alert("Donor saved!");
     document.getElementById("donorForm").reset();
     document.getElementById("donorTypeAuto").value="";
-    document.getElementById("age").value="";
     document.getElementById("extraType").style.display="none";
     document.getElementById("entryDate").value=today;
 }
@@ -247,5 +231,6 @@ function goHome(){ window.location.href="index.html"; }
 function goDonorList(){ window.location.href="donor-list.html"; }
 
 </script>
+
 </body>
 </html>
