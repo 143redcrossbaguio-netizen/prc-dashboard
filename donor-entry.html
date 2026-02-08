@@ -2,141 +2,68 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Donor Entry | PRC Baguio</title>
+<title>Donor Database | PRC Baguio</title>
 <style>
-body {
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: #f9f9f9;
-  margin: 0;
-  color: #333;
-}
-
-/* HEADER */
-header {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 15px 30px;
-  background: #ffffff;
-  border-bottom: 4px solid #c62828;
-}
-
-header img { height: 55px; }
-header h2 { color: #c62828; margin: 0; font-weight: 700; }
-
-/* CONTAINER */
-.container {
-  max-width: 1200px;
-  margin: 25px auto;
-  padding: 20px;
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.1);
-}
-
-/* SECTION */
-.section {
-  border-left: 6px solid #c62828;
-  padding: 15px 18px;
-  margin-bottom: 18px;
-  border-radius: 6px;
-  background: #f5f5f5;
-}
-
-.section-title { font-weight: 700; color: #c62828; margin-bottom: 10px; }
-
-/* ROW */
-.row {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-}
-
-/* LABEL */
-label { font-weight: 600; min-width: 120px; }
-
-/* INPUT */
-input {
-  border: 1px solid #ccc;
-  padding: 7px 9px;
-  border-radius: 5px;
-  font-size: 14px;
-}
-
-input:focus { outline: none; border-color: #c62828; }
-
-/* AUTO RESIZE */
-.auto { flex: 1; min-width: 140px; }
-.small { width: 120px; }
-.mini { width: 70px; }
-
-/* SERIAL */
-.serial-prefix {
-  background: #e0e0e0;
-  padding: 6px 10px;
-  border-radius: 5px;
-  font-weight: bold;
-}
-
-/* BUTTONS */
-.buttons {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 25px;
-}
-.center-btns { display: flex; gap: 12px; }
-button {
-  background: #c62828;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-}
-button:hover { background: #a91f1f; }
-.secondary {
-  background: #eeeeee;
-  color: #333;
-}
-.secondary:hover { background: #dddddd; }
-
-/* EXTRA DONOR TYPE */
-#donorExtra { display: none; }
-
+body { font-family: "Segoe UI", Arial, sans-serif; margin:0; background:#f7f7f7; color:#333; }
+header { display:flex; align-items:center; gap:15px; padding:15px 30px; border-bottom:4px solid #c62828; background:#fff; }
+header img { height:55px; }
+header h2 { color:#c62828; margin:0; font-weight:700; }
+.container { max-width:1200px; margin:25px auto; padding:20px; }
+.section { background:#fff; border-radius:8px; padding:16px 18px; margin-bottom:18px; border-left:6px solid #c62828; }
+.section-title { color:#c62828; font-weight:700; margin-bottom:10px; }
+.row { display:flex; gap:10px; align-items:center; margin-bottom:10px; flex-wrap:wrap; }
+label { font-weight:600; min-width:120px; }
+input { border:1px solid #ccc; padding:7px 9px; border-radius:5px; font-size:14px; }
+input:focus { outline:none; border-color:#c62828; }
+.auto { flex:1; min-width:140px; }
+.small { width:110px; }
+.mini { width:70px; }
+.serial-prefix { background:#e0e0e0; padding:6px 10px; border-radius:5px; font-weight:bold; }
+.buttons { display:flex; justify-content:space-between; align-items:center; margin-top:25px; }
+.center-btns { display:flex; gap:12px; }
+button { background:#c62828; color:white; border:none; padding:10px 18px; border-radius:6px; font-weight:600; cursor:pointer; }
+button:hover { background:#a91f1f; }
+.secondary { background:#eeeeee; color:#333; }
+.secondary:hover { background:#dddddd; }
+#donorExtra { display:none; }
+#menuPanel, #entryPanel, #listPanel { display:none; }
+table { width:100%; border-collapse:collapse; }
+table, th, td { border:1px solid #ccc; }
+th, td { padding:8px; text-align:center; }
+th { background:#c62828; color:white; }
+td.blood-A { background:#bbdefb; } /* A - blue */
+td.blood-B { background:#fff9c4; } /* B - yellow */
+td.blood-AB { background:#f8bbd0; } /* AB - pink */
+td.blood-O { background:#eeeeee; } /* O - gray */
 </style>
 </head>
 <body>
 
 <header>
-  <img src="assets/logo.png" alt="PRC Logo">
+  <img src="assets/logo.png">
   <h2>Philippine Red Cross – Baguio City Chapter</h2>
 </header>
 
 <div class="container">
 
-<form id="donorForm">
-
-<!-- BASIC INFO -->
-<div class="section">
-  <div class="section-title">Basic Information</div>
-  <div class="row">
-    <label>Date</label>
-    <input type="date" id="entryDate">
-  </div>
-  <div class="row">
-    <label>Donor Type</label>
-    <input id="donorType" class="small">
-    <input id="donorExtra" class="auto" placeholder="Specify if required">
-  </div>
+<!-- MENU PANEL -->
+<div id="menuPanel">
+  <h3>Donor Database Menu</h3>
+  <button onclick="showPanel('entry')">Donor Entry</button>
+  <button onclick="showPanel('list')">Donor List</button>
+  <button onclick="goHome()">Back to Homepage</button>
 </div>
 
-<!-- NAME -->
-<div class="section">
-  <div class="section-title">Donor Name</div>
+<!-- DONOR ENTRY PANEL -->
+<div id="entryPanel">
+<form id="donorForm">
+<div class="section"><div class="section-title">Basic Information</div>
+  <div class="row"><label>Date</label><input type="date" id="entryDate"></div>
+  <div class="row"><label>Donor Type</label><input id="donorType" class="small">
+  <input id="donorExtra" class="auto" placeholder="Specify if required"></div>
+</div>
+
+<div class="section"><div class="section-title">Donor Name</div>
   <div class="row">
     <input id="suffix" class="mini" placeholder="Suffix">
     <input id="surname" class="auto" placeholder="Surname">
@@ -145,27 +72,18 @@ button:hover { background: #a91f1f; }
   </div>
 </div>
 
-<!-- BIRTH & SEX -->
-<div class="section">
-  <div class="section-title">Birth Information</div>
+<div class="section"><div class="section-title">Birth & Contact</div>
   <div class="row">
     <label>Birthday</label>
     <input id="bd" class="mini" maxlength="2" placeholder="DD">
     <input id="bm" class="mini" maxlength="2" placeholder="MM">
     <input id="by" class="mini" maxlength="4" placeholder="YY/YYYY">
-    <label>Age</label>
-    <input id="age" class="small" readonly>
-    <label>Sex</label>
-    <input id="sex" class="mini" placeholder="M/F">
+    <label>Age</label><input id="age" class="small" readonly>
+    <label>Sex</label><input id="sex" class="mini" maxlength="1">
   </div>
-</div>
-
-<!-- CONTACT -->
-<div class="section">
-  <div class="section-title">Contact Details</div>
   <div class="row">
     <input id="address" class="auto" placeholder="Address">
-    <input id="city" class="small" maxlength="15" placeholder="City/Region">
+    <input id="city" class="small" maxlength="15" placeholder="City / Region">
   </div>
   <div class="row">
     <label>Contact</label>
@@ -175,27 +93,20 @@ button:hover { background: #a91f1f; }
   </div>
 </div>
 
-<!-- BLOOD & COLLECTION -->
-<div class="section">
-  <div class="section-title">Blood & Collection</div>
+<div class="section"><div class="section-title">Blood & Collection</div>
   <div class="row">
     <label>Serial</label>
     <span class="serial-prefix">PRC2600-</span>
     <input id="serial" class="auto">
   </div>
   <div class="row">
-    <label>Blood Type</label>
-    <input id="bloodType" class="small">
-    <label>Times Donated</label>
-    <input id="times" class="mini">
+    <label>Blood Type</label><input id="bloodType" class="small">
+    <label>Times Donated</label><input id="times" class="mini">
   </div>
   <div class="row">
-    <label>Bag Used</label>
-    <input id="bagUsed" class="small">
-    <label>Bag Type</label>
-    <input id="bagType" class="small">
-    <label>Amount</label>
-    <input id="amount" class="small">
+    <label>Bag Used</label><input id="bagUsed" class="small">
+    <label>Bag Type</label><input id="bagType" class="small">
+    <label>Amount</label><input id="amount" class="small">
   </div>
   <div class="row">
     <label>Time</label>
@@ -207,93 +118,186 @@ button:hover { background: #a91f1f; }
   </div>
 </div>
 
-<!-- BUTTONS -->
 <div class="buttons">
-  <button type="button" class="secondary" onclick="location.href='dashboard.html'">
-    Back to Homepage
-  </button>
-
+  <button type="button" class="secondary" onclick="showPanel('menu')">Back to Homepage</button>
   <div class="center-btns">
     <button type="button" onclick="saveDonor()">Submit</button>
-    <button type="button" class="secondary" onclick="location.href='donor-list.html'">
-      Go to Donor List
-    </button>
+    <button type="button" class="secondary" onclick="showPanel('list')">Go to Donor List</button>
   </div>
 </div>
-
 </form>
 </div>
 
+<!-- DONOR LIST PANEL -->
+<div id="listPanel">
+  <div style="margin-bottom:15px;">
+    <button onclick="showPanel('menu')">Back to Homepage</button>
+    <button onclick="exportToGoogleSheet()">Export to Google Sheet</button>
+    <button onclick="printDonorList()">Print</button>
+  </div>
+  <input type="text" id="searchInput" placeholder="Search..." oninput="filterTable()">
+  <table id="donorTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Date</th><th>Donor Type</th><th>Suffix</th><th>Surname</th><th>First Name</th><th>Middle Name</th>
+        <th>Birthday</th><th>Age</th><th>Sex</th><th>Address</th><th>City</th><th>Contact</th>
+        <th>Serial</th><th>Blood Type</th><th>Times Donated</th><th>Bag Used</th><th>Bag Type</th><th>Amount</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+</div>
+
 <script>
-// Prefill date
-const entryDate = document.getElementById("entryDate");
-const today = new Date().toISOString().split("T")[0];
-entryDate.value = today;
+// Panels
+function showPanel(panel){
+  document.getElementById('menuPanel').style.display='none';
+  document.getElementById('entryPanel').style.display='none';
+  document.getElementById('listPanel').style.display='none';
+  if(panel==='entry') document.getElementById('entryPanel').style.display='block';
+  if(panel==='list') document.getElementById('listPanel').style.display='block';
+  if(panel==='menu') document.getElementById('menuPanel').style.display='block';
+}
+showPanel('menu'); // default
 
-// Donor Type autofill
-const donorType = document.getElementById("donorType");
-const donorExtra = document.getElementById("donorExtra");
-donorType.oninput = () => {
-  const v = donorType.value.toUpperCase();
-  donorExtra.style.display = (v==="M"||v==="P") ? "inline-block" : "none";
-  if(v==="W") donorType.value="Walk-in";
-  if(v==="M") donorType.value="MBD";
-  if(v==="P") donorType.value="Patient Directed";
+function goHome(){ showPanel('menu'); }
+
+// Donor Entry Defaults
+const today=new Date().toISOString().split("T")[0];
+entryDate.value=today;
+
+donorType.oninput=()=>{
+  const v=donorType.value.toUpperCase();
+  donorExtra.style.display=(v==='M'||v==='P')?'inline-block':'none';
+  if(v==='W') donorType.value='Walk-in';
+  if(v==='M') donorType.value='MBD';
+  if(v==='P') donorType.value='Patient Directed';
 };
 
-// Birthday auto-age and cursor move
-const bd = document.getElementById("bd");
-const bm = document.getElementById("bm");
-const by = document.getElementById("by");
-const age = document.getElementById("age");
-const sex = document.getElementById("sex");
-
-bd.oninput = ()=>bd.value.length===2 && bm.focus();
-bm.oninput = ()=>bm.value.length===2 && by.focus();
-by.oninput = ()=>{
-  if(by.value.length===2) by.value = "19"+by.value;
-  const birthDate = new Date(by.value, bm.value-1, bd.value);
-  age.value = new Date().getFullYear()-birthDate.getFullYear();
-  sex.value = "M"; // default male, can be changed manually
+bd.oninput=()=>bd.value.length===2&&bm.focus();
+bm.oninput=()=>bm.value.length===2&&by.focus();
+by.oninput=()=>{
+  if(by.value.length===2) by.value='19'+by.value;
+  age.value=new Date().getFullYear()-new Date(by.value,bm.value-1,bd.value).getFullYear();
 };
-
-// Contact auto cursor move
-document.getElementById("c1").oninput = ()=>document.getElementById("c2").focus();
-document.getElementById("c2").oninput = ()=>document.getElementById("c3").focus();
-
-// Blood Type auto-fill
-const bloodType = document.getElementById("bloodType");
-bloodType.oninput = ()=>{
+c1.oninput=()=>c1.value.length===4&&c2.focus();
+c2.oninput=()=>c2.value.length===3&&c3.focus();
+bloodType.oninput=()=>{
   const map={AP:"A+",AN:"A-",BP:"B+",BN:"B-",ABP:"AB+",ABN:"AB-",OP:"O+",ON:"O-"};
   if(map[bloodType.value.toUpperCase()]) bloodType.value=map[bloodType.value.toUpperCase()];
 };
-
-// Bag Used/Type/Amount
-const bagUsed = document.getElementById("bagUsed");
-bagUsed.oninput = ()=>bagUsed.value=(bagUsed.value.toUpperCase()==="K"?"Karmi":bagUsed.value.toUpperCase()==="T"?"Terumo":bagUsed.value);
-const bagType = document.getElementById("bagType");
-bagType.oninput = ()=>bagType.value={S:"Single",D:"Double",T:"Triple"}[bagType.value.toUpperCase()]||bagType.value;
-const amount = document.getElementById("amount");
-amount.oninput = ()=>amount.value={4:"450mL",Q:"QNS",U:"UB"}[amount.value.toUpperCase()]||amount.value;
-
-// Time auto-cursor move
-const sh = document.getElementById("sh");
-const sm = document.getElementById("sm");
-const eh = document.getElementById("eh");
-const em = document.getElementById("em");
-
+bagUsed.oninput=()=>bagUsed.value=bagUsed.value.toUpperCase()==="K"?"K":bagUsed.value.toUpperCase()==="T"?"T":bagUsed.value;
+bagType.oninput=()=>bagType.value={S:"S",D:"D",T:"T"}[bagType.value.toUpperCase()]||bagType.value;
+amount.oninput=()=>amount.value={4:"450mL",Q:"QNS",U:"UB"}[amount.value.toUpperCase()]||amount.value;
 sh.oninput=()=>sh.value.length===2&&sm.focus();
 sm.oninput=()=>sm.value.length===2&&eh.focus();
 eh.oninput=()=>eh.value.length===2&&em.focus();
 
-// Save donor
+// Data Table
+let donors=[];
 function saveDonor(){
-  alert("Donor saved successfully");
+  const d={
+    date:entryDate.value, donorType:donorType.value, donorExtra:donorExtra.value,
+    suffix:suffix.value, surname:surname.value, firstName:firstName.value, middleName:middleName.value,
+    bd:bd.value, bm:bm.value, by:by.value, age:age.value, sex:sex.value,
+    address:address.value, city:city.value,
+    contact:c1.value+"-"+c2.value+"-"+c3.value,
+    serial:serial.value,
+    bloodType:bloodType.value, times:times.value, bagUsed:bagUsed.value, bagType:bagType.value, amount:amount.value
+  };
+  donors.push(d);
+  populateTable();
   donorForm.reset();
   entryDate.value=today;
   donorExtra.style.display="none";
 }
-</script>
 
+// Populate Table
+function populateTable(){
+  const tbody=document.querySelector("#donorTable tbody");
+  tbody.innerHTML="";
+  donors.forEach((d,i)=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td>${i+1}</td>
+      <td>${d.date}</td>
+      <td>${d.donorType}</td>
+      <td>${d.suffix}</td>
+      <td>${d.surname}</td>
+      <td>${d.firstName}</td>
+      <td>${d.middleName}</td>
+      <td>${d.bd}/${d.bm}/${d.by}</td>
+      <td>${d.age}</td>
+      <td>${d.sex}</td>
+      <td>${d.address}</td>
+      <td>${d.city}</td>
+      <td>${d.contact}</td>
+      <td>${d.serial}</td>
+      <td class="blood-${d.bloodType[0]}">${d.bloodType}</td>
+      <td>${d.times}</td>
+      <td>${d.bagUsed}</td>
+      <td>${d.bagType}</td>
+      <td>${d.amount}</td>
+      <td>
+        <button onclick="editDonor(${i})">✏️</button>
+        <button onclick="deleteDonor(${i})">🗑️</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function editDonor(i){
+  const d=donors[i];
+  showPanel('entry');
+  entryDate.value=d.date;
+  donorType.value=d.donorType;
+  donorExtra.value=d.donorExtra;
+  suffix.value=d.suffix;
+  surname.value=d.surname;
+  firstName.value=d.firstName;
+  middleName.value=d.middleName;
+  bd.value=d.bd; bm.value=d.bm; by.value=d.by; age.value=d.age; sex.value=d.sex;
+  address.value=d.address; city.value=d.city;
+  c1.value=d.contact.split("-")[0]; c2.value=d.contact.split("-")[1]; c3.value=d.contact.split("-")[2];
+  serial.value=d.serial;
+  bloodType.value=d.bloodType; times.value=d.times;
+  bagUsed.value=d.bagUsed; bagType.value=d.bagType; amount.value=d.amount;
+  donors.splice(i,1); // remove original entry to replace after resubmit
+}
+
+function deleteDonor(i){
+  if(confirm("Delete this donor?")) { donors.splice(i,1); populateTable(); }
+}
+
+// Filter Table
+function filterTable(){
+  const term=document.getElementById("searchInput").value.toLowerCase();
+  const trs=document.querySelectorAll("#donorTable tbody tr");
+  trs.forEach(tr=>{
+    tr.style.display=[...tr.cells].some(td=>td.textContent.toLowerCase().includes(term))?'':'none';
+  });
+}
+
+// Print
+function printDonorList(){
+  const printWindow=window.open('','PRINT');
+  printWindow.document.write('<html><head><title>Donor List</title>');
+  printWindow.document.write('<style>table{width:100%;border-collapse:collapse}th,td{border:1px solid #000;padding:5px;text-align:center;}th{background:#c62828;color:white;}</style></head><body>');
+  printWindow.document.write(document.querySelector("#donorTable").outerHTML);
+  printWindow.document.write('</body></html>');
+  printWindow.document.close();
+  printWindow.print();
+}
+
+// Placeholder Google Sheet
+function exportToGoogleSheet(){
+  alert("Google Sheet export will be implemented with API key.");
+}
+</script>
 </body>
 </html>
