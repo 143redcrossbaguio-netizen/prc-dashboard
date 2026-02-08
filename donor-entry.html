@@ -19,6 +19,9 @@ label { display:inline-block; width:140px; vertical-align:top; }
 .blood-AB { background-color: #ffc0cb; } /* Pink */
 .blood-O { background-color: #fff; } /* White */
 #loginContainer { text-align:center; margin-top:100px; }
+.bottom-buttons { display:flex; justify-content:center; margin-top:20px; }
+.bottom-left { position:fixed; bottom:20px; left:20px; }
+.bottom-center { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); }
 </style>
 </head>
 <body>
@@ -28,6 +31,7 @@ label { display:inline-block; width:140px; vertical-align:top; }
     <label>Username:</label><input type="text" id="username"><br>
     <label>Password:</label><input type="password" id="password"><br>
     <button onclick="login()">Login</button>
+    <button onclick="changeLogin()">Change Login</button>
     <p id="loginMsg" style="color:red;"></p>
 </div>
 
@@ -41,7 +45,6 @@ label { display:inline-block; width:140px; vertical-align:top; }
 </header>
 
 <div class="container">
-    <button style="float:left;margin-bottom:10px;" onclick="logout()">Back</button>
     <form id="donorForm">
         <label>Date:</label><input type="date" id="date" required><br>
 
@@ -87,35 +90,47 @@ label { display:inline-block; width:140px; vertical-align:top; }
 
         <input type="submit" value="Submit" style="float:right;">
     </form>
+
+    <div class="bottom-buttons">
+        <button class="bottom-left" onclick="window.location.reload()">Back</button>
+        <button class="bottom-center" onclick="window.location.href='donor-list.html'">Go to Donor List</button>
+    </div>
 </div>
 </div>
 
 <script>
-// --- LOGIN ---
-function login() {
+// --- Login ---
+if(!localStorage.getItem("loginUser")) localStorage.setItem("loginUser","admin");
+if(!localStorage.getItem("loginPass")) localStorage.setItem("loginPass","prc123");
+
+function login(){
     const user=document.getElementById("username").value;
     const pass=document.getElementById("password").value;
-    if(user==="admin" && pass==="prc123"){
+    if(user===localStorage.getItem("loginUser") && pass===localStorage.getItem("loginPass")){
         document.getElementById("loginContainer").style.display="none";
         document.getElementById("donorContainer").style.display="block";
     } else {
         document.getElementById("loginMsg").innerText="Invalid username or password!";
     }
 }
-function logout(){
-    document.getElementById("donorContainer").style.display="none";
-    document.getElementById("loginContainer").style.display="block";
+
+function changeLogin(){
+    let newUser=prompt("Enter new username:");
+    let newPass=prompt("Enter new password:");
+    if(newUser && newPass){
+        localStorage.setItem("loginUser", newUser);
+        localStorage.setItem("loginPass", newPass);
+        alert("Login updated!");
+    }
 }
 
 // --- Auto resize input fields ---
-function autoResize(el){
-    el.style.width = ((el.value.length + 1) * 10) + "px";
-}
+function autoResize(el){ el.style.width=((el.value.length+1)*10)+"px";}
 
 // --- Default date
-document.getElementById("date").valueAsDate = new Date();
+document.getElementById("date").valueAsDate=new Date();
 
-// --- Age calculation & auto move
+// --- Age calculation & cursor move
 function calculateAge() {
     let y=parseInt(document.getElementById("bYear").value);
     let m=parseInt(document.getElementById("bMonth").value)-1;
