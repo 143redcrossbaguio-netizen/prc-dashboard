@@ -4,37 +4,40 @@
 <meta charset="UTF-8">
 <title>Donor Entry | PRC Baguio</title>
 <style>
-body { font-family: "Segoe UI", Arial, sans-serif; background:#f7f7f7; margin:0; color:#333;}
-header { display:flex; align-items:center; gap:15px; padding:15px 30px; border-bottom:4px solid #c62828; background:#fff;}
-header img { height:55px; }
-header h2 { color:#c62828; margin:0; font-weight:700; }
-.container { max-width:1200px; margin:25px auto; padding:20px;}
-.section { background:#fff; border-radius:8px; padding:16px 18px; margin-bottom:18px; border-left:6px solid #c62828; }
-.section-title { color:#c62828; font-weight:700; margin-bottom:10px; }
-.row { display:flex; gap:10px; align-items:center; margin-bottom:10px; flex-wrap:wrap; }
-label { font-weight:600; color:#444; min-width:120px; }
-input { border:1px solid #ccc; padding:7px 9px; border-radius:5px; font-size:14px; }
-input:focus { outline:none; border-color:#c62828; }
-.auto { flex:1; min-width:140px; }
-.small { width:110px; } .mini{ width:70px; }
-.serial-prefix { background:#e0e0e0; padding:6px 10px; border-radius:5px; font-weight:bold; }
-.buttons { display:flex; justify-content:space-between; align-items:center; margin-top:25px; }
-.center-btns { display:flex; gap:12px; }
-button { background:#c62828; color:white; border:none; padding:10px 18px; border-radius:6px; font-weight:600; cursor:pointer; }
-button:hover { background:#a91f1f; }
-.secondary { background:#eeeeee; color:#333; }
-.secondary:hover { background:#dddddd; }
-#donorExtra { display:none; }
+body { font-family:"Segoe UI",Arial,sans-serif; background:#fff; margin:0; color:#333;}
+header {display:flex; align-items:center; gap:15px; padding:15px 30px; border-bottom:4px solid #c62828;}
+header img {height:55px;}
+header h2 {color:#c62828; margin:0; font-weight:700;}
+.container {max-width:1200px; margin:25px auto; padding:20px;}
+.section {background:#f5f5f5; border-radius:8px; padding:16px 18px; margin-bottom:18px; border-left:6px solid #c62828;}
+.section-title {color:#c62828; font-weight:700; margin-bottom:10px;}
+.row {display:flex; gap:10px; align-items:center; margin-bottom:10px; flex-wrap:wrap;}
+label {font-weight:600; color:#444; min-width:120px;}
+input {border:1px solid #ccc; padding:7px 9px; border-radius:5px; font-size:14px;}
+input:focus {outline:none; border-color:#c62828;}
+.auto {flex:1; min-width:140px;}
+.small {width:110px;}
+.mini {width:70px;}
+.serial-prefix {background:#e0e0e0; padding:6px 10px; border-radius:5px; font-weight:bold;}
+.buttons {display:flex; justify-content:space-between; align-items:center; margin-top:25px;}
+.center-btns {display:flex; gap:12px;}
+button {background:#c62828; color:white; border:none; padding:10px 18px; border-radius:6px; font-weight:600; cursor:pointer;}
+button:hover {background:#a91f1f;}
+.secondary {background:#eeeeee; color:#333;}
+.secondary:hover {background:#dddddd;}
+#donorExtra {display:none;}
 </style>
 </head>
+
 <body>
 
 <header>
-  <img src="assets/logo.png" alt="PRC Logo">
+  <img src="assets/logo.png">
   <h2>Philippine Red Cross – Baguio City Chapter</h2>
 </header>
 
 <div class="container">
+
 <form id="donorForm">
 
 <!-- BASIC -->
@@ -126,10 +129,14 @@ button:hover { background:#a91f1f; }
 
 <!-- BUTTONS -->
 <div class="buttons">
-  <button type="button" class="secondary" onclick="location.href='dashboard.html'">Back to Homepage</button>
+  <button type="button" class="secondary" onclick="location.href='donor-list.html'">
+    Back to Homepage
+  </button>
   <div class="center-btns">
     <button type="button" onclick="saveDonor()">Submit</button>
-    <button type="button" class="secondary" onclick="location.href='donor-list.html'">Go to Donor List</button>
+    <button type="button" class="secondary" onclick="location.href='donor-list.html'">
+      Go to Donor List
+    </button>
   </div>
 </div>
 
@@ -139,6 +146,49 @@ button:hover { background:#a91f1f; }
 <script>
 const today = new Date().toISOString().split("T")[0];
 entryDate.value = today;
+
+// Check if editing
+let editIndex = localStorage.getItem("editIndex");
+let editDonor = JSON.parse(localStorage.getItem("editDonor") || "null");
+
+if(editDonor){
+  entryDate.value = editDonor.date;
+  donorType.value = editDonor.donorType;
+  if(editDonor.donorType === "MBD" || editDonor.donorType === "Patient Directed") donorExtra.style.display="inline-block";
+  donorExtra.value = editDonor.donorExtra || "";
+
+  suffix.value = editDonor.suffix;
+  surname.value = editDonor.surname;
+  firstName.value = editDonor.firstName;
+  middleName.value = editDonor.middleName;
+
+  bd.value = editDonor.birthday.split("-")[0];
+  bm.value = editDonor.birthday.split("-")[1];
+  by.value = editDonor.birthday.split("-")[2];
+  age.value = editDonor.age;
+
+  sex.value = editDonor.sex;
+
+  address.value = editDonor.address;
+  city.value = editDonor.city;
+
+  c1.value = editDonor.contact.split("-")[0];
+  c2.value = editDonor.contact.split("-")[1];
+  c3.value = editDonor.contact.split("-")[2];
+
+  serial.value = editDonor.serial;
+
+  bloodType.value = editDonor.bloodType;
+  times.value = editDonor.times;
+  bagUsed.value = editDonor.bagUsed;
+  bagType.value = editDonor.bagType;
+  amount.value = editDonor.amount;
+
+  sh.value = editDonor.time.split(":")[0];
+  sm.value = editDonor.time.split(":")[1];
+  eh.value = editDonor.time.split(":")[2];
+  em.value = editDonor.time.split(":")[3];
+}
 
 donorType.oninput = () => {
   const v = donorType.value.toUpperCase();
@@ -172,7 +222,7 @@ sm.oninput=()=>sm.value.length===2&&eh.focus();
 eh.oninput=()=>eh.value.length===2&&em.focus();
 
 function saveDonor(){
-  const donor = {
+  let donorData = {
     date: entryDate.value,
     donorType: donorType.value,
     donorExtra: donorExtra.value,
@@ -182,22 +232,33 @@ function saveDonor(){
     middleName: middleName.value,
     birthday: `${bd.value}-${bm.value}-${by.value}`,
     age: age.value,
-    sex: sex.value.toUpperCase(),
+    sex: sex.value,
     address: address.value,
     city: city.value,
-    contact: `${c1.value}${c2.value}${c3.value}`,
+    contact: `${c1.value}-${c2.value}-${c3.value}`,
     serial: serial.value,
     bloodType: bloodType.value,
     times: times.value,
     bagUsed: bagUsed.value,
     bagType: bagType.value,
     amount: amount.value,
-    time: `${sh.value}:${sm.value}-${eh.value}:${em.value}`
+    time: `${sh.value}:${sm.value}:${eh.value}:${em.value}`
   };
-  let donors = JSON.parse(localStorage.getItem('donors')||'[]');
-  donors.push(donor);
-  localStorage.setItem('donors', JSON.stringify(donors));
-  alert("Donor saved successfully!");
+
+  let donors = JSON.parse(localStorage.getItem("donors") || "[]");
+
+  if(editIndex !== null){
+    donors[editIndex] = donorData;
+    alert("Donor updated successfully!");
+    localStorage.removeItem("editIndex");
+    localStorage.removeItem("editDonor");
+    editIndex = null;
+  } else {
+    donors.push(donorData);
+    alert("Donor saved successfully!");
+  }
+
+  localStorage.setItem("donors", JSON.stringify(donors));
   donorForm.reset();
   entryDate.value = today;
   donorExtra.style.display = "none";
