@@ -25,78 +25,75 @@ header img {
   margin-right: 15px;
 }
 
-.main {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+.dashboard {
+  display: flex;
   gap: 15px;
   padding: 15px;
 }
 
-.panel {
+.card {
+  flex: 1;
   background: white;
-  padding: 15px;
-  border-radius: 6px;
+  border: 2px solid #c62828;
+  padding: 25px;
+  text-align: center;
+  font-weight: bold;
+  color: #c62828;
+  cursor: pointer;
+}
+
+.section {
+  display: none;
+  padding: 20px;
+  background: white;
+  margin: 15px;
   border: 2px solid #c62828;
 }
 
-h3 {
-  color: #c62828;
-  margin-top: 0;
+.section.active {
+  display: block;
 }
 
 label {
   font-weight: bold;
-  margin-top: 6px;
   display: block;
+  margin-top: 8px;
 }
 
 input {
+  width: 100%;
   padding: 6px;
   margin-top: 3px;
-  width: 100%;
   box-sizing: border-box;
 }
-
-.small { width: 80px; }
-.city { width: 150px; }
-.contact { width: 70px; }
 
 .row {
   display: flex;
   gap: 6px;
-  align-items: center;
 }
 
-.hidden { display: none; }
+.small { width: 80px; }
 
 button {
-  padding: 10px;
+  margin-top: 15px;
+  padding: 12px;
   border: none;
-  cursor: pointer;
-}
-
-.submit {
   background: #c62828;
   color: white;
   width: 100%;
-  margin-top: 10px;
-}
-
-.export, .print {
-  background: #555;
-  color: white;
-  margin-right: 5px;
+  cursor: pointer;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12px;
+  margin-top: 15px;
 }
 
 th, td {
   border: 1px solid #ccc;
-  padding: 5px;
+  padding: 6px;
+  font-size: 13px;
 }
 
 th {
@@ -104,9 +101,20 @@ th {
   color: white;
 }
 
+.month {
+  background: #eee;
+  font-weight: bold;
+}
+
 @media print {
-  button { display: none; }
-  body { background: white; }
+  header, .dashboard, .section:not(#listSection), button {
+    display: none;
+  }
+  #listSection {
+    display: block;
+    border: none;
+  }
+  @page { size: landscape; }
 }
 </style>
 </head>
@@ -118,100 +126,60 @@ th {
   <h2>Philippine Red Cross – Baguio City Chapter</h2>
 </header>
 
-<div class="main">
+<div class="dashboard">
+  <div class="card" onclick="showSection('entrySection')">DONOR ENTRY</div>
+  <div class="card" onclick="showSection('listSection')">DONOR LIST</div>
+</div>
 
-<!-- ================= LEFT PANEL ================= -->
-<div class="panel">
-<h3>Donor Data Entry</h3>
+<!-- ================= DONOR ENTRY ================= -->
+<div id="entrySection" class="section active">
+
+<h3>Donor Entry</h3>
 
 <label>Date</label>
 <input type="date" id="date">
 
-<label>Donor Type (W / M / P)</label>
-<input id="donorType" onkeyup="setDonorType()">
-
-<input id="extraBox" class="hidden" placeholder="MBD / Patient Info">
-
-<div class="row">
-  <div style="flex:1">
-    <label>Surname</label>
-    <input id="surname">
-  </div>
-  <div>
-    <label>Suffix</label>
-    <input id="suffix" maxlength="3" class="small">
-  </div>
-</div>
+<label>Surname</label>
+<input id="surname">
 
 <label>First Name</label>
 <input id="fname">
 
-<label>Middle Name</label>
-<input id="mname">
-
 <label>Birthdate</label>
 <div class="row">
-  <input id="mm" placeholder="MM" maxlength="2" class="small" onkeyup="calcAge()">
-  <input id="dd" placeholder="DD" maxlength="2" class="small" onkeyup="calcAge()">
-  <input id="yy" placeholder="YY/YYYY" maxlength="4" class="small" onkeyup="calcAge()">
+  <input id="mm" placeholder="MM" class="small">
+  <input id="dd" placeholder="DD" class="small">
+  <input id="yy" placeholder="YY/YYYY" class="small" onkeyup="calcAge()">
 </div>
 
 <label>Age</label>
 <input id="age" readonly>
 
-<label>Address</label>
-<input id="address">
-
 <label>City / Region</label>
-<input id="city" maxlength="15" class="city">
+<input id="city">
 
-<label>Contact Number</label>
-<div class="row">
-  <input maxlength="4" class="contact">
-  <input maxlength="3" class="contact">
-  <input maxlength="4" class="contact">
+<button onclick="saveDonor()">SUBMIT</button>
+
 </div>
 
-<label>Blood Bag Used (K / T)</label>
-<input id="bagUsed" onkeyup="fillBagUsed()">
+<!-- ================= DONOR LIST ================= -->
+<div id="listSection" class="section">
 
-<label>Blood Bag Type (S / D / T)</label>
-<input id="bagType" onkeyup="fillBagType()">
+<h3>Donor List (Compiled Monthly)</h3>
 
-<label>Amount Collected (4 / Q / U)</label>
-<input id="amount" onkeyup="fillAmount()">
+<button onclick="window.print()">PRINT DONOR LIST</button>
 
-<label>Time Started</label>
-<div class="row">
-  <input placeholder="HH" maxlength="2" class="small">
-  <input placeholder="MM" maxlength="2" class="small">
-</div>
-
-<label>Time Ended</label>
-<div class="row">
-  <input placeholder="HH" maxlength="2" class="small">
-  <input placeholder="MM" maxlength="2" class="small">
-</div>
-
-<button class="submit" onclick="saveDonor()">SUBMIT</button>
-</div>
-
-<!-- ================= RIGHT PANEL ================= -->
-<div class="panel">
-<h3>Donor List</h3>
-
-<button class="export" onclick="exportCSV()">EXPORT EXCEL</button>
-<button class="print" onclick="window.print()">PRINT</button>
-
-<table id="table">
+<table>
 <thead>
 <tr>
-<th>Date</th><th>Type</th><th>Name</th><th>Age</th><th>City</th>
+<th>Date</th>
+<th>Name</th>
+<th>Age</th>
+<th>City</th>
 </tr>
 </thead>
-<tbody></tbody>
+<tbody id="donorTable"></tbody>
 </table>
-</div>
 
 </div>
 
@@ -219,11 +187,9 @@ th {
 document.getElementById("date").valueAsDate = new Date();
 let donors = JSON.parse(localStorage.getItem("donors")) || [];
 
-function setDonorType(){
-  let v = donorType.value.toUpperCase();
-  if(v === "W") donorType.value = "WALK-IN";
-  if(v === "M"){ donorType.value = "MBD"; extraBox.classList.remove("hidden"); }
-  if(v === "P"){ donorType.value = "PATIENT DIRECTED"; extraBox.classList.remove("hidden"); }
+function showSection(id){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
 }
 
 function calcAge(){
@@ -234,62 +200,41 @@ function calcAge(){
   }
 }
 
-function fillBagUsed(){
-  if(bagUsed.value.toUpperCase() === "K") bagUsed.value = "KARMI";
-  if(bagUsed.value.toUpperCase() === "T") bagUsed.value = "TERUMO";
-}
-
-function fillBagType(){
-  let v = bagType.value.toUpperCase();
-  if(v === "S") bagType.value = "SINGLE";
-  if(v === "D") bagType.value = "DOUBLE";
-  if(v === "T") bagType.value = "TRIPLE";
-}
-
-function fillAmount(){
-  let v = amount.value.toUpperCase();
-  if(v === "4") amount.value = "450mL";
-  if(v === "Q") amount.value = "QNS";
-  if(v === "U") amount.value = "UB";
-}
-
 function saveDonor(){
   donors.push({
     date: date.value,
-    type: donorType.value,
+    month: new Date(date.value).toLocaleString("default",{month:"long",year:"numeric"}),
     name: surname.value + ", " + fname.value,
     age: age.value,
     city: city.value
   });
   localStorage.setItem("donors", JSON.stringify(donors));
-  render();
+  document.getElementById("entrySection").querySelectorAll("input").forEach(i=>i.value="");
+  document.getElementById("date").valueAsDate = new Date();
+  renderList();
 }
 
-function render(){
-  let tbody = document.querySelector("#table tbody");
+function renderList(){
+  let tbody = document.getElementById("donorTable");
   tbody.innerHTML = "";
+  let grouped = {};
   donors.forEach(d=>{
-    tbody.innerHTML += `<tr>
-      <td>${d.date}</td>
-      <td>${d.type}</td>
-      <td>${d.name}</td>
-      <td>${d.age}</td>
-      <td>${d.city}</td>
-    </tr>`;
+    grouped[d.month] = grouped[d.month] || [];
+    grouped[d.month].push(d);
   });
+  for(let m in grouped){
+    tbody.innerHTML += `<tr class="month"><td colspan="4">${m}</td></tr>`;
+    grouped[m].forEach(d=>{
+      tbody.innerHTML += `<tr>
+        <td>${d.date}</td>
+        <td>${d.name}</td>
+        <td>${d.age}</td>
+        <td>${d.city}</td>
+      </tr>`;
+    });
+  }
 }
-render();
-
-function exportCSV(){
-  let csv = "Date,Type,Name,Age,City\n";
-  donors.forEach(d=>{
-    csv += `${d.date},${d.type},${d.name},${d.age},${d.city}\n`;
-  });
-  let a = document.createElement("a");
-  a.href = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
-  a.download = "donors.csv";
-  a.click();
-}
+renderList();
 </script>
 
 </body>
