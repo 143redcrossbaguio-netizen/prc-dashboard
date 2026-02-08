@@ -9,7 +9,7 @@ body { font-family: Arial; margin:20px; background:#fff; color:#b71c1c; }
 header { display:flex; align-items:center; gap:10px; margin-bottom:20px; }
 header img { height:50px; }
 h2 { text-align:center; margin-bottom:20px; }
-form { display:flex; flex-direction:column; gap:10px; max-width:900px; margin:auto; }
+form { display:flex; flex-direction:column; gap:10px; max-width:950px; margin:auto; }
 .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
 input, select { padding:5px; font-size:14px; }
 input.text { flex:1; min-width:80px; }
@@ -21,6 +21,7 @@ button:hover { background:#a11212; }
 .blood-type { width:60px; text-align:center; }
 .age-box { width:50px; text-align:center; }
 .serial-prefix { width:80px; text-align:center; background:#eee; border:none; }
+#extraType { display:none; width:150px; }
 </style>
 </head>
 <body>
@@ -33,11 +34,18 @@ button:hover { background:#a11212; }
 <h2>Philippine Red Cross - Baguio City Chapter</h2>
 
 <form id="donorForm">
+<!-- Row 0: Date of Entry -->
+<div class="row">
+<label>Date:</label>
+<input type="date" id="entryDate">
+</div>
+
 <!-- Row 1: Donor Type -->
 <div class="row">
 <label>Donor Type:</label>
 <input type="text" id="donorType" maxlength="1" placeholder="W/M/P">
 <input type="text" id="donorTypeAuto" readonly class="text" placeholder="Walk-in/MBD/Patient Directed">
+<input type="text" id="extraType" placeholder="Specify if MBD or Patient Directed">
 </div>
 
 <!-- Row 2: Suffix + Name -->
@@ -122,76 +130,89 @@ button:hover { background:#a11212; }
 </form>
 
 <script>
-// Ensure user is logged in
+// Set default date today
+const today = new Date().toISOString().split('T')[0];
+document.getElementById("entryDate").value = today;
+
+// Login check
 if(sessionStorage.getItem("loggedIn") !== "true"){
     window.location.href="login.html";
 }
 
-// Donor Type autofill
+// Donor Type autofill & extra box
 document.getElementById("donorType").addEventListener("input", function(){
     const val = this.value.toUpperCase();
     const auto = document.getElementById("donorTypeAuto");
-    if(val === "W") auto.value = "Walk-in";
-    else if(val === "M") auto.value = "MBD";
-    else if(val === "P") auto.value = "Patient Directed";
-    else auto.value = "";
+    const extra = document.getElementById("extraType");
+    if(val==="W"){ auto.value="Walk-in"; extra.style.display="none"; }
+    else if(val==="M"){ auto.value="MBD"; extra.style.display="inline-block"; }
+    else if(val==="P"){ auto.value="Patient Directed"; extra.style.display="inline-block"; }
+    else { auto.value=""; extra.style.display="none"; }
 });
 
-// Birthday -> Age calculation
-function calcAge(){
-    const d = parseInt(document.getElementById("bdayDay").value);
-    const m = parseInt(document.getElementById("bdayMonth").value);
+// Birthday -> Auto-age & cursor move
+function calcAgeAndMove(e){
+    const d = document.getElementById("bdayDay").value;
+    const m = document.getElementById("bdayMonth").value;
     let y = document.getElementById("bdayYear").value;
-    if(y.length === 2) y = "19"+y; // auto 2-digit year
-    const birth = new Date(y, m-1, d);
+    if(y.length===2) y="19"+y;
+    const birth = new Date(y,m-1,d);
     const today = new Date();
     let age = today.getFullYear() - birth.getFullYear();
     const mDiff = today.getMonth() - birth.getMonth();
-    if(mDiff < 0 || (mDiff ===0 && today.getDate() < birth.getDate())) age--;
-    if(!isNaN(age)) document.getElementById("age").value = age;
-}
+    if(mDiff<0 || (mDiff===0 && today.getDate()<birth.getDate())) age--;
+    if(!isNaN(age)) document.getElementById("age").value=age;
+
+    // Auto cursor move
+    if(e.target.id==="bdayDay" && d.length===2) document.getElementById("bdayMonth").focus();
+    if(e.target.id==="bdayMonth" && m.length===2) document.getElementById("bdayYear").focus();
+});
 ["bdayDay","bdayMonth","bdayYear"].forEach(id=>{
-    document.getElementById(id).addEventListener("input", calcAge);
+    document.getElementById(id).addEventListener("input",calcAgeAndMove);
 });
 
-// Blood Type autofill
+// Blood Type
 document.getElementById("bloodType").addEventListener("input", function(){
-    const val = this.value.toUpperCase();
-    const colorMap = {"A+":"#ADD8E6","A-":"#ADD8E6","B+":"#FFFF99","B-":"#FFFF99",
-                      "AB+":"#FFC0CB","AB-":"#FFC0CB","O+":"#FFFFFF","O-":"#FFFFFF"};
-    const shortcut = {"AP":"A+","AN":"A-","BP":"B+","BN":"B-","ABP":"AB+","ABN":"AB-","OP":"O+","ON":"O-"};
-    if(shortcut[val]) this.value = shortcut[val];
-    this.style.background = colorMap[this.value] || "white";
+    const val=this.value.toUpperCase();
+    const colorMap={"A+":"#ADD8E6","A-":"#ADD8E6","B+":"#FFFF99","B-":"#FFFF99",
+                    "AB+":"#FFC0CB","AB-":"#FFC0CB","O+":"#FFFFFF","O-":"#FFFFFF"};
+    const shortcut={"AP":"A+","AN":"A-","BP":"B+","BN":"B-","ABP":"AB+","ABN":"AB-","OP":"O+","ON":"O-"};
+    if(shortcut[val]) this.value=shortcut[val];
+    this.style.background=colorMap[this.value]||"white";
 });
 
-// Blood Bag, Bag Type, Amount auto-fill
+// Blood Bag, Bag Type, Amount
 document.getElementById("bagUsed").addEventListener("input", function(){
-    const val = this.value.toUpperCase();
+    const val=this.value.toUpperCase();
     if(val==="K") this.value="Karmi";
     else if(val==="T") this.value="Terumo";
 });
 document.getElementById("bagType").addEventListener("input", function(){
-    const val = this.value.toUpperCase();
-    const map = {"S":"Single","D":"Double","T":"Triple","Q":"Quadruple"};
-    if(map[val]) this.value = map[val];
+    const val=this.value.toUpperCase();
+    const map={"S":"Single","D":"Double","T":"Triple","Q":"Quadruple"};
+    if(map[val]) this.value=map[val];
 });
 document.getElementById("amount").addEventListener("input", function(){
-    const val = this.value.toUpperCase();
-    const map = {"4":"450ml","Q":"QNS","U":"UB"};
-    if(map[val]) this.value = map[val];
+    const val=this.value.toUpperCase();
+    const map={"4":"450ml","Q":"QNS","U":"UB"};
+    if(map[val]) this.value=map[val];
 });
 
-// Time auto cursor movement
-["timeStartHH","timeStartMM","timeEndHH","timeEndMM"].forEach((id,index,arr)=>{
-    document.getElementById(id).addEventListener("input", function(){
-        if(this.value.length==2 && index<arr.length-1) arr[index+1].focus();
+// Time auto cursor
+const timeFields=["timeStartHH","timeStartMM","timeEndHH","timeEndMM"];
+timeFields.forEach((id,index)=>{
+    document.getElementById(id).addEventListener("input",function(){
+        if(this.value.length===2 && index<timeFields.length-1)
+            document.getElementById(timeFields[index+1]).focus();
     });
 });
 
 // Submit donor
 function submitDonor(){
     const donor = {
+        date: document.getElementById("entryDate").value,
         type: document.getElementById("donorTypeAuto").value,
+        extraType: document.getElementById("extraType").value,
         suffix: document.getElementById("suffix").value,
         surname: document.getElementById("surname").value,
         firstName: document.getElementById("firstName").value,
@@ -200,8 +221,8 @@ function submitDonor(){
         age: document.getElementById("age").value,
         address: document.getElementById("address").value,
         city: document.getElementById("city").value,
-        contact: document.getElementById("contact1").value + "-" + document.getElementById("contact2").value + "-" + document.getElementById("contact3").value,
-        serial: "PRC2600-" + document.getElementById("serialNum").value,
+        contact: document.getElementById("contact1").value+"-"+document.getElementById("contact2").value+"-"+document.getElementById("contact3").value,
+        serial: "PRC2600-"+document.getElementById("serialNum").value,
         bloodType: document.getElementById("bloodType").value,
         timesDonated: document.getElementById("timesDonated").value,
         bagUsed: document.getElementById("bagUsed").value,
@@ -217,6 +238,8 @@ function submitDonor(){
     document.getElementById("donorForm").reset();
     document.getElementById("donorTypeAuto").value="";
     document.getElementById("age").value="";
+    document.getElementById("extraType").style.display="none";
+    document.getElementById("entryDate").value=today;
 }
 
 // Navigation
