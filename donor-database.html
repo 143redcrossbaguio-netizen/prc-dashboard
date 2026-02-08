@@ -3,23 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRC Baguio - Donor List</title>
+<title>PRC Baguio - Donor Entry</title>
 <style>
-body { font-family: Arial; background:#fff; color:#b71c1c; margin:0;}
-header { background:#b71c1c; color:white; padding:10px 20px; display:flex; align-items:center;}
+body { font-family: Arial; background: #fff; color: #b71c1c; margin:0; }
+header { background: #b71c1c; color:white; padding:10px 20px; display:flex; align-items:center;}
 header img { height:50px; margin-right:15px; }
 h1,h2 { margin:5px 0; }
-.container { padding:20px; }
-input[type="text"] { padding:5px; width:100%; margin-bottom:10px; font-size:14px;}
-button { padding:10px 20px; background:#b71c1c; color:white; border:none; cursor:pointer; font-size:14px; margin-bottom:10px;}
-table { width:100%; border-collapse: collapse; }
-table, th, td { border:1px solid #b71c1c; }
-th, td { padding:5px; font-size:13px; text-align:left;}
-.bloodA {background-color:lightblue;}
-.bloodB {background-color:lightyellow;}
-.bloodAB {background-color:lightpink;}
-.bloodO {background-color:white;}
-.month {background:#f5f5f5; font-weight:bold;}
+.container { padding:20px; max-width: 900px; margin:auto; }
+input, select { padding:5px; margin:3px 0; font-size:14px; }
+input[type="text"], input[type="number"], input[type="date"] { width:150px; }
+input[type="submit"], button { padding:10px 20px; background:#b71c1c; color:white; border:none; cursor:pointer; font-size:14px; margin-top:10px;}
+label { display:inline-block; width:120px; }
 </style>
 </head>
 <body>
@@ -28,85 +22,149 @@ th, td { padding:5px; font-size:13px; text-align:left;}
     <img src="https://upload.wikimedia.org/wikipedia/commons/f/f5/Philippine_Red_Cross_logo.svg" alt="PRC Logo">
     <div>
         <h1>Philippine Red Cross</h1>
-        <h2>Baguio City Chapter - Donor List</h2>
+        <h2>Baguio City Chapter - Donor Entry</h2>
     </div>
 </header>
 
 <div class="container">
-    <a href="donor-entry.html"><button>Go to Donor Entry</button></a>
-    <input type="text" id="searchDonor" placeholder="Search donor list...">
-    <button id="exportBtn">Export as Excel</button>
-    <table>
-        <thead>
-            <tr>
-                <th>Date</th><th>Donor Type</th><th>Name</th><th>Suffix</th><th>Age</th>
-                <th>Address</th><th>City</th><th>Contact</th><th>Serial</th><th>Blood Type</th>
-                <th># Donations</th><th>Bag Used</th><th>Bag Type</th><th>Amount</th>
-                <th>Start Time</th><th>End Time</th>
-            </tr>
-        </thead>
-        <tbody id="donorTable"></tbody>
-    </table>
+    <form id="donorForm">
+        <label>Date:</label><input type="date" id="date" required><br>
+
+        <label>Donor Type:</label><input type="text" id="donorType" maxlength="1"> 
+        <input type="text" id="extraBox" placeholder="Extra if M/P" style="display:none;"><br>
+
+        <label>Surname:</label><input type="text" id="surname" required> 
+        <label>Suffix:</label><input type="text" id="suffix" maxlength="3"><br>
+
+        <label>First Name:</label><input type="text" id="fname" required> 
+        <label>Middle Name:</label><input type="text" id="mname"><br>
+
+        <label>Birth:</label>
+        MM <input type="number" id="bMonth" min="1" max="12" style="width:50px;"> 
+        DD <input type="number" id="bDay" min="1" max="31" style="width:50px;"> 
+        YYYY <input type="number" id="bYear" min="1900" max="2100" style="width:70px;">
+        Age: <input type="number" id="age" readonly style="width:50px;"><br>
+
+        <label>Address:</label><input type="text" id="address" style="width:200px;"> 
+        <label>City/Region:</label><input type="text" id="city" maxlength="15"><br>
+
+        <label>Contact:</label>
+        <input type="text" id="contact1" maxlength="4" style="width:50px;"> - 
+        <input type="text" id="contact2" maxlength="3" style="width:40px;"> - 
+        <input type="text" id="contact3" maxlength="4" style="width:50px;"><br>
+
+        <label>Serial Number:</label><input type="text" id="serialNumber" placeholder="PRC2600-"><br>
+
+        <label>Blood Type:</label><input type="text" id="bloodType"><br>
+
+        <label># Donations:</label><input type="number" id="numDonations" min="1" value="1"><br>
+
+        <label>Bag Used:</label><input type="text" id="bagUsed" maxlength="1">
+        <label>Bag Type:</label><input type="text" id="bagType" maxlength="1"><br>
+
+        <label>Amount Collected:</label><input type="text" id="amount" maxlength="1"><br>
+
+        <label>Time Started:</label>HH <input type="number" id="startHH" min="1" max="12" style="width:50px;">
+        MM <input type="number" id="startMM" min="0" max="60" style="width:50px;"><br>
+
+        <label>Time Ended:</label>HH <input type="number" id="endHH" min="1" max="12" style="width:50px;">
+        MM <input type="number" id="endMM" min="0" max="60" style="width:50px;"><br>
+
+        <input type="submit" value="Submit">
+    </form>
+    <a href="donor-list.html"><button>Go to Donor List</button></a>
 </div>
 
 <script>
-// Load donors
-let donors = JSON.parse(localStorage.getItem("donors")||"[]");
+// Set default date
+document.getElementById("date").valueAsDate = new Date();
 
-// Render table
-function renderList(list=donors){
-    let tbody = document.getElementById("donorTable");
-    tbody.innerHTML="";
-    let grouped={};
-    list.forEach(d=>{grouped[d.date.slice(0,7)]=grouped[d.date.slice(0,7)]||[]; grouped[d.date.slice(0,7)].push(d);});
-    for(let m in grouped){
-        tbody.innerHTML+=`<tr class="month"><td colspan="16">${m}</td></tr>`;
-        grouped[m].forEach(d=>{
-            let bloodClass="";
-            if(d.bloodType.startsWith("A")) bloodClass="bloodA";
-            else if(d.bloodType.startsWith("B")&&!d.bloodType.startsWith("AB")) bloodClass="bloodB";
-            else if(d.bloodType.startsWith("AB")) bloodClass="bloodAB";
-            else if(d.bloodType.startsWith("O")) bloodClass="bloodO";
-
-            tbody.innerHTML+=`<tr>
-                <td>${d.date}</td>
-                <td>${d.donorType}${d.extra?" - "+d.extra:""}</td>
-                <td>${d.surname}, ${d.fname} ${d.mname}</td>
-                <td>${d.suffix}</td>
-                <td>${d.age}</td>
-                <td>${d.address}</td>
-                <td>${d.city}</td>
-                <td>${d.contact}</td>
-                <td>${d.serial}</td>
-                <td class="${bloodClass}">${d.bloodType}</td>
-                <td>${d.numDonations}</td>
-                <td>${d.bagUsed}</td>
-                <td>${d.bagType}</td>
-                <td>${d.amount}</td>
-                <td>${d.startTime}</td>
-                <td>${d.endTime}</td>
-            </tr>`;
-        });
+// Auto-age calculation
+function calculateAge() {
+    let y = parseInt(document.getElementById("bYear").value);
+    let m = parseInt(document.getElementById("bMonth").value)-1;
+    let d = parseInt(document.getElementById("bDay").value);
+    if(!isNaN(y) && !isNaN(m) && !isNaN(d)){
+        let birth = new Date(y,m,d);
+        let ageDifMs = Date.now() - birth.getTime();
+        let ageDate = new Date(ageDifMs);
+        document.getElementById("age").value = Math.abs(ageDate.getUTCFullYear() - 1970);
     }
 }
-renderList();
+["bYear","bMonth","bDay"].forEach(id=>document.getElementById(id).addEventListener("input", calculateAge));
 
-// Live search
-document.getElementById("searchDonor").addEventListener("input", function(){
-    let keyword = this.value.toLowerCase();
-    if(!keyword) return renderList();
-    let filtered = donors.filter(d=> Object.values(d).some(v=>String(v).toLowerCase().includes(keyword)));
-    renderList(filtered);
+// Donor type auto-fill
+document.getElementById("donorType").addEventListener("input", function(){
+    let val = this.value.toUpperCase();
+    let extra = document.getElementById("extraBox");
+    if(val==="W"){ this.value="WALK-IN"; extra.value=""; extra.style.display="none";}
+    else if(val==="M"){ this.value="MBD"; extra.style.display="inline";}
+    else if(val==="P"){ this.value="PATIENT DIRECTED"; extra.style.display="inline";}
 });
 
-// Export Excel
-document.getElementById("exportBtn").addEventListener("click", function(){
-    let table = document.getElementById("donorTable");
-    let html = table.outerHTML.replace(/ /g, '%20');
-    let link = document.createElement("a");
-    link.href = 'data:application/vnd.ms-excel,' + html;
-    link.download = 'donor_list.xls';
-    link.click();
+// Bag and amount auto-fill
+document.getElementById("bagUsed").addEventListener("input", function(){ 
+    if(this.value.toUpperCase()==="K") this.value="KARMI"; 
+    if(this.value.toUpperCase()==="T") this.value="TERUMO";
+});
+document.getElementById("bagType").addEventListener("input", function(){
+    let v=this.value.toUpperCase();
+    if(v==="S") this.value="SINGLE";
+    if(v==="D") this.value="DOUBLE";
+    if(v==="T") this.value="TRIPLE";
+    if(v==="Q") this.value="QUADRUPLE";
+});
+document.getElementById("amount").addEventListener("input", function(){
+    let v=this.value.toUpperCase();
+    if(v==="4") this.value="450mL";
+    if(v==="Q") this.value="QNS";
+    if(v==="U") this.value="UB";
+});
+
+// Submit donor
+document.getElementById("donorForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    let donors = JSON.parse(localStorage.getItem("donors")||"[]");
+
+    let key = document.getElementById("surname").value.trim().toUpperCase()+"|"+
+              document.getElementById("fname").value.trim().toUpperCase()+"|"+
+              document.getElementById("mname").value.trim().toUpperCase();
+
+    let existing = donors.find(d=> (d.surname+"|"+d.fname+"|"+d.mname)===key);
+    let donations = parseInt(document.getElementById("numDonations").value)||1;
+
+    let donorData = {
+        date: document.getElementById("date").value,
+        donorType: document.getElementById("donorType").value,
+        extra: document.getElementById("extraBox").value,
+        surname: document.getElementById("surname").value,
+        suffix: document.getElementById("suffix").value,
+        fname: document.getElementById("fname").value,
+        mname: document.getElementById("mname").value,
+        age: document.getElementById("age").value,
+        address: document.getElementById("address").value,
+        city: document.getElementById("city").value,
+        contact: document.getElementById("contact1").value+"-"+document.getElementById("contact2").value+"-"+document.getElementById("contact3").value,
+        serial: "PRC2600-"+document.getElementById("serialNumber").value,
+        bloodType: document.getElementById("bloodType").value,
+        numDonations: donations,
+        bagUsed: document.getElementById("bagUsed").value,
+        bagType: document.getElementById("bagType").value,
+        amount: document.getElementById("amount").value,
+        startTime: document.getElementById("startHH").value+":"+document.getElementById("startMM").value,
+        endTime: document.getElementById("endHH").value+":"+document.getElementById("endMM").value
+    };
+
+    if(existing) { 
+        existing.numDonations +=1; 
+        Object.assign(existing, donorData); 
+    } else donors.push(donorData);
+
+    localStorage.setItem("donors", JSON.stringify(donors));
+
+    this.reset();
+    document.getElementById("date").valueAsDate = new Date();
+    alert("Donor saved! Data will appear in Donor List.");
 });
 </script>
 
