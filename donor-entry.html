@@ -34,8 +34,7 @@ input {
   font-size: 14px;
 }
 
-.auto { flex: 1; }
-.medium { flex: 1.5; }
+.auto { flex: 1; }          /* normal auto-resize */
 .small { width: 80px; }
 .mini { width: 50px; }
 
@@ -45,9 +44,7 @@ input {
   text-align: center;
 }
 
-#donorExtra {
-  display: none;
-}
+#donorExtra { display: none; }
 
 button {
   background: #b71c1c;
@@ -101,9 +98,9 @@ button:hover { background: #a11212; }
   <input id="age" readonly class="small">
 </div>
 
-<!-- ADDRESS -->
+<!-- ADDRESS (FIXED SIZE) -->
 <div class="row">
-  <input id="address" placeholder="Address" class="medium">
+  <input id="address" placeholder="Address" class="auto">
   <input id="city" placeholder="City/Region" maxlength="15" class="small">
 </div>
 
@@ -164,7 +161,7 @@ button:hover { background: #a11212; }
 const today = new Date().toISOString().split("T")[0];
 entryDate.value = today;
 
-// Donor Type logic
+// Donor Type
 donorType.oninput = () => {
   const v = donorType.value.toUpperCase();
   if (v === "W") {
@@ -182,9 +179,9 @@ donorType.oninput = () => {
 };
 
 // Birthday + Age
-bd.oninput = ()=>bd.value.length===2 && bm.focus();
-bm.oninput = ()=>bm.value.length===2 && by.focus();
-by.oninput = ()=>{
+bd.oninput=()=>bd.value.length===2&&bm.focus();
+bm.oninput=()=>bm.value.length===2&&by.focus();
+by.oninput=()=>{
   if(by.value.length===2) by.value="19"+by.value;
   const d=new Date(by.value,bm.value-1,bd.value);
   age.value=new Date().getFullYear()-d.getFullYear();
