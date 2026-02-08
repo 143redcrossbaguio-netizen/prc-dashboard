@@ -4,46 +4,65 @@
 <meta charset="UTF-8">
 <title>Donor List | PRC Baguio</title>
 <style>
-body { font-family:"Segoe UI", Arial, sans-serif; background:#fff; margin:0; color:#333; }
-header { display:flex; align-items:center; gap:15px; padding:15px 30px; border-bottom:4px solid #c62828; }
-header img { height:55px; }
-header h2 { color:#c62828; margin:0; font-weight:700; }
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  margin: 0;
+  background: #f9f9f9;
+  color: #333;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 30px;
+  border-bottom: 4px solid #c62828;
+}
+header img { height: 55px; }
+header h2 { color: #c62828; margin:0; font-weight:700; }
 
 /* Container */
-.container { max-width:1200px; margin:25px auto; padding:20px; }
+.container { max-width: 1400px; margin: 20px auto; padding: 20px; }
 
 /* Buttons */
-button { background:#c62828; color:white; border:none; padding:10px 18px; border-radius:6px; font-weight:600; cursor:pointer; }
-button:hover { background:#a91f1f; }
-.secondary { background:#eeeeee; color:#333; }
+button { padding: 8px 14px; border-radius:5px; border:none; cursor:pointer; font-weight:600; }
+button:hover { opacity:0.85; }
+.secondary { background:#eee; color:#333; }
 .secondary:hover { background:#ddd; }
-.noPrint {}
-
-/* Search */
-.searchRow { display:flex; gap:10px; align-items:center; margin-bottom:15px; flex-wrap:wrap; }
+.primary { background:#c62828; color:white; }
+.primary:hover { background:#a91f1f; }
 
 /* Table */
-table { width:100%; border-collapse:collapse; }
-th, td { border:1px solid #000; padding:6px; font-size:13px; text-align:center; }
-th { background:#c62828; color:#fff; font-weight:700; }
+table { width: 100%; border-collapse: collapse; background:white; }
+table th, table td { border:1px solid #ccc; padding:6px 8px; font-size:13px; text-align:center; }
+table th { background:#c62828; color:white; position: sticky; top:0; z-index:2; }
 
 /* Blood type colors */
-.A { background:#2196f3; color:white; }
-.B { background:#ffeb3b; color:#000; }
-.AB { background:#e91e63; color:white; }
-.O { background:#fff; color:#000; }
+.A { background:#90caf9; color:black; }
+.B { background:#fff59d; color:black; }
+.AB { background:#f48fb1; color:black; }
+.O { background:#e0e0e0; color:black; }
 
-/* Print */
+/* Hidden for print */
+.noPrint { display:inline-block; }
 @media print {
-  body { margin:0; font-size:12px; }
-  @page { size:A4 landscape; margin:0.5in; }
-  .noPrint { display:none; }
-  table { width:100%; border:1px solid #000; border-collapse:collapse; }
-  th, td { border:1px solid #000; padding:4px; font-size:11px; text-align:center; }
+  body { margin:0; }
+  table { page-break-after:auto; }
+  .noPrint, #searchInput, #backHome { display:none; }
+  @page { size: A4 landscape; margin: 0.5in; }
 }
+
+/* Modal */
+.modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; overflow:auto;
+  background: rgba(0,0,0,0.5); justify-content:center; align-items:center; }
+.modal-content { background:#fff; padding:20px; border-radius:8px; width:600px; max-width:95%; }
+
+/* Row style */
+.row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px; align-items:center; }
+input { flex:1; padding:6px 8px; border-radius:5px; border:1px solid #ccc; }
+input:focus { border-color:#c62828; outline:none; }
+
 </style>
 </head>
-
 <body>
 
 <header>
@@ -53,68 +72,81 @@ th { background:#c62828; color:#fff; font-weight:700; }
 
 <div class="container">
 
-<!-- Back to homepage -->
-<div class="noPrint" style="margin-bottom:10px;">
-  <button onclick="location.href='dashboard.html'">Back to Homepage</button>
+  <button id="backHome" class="secondary" onclick="location.href='dashboard.html'">Back to Homepage</button>
+
+  <div style="margin:10px 0;">
+    <input type="text" id="searchInput" placeholder="Search donor..." style="width:300px; padding:6px; border-radius:5px; border:1px solid #ccc;">
+    <button onclick="exportGoogleSheet()" class="primary">Export to Google Sheet</button>
+    <button onclick="printDonors()" class="primary">Print</button>
+    <button onclick="showSkippedSerials()" class="secondary">Skipped Serials</button>
+  </div>
+
+  <table id="donorTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Date</th>
+        <th>Donor Type</th>
+        <th>Suffix</th>
+        <th>Surname</th>
+        <th>First Name</th>
+        <th>Middle Name</th>
+        <th>Birthday</th>
+        <th>Age</th>
+        <th>Sex</th>
+        <th>Contact</th>
+        <th>Address</th>
+        <th>City</th>
+        <th>Serial</th>
+        <th>Blood Type</th>
+        <th>Times Donated</th>
+        <th>Bag Used</th>
+        <th>Bag Type</th>
+        <th>Amount</th>
+        <th>Time</th>
+        <th class="noPrint">Edit</th>
+        <th class="noPrint">Delete</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 </div>
 
-<!-- Search -->
-<div class="searchRow noPrint">
-  <input type="text" id="searchInput" placeholder="Search donor..." style="flex:1; padding:6px; border-radius:5px; border:1px solid #ccc;">
-  <button onclick="exportGoogleSheet()">Export to Google Sheet</button>
-  <button onclick="window.print()">Print Donor List</button>
-  <button id="skippedBtn" onclick="showSkippedSerials()">Skipped Serial Numbers</button>
-</div>
-
-<!-- Donor Table -->
-<table id="donorTable">
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>Date</th>
-      <th>Donor Type</th>
-      <th>Suffix</th>
-      <th>Surname</th>
-      <th>First Name</th>
-      <th>Middle Name</th>
-      <th>Birthday</th>
-      <th>Age</th>
-      <th>Sex</th>
-      <th>Contact</th>
-      <th>Address</th>
-      <th>City</th>
-      <th>Serial</th>
-      <th>Blood Type</th>
-      <th>Times</th>
-      <th>Bag Used</th>
-      <th>Bag Type</th>
-      <th>Amount</th>
-      <th>Time</th>
-      <th class="noPrint">Edit</th>
-      <th class="noPrint">Delete</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
-
+<!-- EDIT MODAL -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <h3>Edit Donor</h3>
+    <form id="editForm">
+      <div class="row"><label>Date</label><input id="editDate" type="date"></div>
+      <div class="row"><label>Donor Type</label><input id="editDonorType"><input id="editDonorExtra" placeholder="Specify if required"></div>
+      <div class="row"><input id="editSuffix" placeholder="Suffix"><input id="editSurname" placeholder="Surname"><input id="editFirstName" placeholder="First Name"><input id="editMiddleName" placeholder="Middle Name"></div>
+      <div class="row"><label>Birthday</label><input id="editBD" maxlength="2" placeholder="DD"><input id="editBM" maxlength="2" placeholder="MM"><input id="editBY" maxlength="4" placeholder="YYYY"><label>Age</label><input id="editAge" readonly><input id="editSex" placeholder="M/F"></div>
+      <div class="row"><input id="editAddress" placeholder="Address"><input id="editCity" maxlength="15" placeholder="City"></div>
+      <div class="row"><label>Contact</label><input id="editC1" maxlength="4"><input id="editC2" maxlength="3"><input id="editC3" maxlength="4"></div>
+      <div class="row"><label>Serial</label><span>PRC2600-</span><input id="editSerial"></div>
+      <div class="row"><label>Blood Type</label><input id="editBloodType"><label>Times Donated</label><input id="editTimes"></div>
+      <div class="row"><label>Bag Used</label><input id="editBagUsed"><label>Bag Type</label><input id="editBagType"><label>Amount</label><input id="editAmount"></div>
+      <div class="row"><label>Time</label><input id="editSH" maxlength="2"><input id="editSM" maxlength="2"><span>to</span><input id="editEH" maxlength="2"><input id="editEM" maxlength="2"></div>
+      <div style="margin-top:15px; display:flex; justify-content:flex-end; gap:10px;">
+        <button type="button" onclick="closeModal()" class="secondary">Cancel</button>
+        <button type="button" onclick="saveEdit()" class="primary">Save</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <script>
-let donors = [];
+// LOAD DONORS
+let donors = JSON.parse(localStorage.getItem("donors")||"[]");
 let skippedSerials = [];
 
-function addDonor(donor) {
-  // Handle skipped serial numbers
-  if(!donor.serial) skippedSerials.push(donor.surname+" "+donor.firstName);
-  donors.push(donor);
-  renderTable();
-}
-
 function renderTable() {
+  skippedSerials=[];
   const tbody = document.querySelector("#donorTable tbody");
-  tbody.innerHTML = "";
+  tbody.innerHTML="";
   donors.forEach((d,i)=>{
-    const bloodClass = d.bloodType.replace("+","").replace("-","");
+    if(!d.serial) skippedSerials.push(d.surname+" "+d.firstName);
+    const bloodClass=d.bloodType.replace("+","").replace("-","");
     tbody.innerHTML += `<tr>
       <td>${i+1}</td>
       <td>${d.date}</td>
@@ -129,7 +161,7 @@ function renderTable() {
       <td>${d.contact}</td>
       <td>${d.address}</td>
       <td>${d.city}</td>
-      <td>${d.serial?'PRC2600-'+d.serial:''}</td>
+      <td>${d.serial? 'PRC2600-'+d.serial : ''}</td>
       <td class="${bloodClass}">${d.bloodType}</td>
       <td>${d.times}</td>
       <td>${d.bagUsed==="Karmi"?"K":d.bagUsed==="Terumo"?"T":d.bagUsed}</td>
@@ -142,37 +174,91 @@ function renderTable() {
   });
 }
 
-// Delete donor
+// DELETE
 function deleteDonor(index){
   donors.splice(index,1);
+  localStorage.setItem("donors",JSON.stringify(donors));
   renderTable();
 }
 
-// Edit donor
+// EDIT MODAL
+let editIndex=null;
 function editDonor(index){
-  const d = donors[index];
-  alert("Implement donor edit form here for: "+d.firstName);
+  editIndex=index;
+  const d=donors[index];
+  editDate.value=d.date;
+  editDonorType.value=d.donorType;
+  editDonorExtra.value=d.donorExtra;
+  editSuffix.value=d.suffix;
+  editSurname.value=d.surname;
+  editFirstName.value=d.firstName;
+  editMiddleName.value=d.middleName;
+  const bdArr=d.birthday.split("-");
+  editBD.value=bdArr[0]; editBM.value=bdArr[1]; editBY.value=bdArr[2];
+  editAge.value=d.age;
+  editSex.value=d.sex;
+  editAddress.value=d.address;
+  editCity.value=d.city;
+  editC1.value=d.contact.split("-")[0]; editC2.value=d.contact.split("-")[1]; editC3.value=d.contact.split("-")[2];
+  editSerial.value=d.serial;
+  editBloodType.value=d.bloodType;
+  editTimes.value=d.times;
+  editBagUsed.value=d.bagUsed;
+  editBagType.value=d.bagType;
+  editAmount.value=d.amount;
+  const t=d.time.split(" - ");
+  editSH.value=t[0].split(":")[0]; editSM.value=t[0].split(":")[1]; editEH.value=t[1].split(":")[0]; editEM.value=t[1].split(":")[1];
+  document.getElementById("editModal").style.display="flex";
+}
+function closeModal(){ document.getElementById("editModal").style.display="none"; }
+function saveEdit(){
+  const d=donors[editIndex];
+  d.date=editDate.value;
+  d.donorType=editDonorType.value;
+  d.donorExtra=editDonorExtra.value;
+  d.suffix=editSuffix.value;
+  d.surname=editSurname.value;
+  d.firstName=editFirstName.value;
+  d.middleName=editMiddleName.value;
+  d.birthday=`${editBD.value}-${editBM.value}-${editBY.value}`;
+  d.age=editAge.value;
+  d.sex=editSex.value;
+  d.address=editAddress.value;
+  d.city=editCity.value;
+  d.contact=`${editC1.value}-${editC2.value}-${editC3.value}`;
+  d.serial=editSerial.value;
+  d.bloodType=editBloodType.value;
+  d.times=editTimes.value;
+  d.bagUsed=editBagUsed.value;
+  d.bagType=editBagType.value;
+  d.amount=editAmount.value;
+  d.time=`${editSH.value}:${editSM.value} - ${editEH.value}:${editEM.value}`;
+  localStorage.setItem("donors",JSON.stringify(donors));
+  renderTable();
+  closeModal();
 }
 
-// Export to Google Sheet placeholder
-function exportGoogleSheet(){
-  alert("This will link/export to Google Sheet using API or CSV download.");
-}
+// SEARCH
+document.getElementById("searchInput").addEventListener("input", function(){
+  const val=this.value.toLowerCase();
+  document.querySelectorAll("#donorTable tbody tr").forEach(row=>{
+    row.style.display=Array.from(row.cells).some(c=>c.textContent.toLowerCase().includes(val))?"":"none";
+  });
+});
 
-// Show skipped serial numbers
+// PRINT
+function printDonors(){ window.print(); }
+
+// EXPORT GOOGLE SHEET
+function exportGoogleSheet(){ alert("Connect Google Sheets API here."); }
+
+// SKIPPED SERIALS
 function showSkippedSerials(){
   if(skippedSerials.length===0) alert("No skipped serial numbers.");
   else alert("Skipped Serial Numbers:\n"+skippedSerials.join("\n"));
 }
 
-// Example search filter (simple)
-document.getElementById("searchInput").addEventListener("input", function(){
-  const val = this.value.toLowerCase();
-  document.querySelectorAll("#donorTable tbody tr").forEach(row=>{
-    row.style.display = Array.from(row.cells).some(c=>c.textContent.toLowerCase().includes(val))?"":"none";
-  });
-});
-
+renderTable();
 </script>
 
 </body>
