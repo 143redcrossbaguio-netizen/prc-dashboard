@@ -3,145 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <title>Donor Entry | PRC Baguio</title>
-
 <style>
-body {
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: #f8f8f8;
-  margin: 0;
-  color: #333;
-}
-
-header {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 15px 30px;
-  border-bottom: 4px solid #c62828;
-  background: #ffffff;
-}
-
-header img {
-  height: 55px;
-}
-
-header h2 {
-  color: #c62828;
-  margin: 0;
-  font-weight: 700;
-}
-
-/* CONTAINER */
-.container {
-  max-width: 1200px;
-  margin: 25px auto;
-  padding: 20px;
-}
-
-/* SECTION CARD */
-.section {
-  background: #e8e8e8;
-  border-radius: 8px;
-  padding: 16px 18px;
-  margin-bottom: 18px;
-  border-left: 6px solid #c62828;
-}
-
-.section-title {
-  color: #c62828;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-/* ROW */
-.row {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-}
-
-/* LABEL */
-label {
-  font-weight: 600;
-  color: #444;
-  min-width: 120px;
-}
-
-/* INPUT */
-input {
-  border: 1px solid #ccc;
-  padding: 7px 9px;
-  border-radius: 5px;
-  font-size: 14px;
-}
-
-input:focus {
-  outline: none;
-  border-color: #c62828;
-}
-
-/* AUTO RESIZE */
-.auto {
-  flex: 1;
-  min-width: 140px;
-}
-
-/* SIZES */
-.small { width: 110px; }
-.mini { width: 70px; }
-
-/* SERIAL */
-.serial-prefix {
-  background: #e0e0e0;
-  padding: 6px 10px;
-  border-radius: 5px;
-  font-weight: bold;
-}
-
-/* BUTTONS */
-.buttons {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 25px;
-}
-
-.center-btns {
-  display: flex;
-  gap: 12px;
-}
-
-button {
-  background: #c62828;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #a91f1f;
-}
-
-.secondary {
-  background: #eeeeee;
-  color: #333;
-}
-
-.secondary:hover {
-  background: #dddddd;
-}
-
-#donorExtra {
-  display: none;
-}
+body { font-family: "Segoe UI", Arial, sans-serif; background:#f7f7f7; margin:0; color:#333;}
+header { display:flex; align-items:center; gap:15px; padding:15px 30px; border-bottom:4px solid #c62828; background:#fff;}
+header img { height:55px; }
+header h2 { color:#c62828; margin:0; font-weight:700; }
+.container { max-width:1200px; margin:25px auto; padding:20px;}
+.section { background:#fff; border-radius:8px; padding:16px 18px; margin-bottom:18px; border-left:6px solid #c62828; }
+.section-title { color:#c62828; font-weight:700; margin-bottom:10px; }
+.row { display:flex; gap:10px; align-items:center; margin-bottom:10px; flex-wrap:wrap; }
+label { font-weight:600; color:#444; min-width:120px; }
+input { border:1px solid #ccc; padding:7px 9px; border-radius:5px; font-size:14px; }
+input:focus { outline:none; border-color:#c62828; }
+.auto { flex:1; min-width:140px; }
+.small { width:110px; } .mini{ width:70px; }
+.serial-prefix { background:#e0e0e0; padding:6px 10px; border-radius:5px; font-weight:bold; }
+.buttons { display:flex; justify-content:space-between; align-items:center; margin-top:25px; }
+.center-btns { display:flex; gap:12px; }
+button { background:#c62828; color:white; border:none; padding:10px 18px; border-radius:6px; font-weight:600; cursor:pointer; }
+button:hover { background:#a91f1f; }
+.secondary { background:#eeeeee; color:#333; }
+.secondary:hover { background:#dddddd; }
+#donorExtra { display:none; }
 </style>
 </head>
-
 <body>
 
 <header>
@@ -150,18 +35,15 @@ button:hover {
 </header>
 
 <div class="container">
-
 <form id="donorForm">
 
 <!-- BASIC -->
 <div class="section">
   <div class="section-title">Basic Information</div>
-
   <div class="row">
     <label>Date</label>
     <input type="date" id="entryDate">
   </div>
-
   <div class="row">
     <label>Donor Type</label>
     <input id="donorType" class="small">
@@ -172,7 +54,6 @@ button:hover {
 <!-- NAME -->
 <div class="section">
   <div class="section-title">Donor Name</div>
-
   <div class="row">
     <input id="suffix" placeholder="Suffix" class="mini">
     <input id="surname" placeholder="Surname" class="auto">
@@ -183,8 +64,7 @@ button:hover {
 
 <!-- BIRTH -->
 <div class="section">
-  <div class="section-title">Birth & Demographics</div>
-
+  <div class="section-title">Birth Information</div>
   <div class="row">
     <label>Birthday</label>
     <input id="bd" class="mini" maxlength="2" placeholder="DD">
@@ -193,19 +73,17 @@ button:hover {
     <label>Age</label>
     <input id="age" class="small" readonly>
     <label>Sex</label>
-    <input id="sex" class="small" maxlength="1" placeholder="M/F">
+    <input id="sex" class="mini" maxlength="1" placeholder="M/F">
   </div>
 </div>
 
 <!-- CONTACT -->
 <div class="section">
   <div class="section-title">Contact Details</div>
-
   <div class="row">
     <input id="address" class="auto" placeholder="Address">
     <input id="city" class="small" maxlength="15" placeholder="City / Region">
   </div>
-
   <div class="row">
     <label>Contact</label>
     <input id="c1" class="mini" maxlength="4">
@@ -217,20 +95,17 @@ button:hover {
 <!-- BLOOD -->
 <div class="section">
   <div class="section-title">Blood & Collection</div>
-
   <div class="row">
     <label>Serial</label>
     <span class="serial-prefix">PRC2600-</span>
     <input id="serial" class="auto">
   </div>
-
   <div class="row">
     <label>Blood Type</label>
     <input id="bloodType" class="small">
     <label>Times Donated</label>
     <input id="times" class="mini">
   </div>
-
   <div class="row">
     <label>Bag Used</label>
     <input id="bagUsed" class="small">
@@ -239,28 +114,22 @@ button:hover {
     <label>Amount</label>
     <input id="amount" class="small">
   </div>
-
   <div class="row">
     <label>Time</label>
-    <input id="sh" class="mini" maxlength="2" placeholder="HH">
-    <input id="sm" class="mini" maxlength="2" placeholder="MM">
+    <input id="sh" class="mini" maxlength="2">
+    <input id="sm" class="mini" maxlength="2">
     <span>to</span>
-    <input id="eh" class="mini" maxlength="2" placeholder="HH">
-    <input id="em" class="mini" maxlength="2" placeholder="MM">
+    <input id="eh" class="mini" maxlength="2">
+    <input id="em" class="mini" maxlength="2">
   </div>
 </div>
 
 <!-- BUTTONS -->
 <div class="buttons">
-  <button type="button" class="secondary" onclick="location.href='dashboard.html'">
-    Back to Homepage
-  </button>
-
+  <button type="button" class="secondary" onclick="location.href='dashboard.html'">Back to Homepage</button>
   <div class="center-btns">
     <button type="button" onclick="saveDonor()">Submit</button>
-    <button type="button" class="secondary" onclick="location.href='donor-list.html'">
-      Go to Donor List
-    </button>
+    <button type="button" class="secondary" onclick="location.href='donor-list.html'">Go to Donor List</button>
   </div>
 </div>
 
@@ -268,13 +137,9 @@ button:hover {
 </div>
 
 <script>
-/* TODAY DATE */
-const entryDate = document.getElementById('entryDate');
-entryDate.value = new Date().toISOString().split("T")[0];
+const today = new Date().toISOString().split("T")[0];
+entryDate.value = today;
 
-/* DONOR TYPE LOGIC */
-const donorType = document.getElementById('donorType');
-const donorExtra = document.getElementById('donorExtra');
 donorType.oninput = () => {
   const v = donorType.value.toUpperCase();
   donorExtra.style.display = (v === "M" || v === "P") ? "inline-block" : "none";
@@ -283,72 +148,59 @@ donorType.oninput = () => {
   if(v==="P") donorType.value="Patient Directed";
 };
 
-/* BIRTHDAY -> AGE */
-const bd = document.getElementById('bd');
-const bm = document.getElementById('bm');
-const by = document.getElementById('by');
-const age = document.getElementById('age');
 bd.oninput=()=>bd.value.length===2&&bm.focus();
 bm.oninput=()=>bm.value.length===2&&by.focus();
 by.oninput=()=>{
   if(by.value.length===2) by.value="19"+by.value;
-  const birthYear=parseInt(by.value,10);
-  const birthMonth=parseInt(bm.value,10)-1;
-  const birthDay=parseInt(bd.value,10);
-  const today=new Date();
-  let ageVal=today.getFullYear()-birthYear;
-  if(today.getMonth()<birthMonth || (today.getMonth()===birthMonth && today.getDate()<birthDay)) ageVal--;
-  age.value=ageVal;
+  age.value=new Date().getFullYear()-new Date(by.value,bm.value-1,bd.value).getFullYear();
 };
 
-/* SEX FIELD */
-const sex = document.getElementById('sex');
-sex.oninput = () => {
-  const val = sex.value.toUpperCase();
-  if(val==="M") sex.value="M";
-  else if(val==="F") sex.value="F";
-  else sex.value="";
-};
-
-/* CONTACT */
-const c1=document.getElementById('c1');
-const c2=document.getElementById('c2');
-const c3=document.getElementById('c3');
 c1.oninput=()=>c1.value.length===4&&c2.focus();
 c2.oninput=()=>c2.value.length===3&&c3.focus();
 
-/* BLOOD TYPE */
-const bloodType=document.getElementById('bloodType');
 bloodType.oninput=()=>{
   const map={AP:"A+",AN:"A-",BP:"B+",BN:"B-",ABP:"AB+",ABN:"AB-",OP:"O+",ON:"O-"};
   if(map[bloodType.value.toUpperCase()]) bloodType.value=map[bloodType.value.toUpperCase()];
 };
 
-/* BAG USED / TYPE / AMOUNT */
-const bagUsed=document.getElementById('bagUsed');
-const bagType=document.getElementById('bagType');
-const amount=document.getElementById('amount');
-
 bagUsed.oninput=()=>bagUsed.value=bagUsed.value.toUpperCase()==="K"?"Karmi":bagUsed.value.toUpperCase()==="T"?"Terumo":bagUsed.value;
 bagType.oninput=()=>bagType.value={S:"Single",D:"Double",T:"Triple"}[bagType.value.toUpperCase()]||bagType.value;
 amount.oninput=()=>amount.value={4:"450mL",Q:"QNS",U:"UB"}[amount.value.toUpperCase()]||amount.value;
-
-/* TIME */
-const sh=document.getElementById('sh');
-const sm=document.getElementById('sm');
-const eh=document.getElementById('eh');
-const em=document.getElementById('em');
 
 sh.oninput=()=>sh.value.length===2&&sm.focus();
 sm.oninput=()=>sm.value.length===2&&eh.focus();
 eh.oninput=()=>eh.value.length===2&&em.focus();
 
-/* SUBMIT */
 function saveDonor(){
+  const donor = {
+    date: entryDate.value,
+    donorType: donorType.value,
+    donorExtra: donorExtra.value,
+    suffix: suffix.value,
+    surname: surname.value,
+    firstName: firstName.value,
+    middleName: middleName.value,
+    birthday: `${bd.value}-${bm.value}-${by.value}`,
+    age: age.value,
+    sex: sex.value.toUpperCase(),
+    address: address.value,
+    city: city.value,
+    contact: `${c1.value}${c2.value}${c3.value}`,
+    serial: serial.value,
+    bloodType: bloodType.value,
+    times: times.value,
+    bagUsed: bagUsed.value,
+    bagType: bagType.value,
+    amount: amount.value,
+    time: `${sh.value}:${sm.value}-${eh.value}:${em.value}`
+  };
+  let donors = JSON.parse(localStorage.getItem('donors')||'[]');
+  donors.push(donor);
+  localStorage.setItem('donors', JSON.stringify(donors));
   alert("Donor saved successfully!");
-  document.getElementById('donorForm').reset();
-  entryDate.value = new Date().toISOString().split("T")[0];
-  donorExtra.style.display="none";
+  donorForm.reset();
+  entryDate.value = today;
+  donorExtra.style.display = "none";
 }
 </script>
 
