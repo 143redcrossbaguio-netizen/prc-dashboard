@@ -2,95 +2,220 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Donor List</title>
-<link rel="stylesheet" href="css/style.css">
+<title>Donor List | PRC Baguio</title>
 <style>
-body { font-family: Arial; background:#fff; color:#b71c1c; margin:0; }
-header { background:#b71c1c; color:white; padding:10px 20px; display:flex; align-items:center;}
-header img { height:50px; margin-right:15px; }
-table { width:100%; border-collapse:collapse; margin-top:20px;}
-table, th, td { border:1px solid #b71c1c; }
-th, td { padding:8px; text-align:left; }
-input { padding:5px; margin:5px 0; }
-.bottom-right { position:fixed; bottom:20px; right:20px; }
+:root {
+  --prc-red: #c62828;
+  --gray-900: #263238;
+  --gray-700: #546e7a;
+  --gray-400: #b0bec5;
+  --gray-100: #f7f9fb;
+  --input-bg: #fff;
+}
+body { font-family:"Segoe UI", Arial,sans-serif; background:var(--gray-100); margin:0; color:var(--gray-900);}
+header { display:flex; align-items:center; gap:15px; padding:15px 30px; border-bottom:4px solid var(--prc-red); background:var(--gray-100);}
+header img { height:55px; }
+header h2 { color:var(--prc-red); margin:0; font-weight:700; font-size:20px; }
+
+.container { max-width:1300px; margin:25px auto; padding:20px; background:var(--input-bg); border-radius:8px; box-shadow:0 3px 8px rgba(0,0,0,0.1); }
+
+.filters { display:flex; gap:15px; flex-wrap:wrap; margin-bottom:15px; }
+.filters input, .filters select { padding:5px 8px; border-radius:5px; border:1px solid var(--gray-400); }
+
+table { width:100%; border-collapse:collapse; background:#fff; }
+th, td { border:1px solid var(--gray-400); padding:6px 10px; text-align:left; font-size:14px; }
+th { background:var(--gray-100); color:var(--gray-900); }
+tr:nth-child(even) { background:#f9f9f9; }
+
+button { background:var(--prc-red); color:white; border:none; padding:6px 12px; border-radius:5px; font-weight:600; cursor:pointer; margin-right:4px;}
+button:hover { background:#a91f1f; }
+button.secondary { background:var(--gray-200); color:var(--gray-900);}
+button.secondary:hover { background:#ddd; }
+#skipped { margin-top:10px; font-weight:600; color:var(--prc-red);}
 </style>
 </head>
 <body>
 
 <header>
-    <img src="assets/logo.png" alt="PRC Logo">
-    <div>
-        <h1>Philippine Red Cross</h1>
-        <h2>Baguio City Chapter - Donor List</h2>
-    </div>
+  <img src="assets/logo.png" alt="PRC Logo">
+  <h2>Philippine Red Cross – Baguio City Chapter</h2>
 </header>
 
-<div style="padding:20px;">
-<input type="text" id="searchInput" placeholder="Search donor..." onkeyup="filterTable()">
-<button onclick="printTable()">Print Table</button>
-<button onclick="exportTable()">Export Excel</button>
+<div class="container">
 
-<table id="donorTable">
-<thead>
-<tr>
-<th>Date</th><th>Type</th><th>Suffix</th><th>Surname</th><th>First</th><th>Middle</th>
-<th>Age</th><th>Address</th><th>City</th><th>Contact</th><th>Serial</th>
-<th>Blood Type</th><th># Donations</th><th>Bag</th><th>Bag Type</th><th>Amount</th><th>Start</th><th>End</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
+<div class="filters">
+  <input type="text" id="searchBox" placeholder="Search...">
+  <input type="date" id="filterDate">
+  <select id="filterBlood">
+    <option value="">All Blood Types</option>
+    <option value="A+">A+</option><option value="A-">A-</option>
+    <option value="B+">B+</option><option value="B-">B-</option>
+    <option value="AB+">AB+</option><option value="AB-">AB-</option>
+    <option value="O+">O+</option><option value="O-">O-</option>
+  </select>
+  <select id="filterDonorType">
+    <option value="">All Donor Types</option>
+    <option value="Walk-in">Walk-in</option>
+    <option value="MBD">MBD</option>
+    <option value="Patient Directed">Patient Directed</option>
+  </select>
 </div>
 
-<button class="bottom-right" onclick="window.location.href='donor-entry.html'">Back to Dashboard</button>
+<table id="donorTable">
+  <thead>
+    <tr>
+      <th>Serial</th>
+      <th>Date</th>
+      <th>Donor Type</th>
+      <th>Name</th>
+      <th>Birthday / Age</th>
+      <th>Contact</th>
+      <th>Blood Type</th>
+      <th>Times Donated</th>
+      <th>Bag Used</th>
+      <th>Bag Type</th>
+      <th>Amount</th>
+      <th>Time Started</th>
+      <th>Time Ended</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<div id="skipped">Skipped Serials: <span id="skippedList"></span></div>
+
+<div style="margin-top:15px;">
+  <button onclick="printTable()">Print</button>
+  <button onclick="exportExcel()">Export to Excel</button>
+  <button class="secondary" onclick="location.href='dashboard.html'">Back to Homepage</button>
+  <button class="secondary" onclick="location.href='donor-entry.html'">Add New Donor</button>
+</div>
+
+</div>
 
 <script>
-// Load donor data from localStorage
-function loadDonors(){
-    const donors = JSON.parse(localStorage.getItem("donors")||"[]");
-    const tbody = document.querySelector("#donorTable tbody");
-    tbody.innerHTML="";
-    donors.forEach(d=>{
-        const tr=document.createElement("tr");
-        for(let key in d) { const td=document.createElement("td"); td.innerText=d[key]; tr.appendChild(td); }
-        tbody.appendChild(tr);
-    });
-}
-loadDonors();
+// Fetch donors from localStorage
+let donors = JSON.parse(localStorage.getItem('donors')||'[]');
+let skippedSerials = JSON.parse(localStorage.getItem('skippedSerials')||'[]');
 
-// Filter
+function renderTable(){
+  const tbody=document.querySelector('#donorTable tbody');
+  tbody.innerHTML='';
+  donors.forEach((d,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td>${d.serial}</td>
+      <td>${d.date}</td>
+      <td>${d.type}</td>
+      <td>${d.suffix} ${d.surname}, ${d.firstName} ${d.middleName}</td>
+      <td>${d.birthday} / ${d.age}</td>
+      <td>${d.contact}</td>
+      <td>${d.bloodType}</td>
+      <td>${d.times}</td>
+      <td>${d.bagUsed}</td>
+      <td>${d.bagType}</td>
+      <td>${d.amount}</td>
+      <td>${d.timeStart}</td>
+      <td>${d.timeEnd}</td>
+      <td>
+        <button onclick="editDonor(${i})">Edit</button>
+        <button onclick="deleteDonor(${i})">Delete</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('skippedList').textContent = skippedSerials.join(', ');
+}
+
+function deleteDonor(i){
+  if(confirm("Are you sure you want to delete this donor?")){
+    donors.splice(i,1);
+    localStorage.setItem('donors',JSON.stringify(donors));
+    renderTable();
+  }
+}
+
+function editDonor(i){
+  localStorage.setItem('editIndex', i);
+  location.href='donor-entry.html';
+}
+
+// SEARCH & FILTER
+document.getElementById('searchBox').oninput = filterTable;
+document.getElementById('filterDate').onchange = filterTable;
+document.getElementById('filterBlood').onchange = filterTable;
+document.getElementById('filterDonorType').onchange = filterTable;
+
 function filterTable(){
-    const val=document.getElementById("searchInput").value.toLowerCase();
-    document.querySelectorAll("#donorTable tbody tr").forEach(row=>{
-        row.style.display=Array.from(row.cells).some(cell=>cell.innerText.toLowerCase().includes(val))?"":"none";
-    });
+  const search=document.getElementById('searchBox').value.toLowerCase();
+  const dateF=document.getElementById('filterDate').value;
+  const bloodF=document.getElementById('filterBlood').value;
+  const typeF=document.getElementById('filterDonorType').value;
+
+  const tbody=document.querySelector('#donorTable tbody');
+  tbody.innerHTML='';
+  donors.forEach((d,i)=>{
+    if((!dateF || d.date===dateF) &&
+       (!bloodF || d.bloodType===bloodF) &&
+       (!typeF || d.type===typeF) &&
+       (d.surname.toLowerCase().includes(search) ||
+        d.firstName.toLowerCase().includes(search) ||
+        d.middleName.toLowerCase().includes(search) ||
+        d.serial.toLowerCase().includes(search))
+      ){
+      const tr=document.createElement('tr');
+      tr.innerHTML=`
+      <td>${d.serial}</td>
+      <td>${d.date}</td>
+      <td>${d.type}</td>
+      <td>${d.suffix} ${d.surname}, ${d.firstName} ${d.middleName}</td>
+      <td>${d.birthday} / ${d.age}</td>
+      <td>${d.contact}</td>
+      <td>${d.bloodType}</td>
+      <td>${d.times}</td>
+      <td>${d.bagUsed}</td>
+      <td>${d.bagType}</td>
+      <td>${d.amount}</td>
+      <td>${d.timeStart}</td>
+      <td>${d.timeEnd}</td>
+      <td>
+        <button onclick="editDonor(${i})">Edit</button>
+        <button onclick="deleteDonor(${i})">Delete</button>
+      </td>
+      `;
+      tbody.appendChild(tr);
+    }
+  });
 }
 
-// Print
+// PRINT
 function printTable(){
-    const table = document.getElementById("donorTable").outerHTML;
-    const win = window.open("");
-    win.document.write("<html><head><title>Donor List</title></head><body>"+table+"</body></html>");
-    win.print();
-    win.close();
+  const table=document.getElementById('donorTable').outerHTML;
+  const win=window.open('', '', 'width=1200,height=800');
+  win.document.write('<html><head><title>Print Donor List</title></head><body>');
+  win.document.write(table);
+  win.document.write('</body></html>');
+  win.document.close();
+  win.print();
 }
 
-// Export Excel (simple CSV method)
-function exportTable(){
-    const rows = document.querySelectorAll("#donorTable tr");
-    let csv="";
-    rows.forEach(r=>{
-        const cells = r.querySelectorAll("th, td");
-        csv+=Array.from(cells).map(c=>`"${c.innerText}"`).join(",")+"\n";
-    });
-    const blob = new Blob([csv], {type:"text/csv"});
-    const a=document.createElement("a");
-    a.href=URL.createObjectURL(blob);
-    a.download="donor_list.csv";
-    a.click();
+// EXPORT TO EXCEL
+function exportExcel(){
+  let csv='Serial,Date,Donor Type,Name,Birthday/Age,Contact,Blood Type,Times Donated,Bag Used,Bag Type,Amount,Time Started,Time Ended\n';
+  donors.forEach(d=>{
+    csv+=`"${d.serial}","${d.date}","${d.type}","${d.suffix} ${d.surname}, ${d.firstName} ${d.middleName}","${d.birthday}/${d.age}","${d.contact}","${d.bloodType}","${d.times}","${d.bagUsed}","${d.bagType}","${d.amount}","${d.timeStart}","${d.timeEnd}"\n`;
+  });
+  const blob=new Blob([csv], {type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='donor_list.csv';
+  a.click();
+  URL.revokeObjectURL(url);
 }
+
+renderTable();
 </script>
-
 </body>
 </html>
