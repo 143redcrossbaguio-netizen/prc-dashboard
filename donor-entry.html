@@ -10,8 +10,6 @@ body {
   margin: 0;
   color: #333;
 }
-
-/* HEADER */
 header {
   display: flex;
   align-items: center;
@@ -20,23 +18,11 @@ header {
   border-bottom: 4px solid #c62828;
   background: #fff;
 }
-header img {
-  height: 55px;
-}
-header h2 {
-  color: #c62828;
-  margin: 0;
-  font-weight: 700;
-}
+header img { height: 55px; }
+header h2 { color: #c62828; margin: 0; font-weight: 700; }
 
-/* CONTAINER */
-.container {
-  max-width: 1200px;
-  margin: 25px auto;
-  padding: 20px;
-}
+.container { max-width: 1200px; margin: 25px auto; padding: 20px; }
 
-/* SECTION CARD */
 .section {
   background: #fff;
   border-radius: 8px;
@@ -45,93 +31,36 @@ header h2 {
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   border-left: 6px solid #c62828;
 }
-.section-title {
-  color: #c62828;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
+.section-title { color: #c62828; font-weight: 700; margin-bottom: 10px; }
 
-/* ROW */
-.row {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-}
+.row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
 
-/* LABEL */
-label {
-  font-weight: 600;
-  color: #444;
-  min-width: 120px;
-}
+label { font-weight: 600; color: #444; min-width: 120px; }
 
-/* INPUT */
 input {
   border: 1px solid #ccc;
   padding: 7px 9px;
   border-radius: 5px;
   font-size: 14px;
 }
-input:focus {
-  outline: none;
-  border-color: #c62828;
-}
+input:focus { outline: none; border-color: #c62828; }
 
-/* AUTO RESIZE */
-.auto {
-  flex: 1;
-  min-width: 140px;
-}
-
-/* SIZES */
+.auto { flex: 1; min-width: 140px; }
 .small { width: 110px; }
 .mini { width: 70px; }
 
-/* SERIAL */
-.serial-prefix {
-  background: #e0e0e0;
-  padding: 6px 10px;
-  border-radius: 5px;
-  font-weight: bold;
-}
+.serial-prefix { background: #e0e0e0; padding: 6px 10px; border-radius: 5px; font-weight: bold; }
 
-/* BUTTONS */
-.buttons {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 25px;
-}
-.center-btns {
-  display: flex;
-  gap: 12px;
-}
+.buttons { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; }
+.center-btns { display: flex; gap: 12px; }
 button {
-  background: #c62828;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
+  background: #c62828; color: white; border: none; padding: 10px 18px; border-radius: 6px; font-weight: 600; cursor: pointer;
 }
-button:hover {
-  background: #a91f1f;
-}
-.secondary {
-  background: #eeeeee;
-  color: #333;
-}
-.secondary:hover {
-  background: #dddddd;
-}
+button:hover { background: #a91f1f; }
+.secondary { background: #eeeeee; color: #333; }
+.secondary:hover { background: #dddddd; }
 
-/* EXTRA DONOR TYPE */
-#donorExtra {
-  display: none;
-}
+#donorExtra { display: none; }
 </style>
 </head>
 
@@ -272,7 +201,7 @@ by.oninput=()=>{
 };
 
 /* SEX AUTO */
-sex.oninput=()=>{sex.value=sex.value.toUpperCase()==="M"?"M":"F"};
+sex.oninput=()=>{sex.value=sex.value.toUpperCase()==="M"?"M":"F";};
 
 /* CONTACT AUTO-MOVE */
 c1.oninput=()=>c1.value.length===4&&c2.focus();
@@ -284,9 +213,17 @@ bloodType.oninput=()=>{
   if(map[bloodType.value.toUpperCase()]) bloodType.value=map[bloodType.value.toUpperCase()];
 };
 
-/* BAG USED / TYPE / AMOUNT */
-bagUsed.oninput=()=>bagUsed.value=bagUsed.value.toUpperCase()==="K"?"K":bagUsed.value.toUpperCase()==="T"?"T":bagUsed.value;
-bagType.oninput=()=>bagType.value={S:"S",D:"D",T:"T"}[bagType.value.toUpperCase()]||bagType.value;
+/* BAG USED / TYPE / AMOUNT FIXED */
+bagUsed.oninput=()=>{
+  const v = bagUsed.value.toUpperCase();
+  if(v==="K") bagUsed.value="K"; 
+  else if(v==="T") bagUsed.value="T"; 
+  else bagUsed.value=v;
+};
+bagType.oninput=()=>{
+  const v = bagType.value.toUpperCase();
+  bagType.value = {S:"S",D:"D",T:"T"}[v] || bagType.value;
+};
 amount.oninput=()=>amount.value={4:"450mL",Q:"QNS",U:"UB"}[amount.value.toUpperCase()]||amount.value;
 
 /* TIME AUTO-MOVE */
