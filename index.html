@@ -3,88 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRC Baguio - Login</title>
-<link rel="stylesheet" href="css/style.css">
+<title>PRC Baguio - Dashboard</title>
 <style>
-body {
-  margin:0;
-  font-family: Arial, sans-serif;
-  background:#fff;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  color:#b71c1c;
-}
-.logo { height:100px; margin-bottom:20px; }
-.login-box {
-  border:2px solid #b71c1c;
-  padding:30px 40px;
-  border-radius:10px;
-  box-shadow:2px 2px 12px #ccc;
-  text-align:center;
-  width:320px;
-}
-.login-box h2 { margin-bottom:20px; }
-.login-box input {
-  width:90%;
-  padding:10px;
-  margin:8px 0;
-  border:1px solid #b71c1c;
-  border-radius:5px;
-}
-.login-box button {
-  padding:10px 20px;
-  margin-top:10px;
-  background:#b71c1c;
-  color:white;
-  border:none;
-  border-radius:5px;
-  cursor:pointer;
-}
-.login-box button:hover { background:#a11212; }
-#loginMsg { color:red; margin-top:10px; }
+body { font-family: Arial; margin:0; background:#fff; color:#b71c1c; }
+header { background:#b71c1c; color:white; padding:10px 20px; display:flex; align-items:center; }
+header img { height:50px; margin-right:15px; }
+.container { padding:20px; display:flex; flex-wrap:wrap; gap:20px; justify-content:center; }
+.panel { width:200px; height:100px; background:white; color:#b71c1c; border:2px solid #b71c1c; display:flex; justify-content:center; align-items:center; cursor:pointer; font-weight:bold; border-radius:10px; }
+.panel:hover { background:#b71c1c; color:white; }
 </style>
 </head>
 <body>
 
-<img src="assets/logo.png" alt="PRC Logo" class="logo">
+<header>
+<img src="assets/logo.png" alt="PRC Logo">
+<h1>Philippine Red Cross - Baguio City Chapter</h1>
+</header>
 
-<div class="login-box">
-<h2>Philippine Red Cross<br>Baguio City Chapter</h2>
-<input type="text" id="username" placeholder="Username"><br>
-<input type="password" id="password" placeholder="Password"><br>
-<button onclick="login()">Login</button><br>
-<button onclick="changeLogin()">Change Username/Password</button>
-<p id="loginMsg"></p>
+<div class="container">
+<div class="panel" onclick="location.href='donor-entry.html'">Donor Entry</div>
+<div class="panel" onclick="location.href='donor-list.html'">Donor List</div>
+<div class="panel">Deferrals</div>
+<div class="panel">Blood Issuance</div>
+<div class="panel">Statistics</div>
 </div>
 
 <script>
-// Default login if not exist
-if(!localStorage.getItem("loginUser")) localStorage.setItem("loginUser","admin");
-if(!localStorage.getItem("loginPass")) localStorage.setItem("loginPass","prc123");
-
-// Login function
-function login(){
-  const user=document.getElementById("username").value;
-  const pass=document.getElementById("password").value;
-  if(user === localStorage.getItem("loginUser") && pass === localStorage.getItem("loginPass")){
-    window.location.href="donor-entry.html"; // Redirect to dashboard
-  } else {
-    document.getElementById("loginMsg").innerText="Invalid username or password!";
-  }
-}
-
-// Change login
-function changeLogin(){
-  let newUser=prompt("Enter new username:");
-  let newPass=prompt("Enter new password:");
-  if(newUser && newPass){
-    localStorage.setItem("loginUser",newUser);
-    localStorage.setItem("loginPass",newPass);
-    alert("Login updated!");
-  }
+// Check login session
+if(sessionStorage.getItem("loggedIn") !== "true"){
+    window.location.href="login.html"; // redirect if not logged in
 }
 </script>
 
