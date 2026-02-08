@@ -8,7 +8,7 @@ body { font-family:"Segoe UI",Arial,sans-serif; background:#fff; margin:0; color
 header {display:flex; align-items:center; gap:15px; padding:15px 30px; border-bottom:4px solid #c62828;}
 header img {height:55px;}
 header h2 {color:#c62828; margin:0; font-weight:700;}
-.container {max-width:1200px; margin:25px auto; padding:20px;}
+.container {max-width:1400px; margin:25px auto; padding:20px;}
 .row {display:flex; gap:10px; align-items:center; margin-bottom:10px; flex-wrap:wrap;}
 label {font-weight:600; color:#444; min-width:120px;}
 input, select {border:1px solid #ccc; padding:7px 9px; border-radius:5px; font-size:14px;}
@@ -94,6 +94,8 @@ button:hover {background:#a91f1f;}
       <th>Birthday</th>
       <th>Age</th>
       <th>Sex</th>
+      <th>Address</th>
+      <th>City/Region</th>
       <th>Contact</th>
       <th>Serial</th>
       <th>Blood Type</th>
@@ -129,6 +131,8 @@ function loadDonors(){
       <td>${d.birthday}</td>
       <td>${d.age}</td>
       <td>${d.sex}</td>
+      <td>${d.address}</td>
+      <td>${d.city}</td>
       <td>${d.contact}</td>
       <td>${d.serial}</td>
       <td class="blood-${d.bloodType.replace("+","p").replace("-","n")}">${d.bloodType}</td>
@@ -201,6 +205,8 @@ function applyFilters(){
       <td>${d.birthday}</td>
       <td>${d.age}</td>
       <td>${d.sex}</td>
+      <td>${d.address}</td>
+      <td>${d.city}</td>
       <td>${d.contact}</td>
       <td>${d.serial}</td>
       <td class="blood-${d.bloodType.replace("+","p").replace("-","n")}">${d.bloodType}</td>
@@ -218,7 +224,7 @@ function applyFilters(){
   });
 }
 
-// EXPORT TO GOOGLE SHEET (Opens Google Sheet)
+// EXPORT TO GOOGLE SHEET
 function exportGoogleSheet(){
   alert("This will open Google Sheets export (requires server integration or Apps Script).");
 }
