@@ -21,56 +21,44 @@ header img {
 }
 
 form {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: auto;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .row {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
-  flex-wrap: nowrap;
 }
+
+.auto { flex: 1; }
+.small { width: 70px; }
+.mini { width: 45px; }
 
 input {
   padding: 6px;
-  font-size: 14px;
 }
-
-.auto {
-  flex: 1;
-}
-
-.small { width: 60px; }
-.mini { width: 45px; }
 
 .serial-prefix {
-  width: 90px;
+  width: 100px;
   background: #eee;
-  border: 1px solid #ccc;
   text-align: center;
 }
 
 button {
   background: #b71c1c;
   color: white;
-  padding: 10px 20px;
+  padding: 10px 16px;
   border: none;
-  cursor: pointer;
   border-radius: 5px;
+  cursor: pointer;
 }
+button:hover { background: #a11212; }
 
-button:hover {
-  background: #a11212;
-}
-
-#extraType {
-  display: none;
-  width: 200px;
-}
+#extraType { display: none; }
 </style>
 </head>
 
@@ -83,15 +71,15 @@ button:hover {
 
 <form id="donorForm">
 
-<!-- DATE TODAY -->
+<!-- DATE -->
 <div class="row">
-  <label>Date:</label>
+  <label>Date</label>
   <input type="date" id="entryDate">
 </div>
 
 <!-- DONOR TYPE -->
 <div class="row">
-  <label>Donor Type:</label>
+  <label>Donor Type</label>
   <input id="donorType" maxlength="1" class="mini">
   <input id="donorTypeAuto" readonly class="auto">
   <input id="extraType" placeholder="Specify (MBD / Patient)">
@@ -99,34 +87,73 @@ button:hover {
 
 <!-- NAME -->
 <div class="row">
-  <label>Suffix</label>
-  <input id="suffix" class="small">
-  <label>Surname</label>
-  <input id="surname" class="auto">
-  <label>First</label>
-  <input id="firstName" class="auto">
-  <label>Middle</label>
-  <input id="middleName" class="auto">
+  <input id="suffix" placeholder="Suffix" class="small">
+  <input id="surname" placeholder="Surname" class="auto">
+  <input id="firstName" placeholder="First Name" class="auto">
+  <input id="middleName" placeholder="Middle Name" class="auto">
 </div>
 
 <!-- BIRTHDAY -->
 <div class="row">
   <label>Birthday</label>
-  <input id="bd" class="mini" maxlength="2" placeholder="DD">
-  <input id="bm" class="mini" maxlength="2" placeholder="MM">
-  <input id="by" class="mini" maxlength="4" placeholder="YY/YYYY">
+  <input id="bd" maxlength="2" class="mini" placeholder="DD">
+  <input id="bm" maxlength="2" class="mini" placeholder="MM">
+  <input id="by" maxlength="4" class="mini" placeholder="YY/YYYY">
   <label>Age</label>
-  <input id="age" class="small" readonly>
+  <input id="age" readonly class="small">
+</div>
+
+<!-- ADDRESS -->
+<div class="row">
+  <input id="address" placeholder="Address" class="auto">
+  <input id="city" placeholder="City/Region" maxlength="15" class="small">
+</div>
+
+<!-- CONTACT -->
+<div class="row">
+  <label>Contact</label>
+  <input id="c1" maxlength="4" class="mini">
+  <input id="c2" maxlength="3" class="mini">
+  <input id="c3" maxlength="4" class="mini">
+</div>
+
+<!-- SERIAL -->
+<div class="row">
+  <label>Serial</label>
+  <input class="serial-prefix" value="PRC2600-" readonly>
+  <input id="serial" class="small">
+</div>
+
+<!-- BLOOD -->
+<div class="row">
+  <label>Blood</label>
+  <input id="bloodInput" class="mini">
+  <input id="bloodType" readonly class="small">
+  <label>Times Donated</label>
+  <input id="times" class="mini">
+</div>
+
+<!-- BAGS -->
+<div class="row">
+  <label>Bag Used</label>
+  <input id="bagUsed" class="mini">
+  <input id="bagUsedAuto" class="small">
+  <label>Bag Type</label>
+  <input id="bagType" class="mini">
+  <input id="bagTypeAuto" class="small">
+  <label>Amount</label>
+  <input id="amount" class="mini">
+  <input id="amountAuto" class="small">
 </div>
 
 <!-- TIME -->
 <div class="row">
   <label>Time Started</label>
-  <input id="sh" class="mini" maxlength="2">
-  <input id="sm" class="mini" maxlength="2">
+  <input id="sh" maxlength="2" class="mini">
+  <input id="sm" maxlength="2" class="mini">
   <label>Time Ended</label>
-  <input id="eh" class="mini" maxlength="2">
-  <input id="em" class="mini" maxlength="2">
+  <input id="eh" maxlength="2" class="mini">
+  <input id="em" maxlength="2" class="mini">
 </div>
 
 <!-- BUTTONS -->
@@ -139,48 +166,52 @@ button:hover {
 </form>
 
 <script>
-// DATE TODAY
 const today = new Date().toISOString().split("T")[0];
 entryDate.value = today;
 
-// DONOR TYPE
-donorType.addEventListener("input", () => {
+// Donor Type
+donorType.oninput = () => {
   const v = donorType.value.toUpperCase();
-  if (v === "W") {
-    donorTypeAuto.value = "Walk-in";
-    extraType.style.display = "none";
-  }
-  if (v === "M") {
-    donorTypeAuto.value = "MBD";
-    extraType.style.display = "inline-block";
-  }
-  if (v === "P") {
-    donorTypeAuto.value = "Patient Directed";
-    extraType.style.display = "inline-block";
-  }
-});
+  donorType.value = v;
+  if(v==="W"){ donorTypeAuto.value="Walk-in"; extraType.style.display="none"; }
+  if(v==="M"){ donorTypeAuto.value="MBD"; extraType.style.display="inline-block"; }
+  if(v==="P"){ donorTypeAuto.value="Patient Directed"; extraType.style.display="inline-block"; }
+};
 
-// BIRTHDAY AUTO + AGE
-bd.addEventListener("input",()=>bd.value.length===2 && bm.focus());
-bm.addEventListener("input",()=>bm.value.length===2 && by.focus());
-
-by.addEventListener("input",()=>{
+// Birthday
+bd.oninput = ()=>bd.value.length===2 && bm.focus();
+bm.oninput = ()=>bm.value.length===2 && by.focus();
+by.oninput = ()=>{
   if(by.value.length===2) by.value="19"+by.value;
-  const birth = new Date(by.value,bm.value-1,bd.value);
-  const now = new Date();
-  age.value = now.getFullYear() - birth.getFullYear();
-});
+  const d=new Date(by.value,bm.value-1,bd.value);
+  age.value = new Date().getFullYear()-d.getFullYear();
+};
 
-// TIME AUTO CURSOR
-sh.addEventListener("input",()=>sh.value.length===2 && sm.focus());
-sm.addEventListener("input",()=>sm.value.length===2 && eh.focus());
-eh.addEventListener("input",()=>eh.value.length===2 && em.focus());
+// Contact auto
+c1.oninput=()=>c1.value.length===4&&c2.focus();
+c2.oninput=()=>c2.value.length===3&&c3.focus();
 
-// SAVE
+// Blood
+bloodInput.oninput=()=>{
+  const v=bloodInput.value.toUpperCase();
+  const map={AP:"A+",AN:"A-",BP:"B+",BN:"B-",ABP:"AB+",ABN:"AB-",OP:"O+",ON:"O-"};
+  if(map[v]) bloodType.value=map[v];
+};
+
+// Bags
+bagUsed.oninput=()=>bagUsedAuto.value=bagUsed.value.toUpperCase()==="K"?"Karmi":bagUsed.value.toUpperCase()==="T"?"Terumo":"";
+bagType.oninput=()=>bagTypeAuto.value={S:"Single",D:"Double",T:"Triple"}[bagType.value.toUpperCase()]||"";
+amount.oninput=()=>amountAuto.value={4:"450mL",Q:"QNS",U:"UB"}[amount.value.toUpperCase()]||"";
+
+// Time
+sh.oninput=()=>sh.value.length===2&&sm.focus();
+sm.oninput=()=>sm.value.length===2&&eh.focus();
+eh.oninput=()=>eh.value.length===2&&em.focus();
+
 function saveDonor(){
-  alert("Donor saved correctly ✔");
+  alert("Donor saved successfully");
   donorForm.reset();
-  entryDate.value = today;
+  entryDate.value=today;
   donorTypeAuto.value="";
   extraType.style.display="none";
 }
