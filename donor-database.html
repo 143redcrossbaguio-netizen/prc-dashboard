@@ -2,65 +2,120 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Donor Database</title>
+<title>PRC Donor Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    background: #f5f5f5;
-  }
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f4f4f4;
+}
 
-  header {
-    background: #c62828;
-    color: white;
-    padding: 15px;
-    display: flex;
-    align-items: center;
-  }
+header {
+  background: #c62828;
+  color: white;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+}
 
-  header img {
-    height: 45px;
-    margin-right: 15px;
-  }
+header img {
+  height: 45px;
+  margin-right: 15px;
+}
 
-  .container {
-    padding: 20px;
-  }
+.container {
+  padding: 20px;
+  background: white;
+}
 
-  h2 {
-    color: #c62828;
-  }
+h2 {
+  color: #c62828;
+}
 
-  input[type="text"] {
-    padding: 10px;
-    width: 300px;
-    border: 2px solid #c62828;
-    border-radius: 5px;
-    margin-bottom: 15px;
-  }
+label {
+  font-weight: bold;
+  display: block;
+  margin-top: 10px;
+}
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-  }
+input, select {
+  padding: 8px;
+  margin-top: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
 
-  th, td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
-  }
+input[type="checkbox"] {
+  width: auto;
+}
 
-  th {
-    background: #c62828;
-    color: white;
-  }
+.row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
 
-  tr.hide {
-    display: none;
-  }
+.row-2 {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 10px;
+}
+
+.small {
+  width: 100px;
+}
+
+.serial-box {
+  display: flex;
+  align-items: center;
+}
+
+.serial-box span {
+  background: #eee;
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+
+.blood {
+  font-weight: bold;
+  padding: 8px;
+  text-align: center;
+}
+
+.A { background: #bbdefb; }
+.B { background: #fff59d; }
+.AB { background: #f8bbd0; }
+.O { background: #ffffff; }
+
+.buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  padding: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.submit {
+  background: #c62828;
+  color: white;
+}
+
+.print {
+  background: #555;
+  color: white;
+}
+
+@media print {
+  @page { size: landscape; }
+  button { display: none; }
+}
 </style>
 </head>
 
@@ -72,58 +127,131 @@
 </header>
 
 <div class="container">
-  <h2>Donor Database</h2>
 
-  <!-- SEARCH PANEL -->
-  <input type="text" id="searchInput" placeholder="Search donor (per letter)..." onkeyup="searchDonor()">
+<h2>Donor Data Entry</h2>
 
-  <!-- DONOR TABLE -->
-  <table id="donorTable">
-    <thead>
-      <tr>
-        <th>Serial No.</th>
-        <th>Surname</th>
-        <th>First Name</th>
-        <th>Blood Type</th>
-        <th>Times Donated</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- SAMPLE DATA (can delete later) -->
-      <tr>
-        <td>PRC2600-001</td>
-        <td>DELA CRUZ</td>
-        <td>JUAN</td>
-        <td>O+</td>
-        <td>5</td>
-      </tr>
-      <tr>
-        <td>PRC2600-002</td>
-        <td>SANTOS</td>
-        <td>MARIA</td>
-        <td>A+</td>
-        <td>3</td>
-      </tr>
-      <tr>
-        <td>PRC2600-003</td>
-        <td>REYES</td>
-        <td>CARLO</td>
-        <td>B-</td>
-        <td>7</td>
-      </tr>
-    </tbody>
-  </table>
+<label>Date</label>
+<input type="date" id="date">
+
+<label>Type of Donor</label>
+<input type="checkbox" onclick="setType('W')"> Walk-in
+<input type="checkbox" onclick="setType('M')"> MBD
+<input type="checkbox" onclick="setType('P')"> Patient Directed
+<input id="donorType" placeholder="Auto code (W / M / P)">
+
+<div class="row">
+  <div>
+    <label>Surname</label>
+    <input id="surname">
+  </div>
+  <div>
+    <label>First Name</label>
+    <input id="firstname">
+  </div>
+  <div>
+    <label>Middle Name</label>
+    <input id="middlename">
+  </div>
+</div>
+
+<label>Suffix</label>
+<input id="suffix">
+
+<label>Birthdate (MM/DD/YYYY)</label>
+<input id="birthdate" placeholder="MM/DD/YY or YYYY" onblur="computeAge()">
+
+<label>Age</label>
+<input id="age" readonly>
+
+<label>Address</label>
+<input id="address">
+
+<label>City / Region</label>
+<input id="city">
+
+<label>Contact Number</label>
+<div class="row">
+  <input maxlength="4">
+  <input maxlength="3">
+  <input maxlength="4">
+</div>
+
+<label>Serial Number</label>
+<div class="serial-box">
+  <span>PRC2600-</span>
+  <input>
+</div>
+
+<label>Blood Type (AP, AN, BP, BN, ABP, ABN, OP, ON)</label>
+<input id="bloodInput" onkeyup="setBlood()">
+<div id="bloodDisplay" class="blood"></div>
+
+<label>Number of Times Donated</label>
+<input id="donations" onfocus="storeDonation()" onkeydown="moveNext(event,'bagUsed')">
+
+<label>Blood Bag Used (K/T)</label>
+<input id="bagUsed" onkeydown="moveNext(event,'bagType')">
+
+<label>Blood Bag Type (S/D/T/Q)</label>
+<input id="bagType" onkeydown="moveNext(event,'amount')">
+
+<label>Amount Collected (4=450ml, Q=QNS, U=UB)</label>
+<input id="amount" onkeydown="moveNext(event,'timeStart')">
+
+<label>Time Started (HH:MM)</label>
+<input id="timeStart" onkeydown="moveNext(event,'timeEnd')">
+
+<label>Time Ended (HH:MM)</label>
+<input id="timeEnd">
+
+<div class="buttons">
+  <button class="submit">SUBMIT</button>
+  <button class="print" onclick="window.print()">PRINT</button>
+</div>
+
 </div>
 
 <script>
-function searchDonor() {
-  const input = document.getElementById("searchInput").value.toUpperCase();
-  const rows = document.querySelectorAll("#donorTable tbody tr");
+document.getElementById("date").valueAsDate = new Date();
 
-  rows.forEach(row => {
-    const text = row.innerText.toUpperCase();
-    row.classList.toggle("hide", !text.includes(input));
-  });
+let baseDonation = 0;
+
+function storeDonation(){
+  baseDonation = parseInt(donations.value) || 0;
+}
+
+function setType(val){
+  donorType.value = val;
+}
+
+function computeAge(){
+  let val = birthdate.value;
+  let parts = val.split("/");
+  let year = parts[2];
+  if(year.length === 2) year = "19" + year;
+  let ageCalc = new Date().getFullYear() - parseInt(year);
+  age.value = ageCalc;
+}
+
+function setBlood(){
+  let map = {
+    AP:"A+", AN:"A-", BP:"B+", BN:"B-",
+    ABP:"AB+", ABN:"AB-", OP:"O+", ON:"O-"
+  };
+  let v = bloodInput.value.toUpperCase();
+  let type = map[v] || "";
+  bloodDisplay.innerText = type;
+  bloodDisplay.className = "blood " + (type.startsWith("A") && !type.startsWith("AB") ? "A" :
+    type.startsWith("B") ? "B" :
+    type.startsWith("AB") ? "AB" :
+    type.startsWith("O") ? "O" : "");
+}
+
+function moveNext(e,next){
+  if(e.key === "Enter"){
+    e.preventDefault();
+    document.getElementById(next).focus();
+  }
 }
 </script>
 
