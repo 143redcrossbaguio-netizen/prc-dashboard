@@ -7,54 +7,107 @@
 <style>
 body {
   font-family: Arial, sans-serif;
-  background: #fff;
-  color: #b71c1c;
+  background: #fdfdfd;
   margin: 20px;
+  color: #b71c1c;
 }
 
-header { text-align: center; }
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
 header img { height: 80px; }
 
+h2 {
+  color: #b71c1c;
+}
+
+/* FORM */
 form {
   max-width: 1200px;
   margin: auto;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 14px;
 }
 
+/* ROW */
 .row {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
 }
 
-input {
-  padding: 6px;
-  font-size: 14px;
+/* LABEL */
+label {
+  font-weight: bold;
+  color: white;
+  min-width: 110px;
 }
 
-.auto { flex: 1; }          /* normal auto-resize */
+/* RED-PINK BOX */
+.rbox {
+  background: linear-gradient(135deg, #b71c1c, #f48fb1);
+  border-radius: 6px;
+  padding: 6px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+/* INPUT */
+input {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255,255,255,0.6);
+  color: white;
+  font-weight: bold;
+  padding: 4px;
+  outline: none;
+}
+
+input::placeholder {
+  color: #ffd6e7;
+}
+
+input:focus {
+  border-bottom: 2px solid white;
+}
+
+input:not(:placeholder-shown) {
+  color: #111;
+}
+
+/* SIZES */
+.auto { flex: 1; }
 .small { width: 80px; }
 .mini { width: 50px; }
 
 .serial-prefix {
-  width: 100px;
-  background: #eee;
-  text-align: center;
+  background: rgba(255,255,255,0.2);
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-weight: bold;
+  color: white;
 }
 
-#donorExtra { display: none; }
-
+/* BUTTONS */
 button {
   background: #b71c1c;
   color: white;
-  padding: 10px 16px;
+  padding: 12px 18px;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
+  font-weight: bold;
   cursor: pointer;
 }
-button:hover { background: #a11212; }
+
+button:hover {
+  background: #a11212;
+}
+
+#donorExtra { display: none; }
 </style>
 </head>
 
@@ -68,16 +121,16 @@ button:hover { background: #a11212; }
 <form id="donorForm">
 
 <!-- DATE -->
-<div class="row">
+<div class="row rbox">
   <label>Date</label>
   <input type="date" id="entryDate">
 </div>
 
 <!-- DONOR TYPE -->
-<div class="row">
+<div class="row rbox">
   <label>Donor Type</label>
   <input id="donorType" class="small">
-  <input id="donorExtra" class="auto" placeholder="Specify (MBD / Patient Directed)">
+  <input id="donorExtra" class="auto" placeholder="Specify if needed">
 </div>
 
 <!-- NAME -->
@@ -89,7 +142,7 @@ button:hover { background: #a11212; }
 </div>
 
 <!-- BIRTHDAY -->
-<div class="row">
+<div class="row rbox">
   <label>Birthday</label>
   <input id="bd" maxlength="2" class="mini" placeholder="DD">
   <input id="bm" maxlength="2" class="mini" placeholder="MM">
@@ -98,14 +151,14 @@ button:hover { background: #a11212; }
   <input id="age" readonly class="small">
 </div>
 
-<!-- ADDRESS (FIXED SIZE) -->
+<!-- ADDRESS -->
 <div class="row">
   <input id="address" placeholder="Address" class="auto">
   <input id="city" placeholder="City/Region" maxlength="15" class="small">
 </div>
 
 <!-- CONTACT -->
-<div class="row">
+<div class="row rbox">
   <label>Contact</label>
   <input id="c1" maxlength="4" class="mini">
   <input id="c2" maxlength="3" class="mini">
@@ -113,22 +166,22 @@ button:hover { background: #a11212; }
 </div>
 
 <!-- SERIAL -->
-<div class="row">
+<div class="row rbox">
   <label>Serial</label>
-  <input class="serial-prefix" value="PRC2600-" readonly>
+  <div class="serial-prefix">PRC2600-</div>
   <input id="serial" class="auto">
 </div>
 
 <!-- BLOOD -->
-<div class="row">
+<div class="row rbox">
   <label>Blood Type</label>
   <input id="bloodType" class="small">
-  <label>Times Donated</label>
+  <label>Times</label>
   <input id="times" class="mini">
 </div>
 
 <!-- BAGS -->
-<div class="row">
+<div class="row rbox">
   <label>Bag Used</label>
   <input id="bagUsed" class="small">
   <label>Bag Type</label>
@@ -138,17 +191,17 @@ button:hover { background: #a11212; }
 </div>
 
 <!-- TIME -->
-<div class="row">
-  <label>Time Started</label>
+<div class="row rbox">
+  <label>Start</label>
   <input id="sh" maxlength="2" class="mini">
   <input id="sm" maxlength="2" class="mini">
-  <label>Time Ended</label>
+  <label>End</label>
   <input id="eh" maxlength="2" class="mini">
   <input id="em" maxlength="2" class="mini">
 </div>
 
 <!-- BUTTONS -->
-<div class="row" style="justify-content:center;margin-top:20px;">
+<div class="row" style="justify-content:center;margin-top:25px;">
   <button type="button" onclick="saveDonor()">SUBMIT</button>
   <button type="button" onclick="location.href='donor-list.html'">GO TO DONOR LIST</button>
   <button type="button" onclick="location.href='index.html'">BACK TO HOMEPAGE</button>
@@ -157,28 +210,19 @@ button:hover { background: #a11212; }
 </form>
 
 <script>
-// Date today
+// Date
 const today = new Date().toISOString().split("T")[0];
 entryDate.value = today;
 
 // Donor Type
 donorType.oninput = () => {
   const v = donorType.value.toUpperCase();
-  if (v === "W") {
-    donorType.value = "Walk-in";
-    donorExtra.style.display = "none";
-  }
-  if (v === "M") {
-    donorType.value = "MBD";
-    donorExtra.style.display = "inline-block";
-  }
-  if (v === "P") {
-    donorType.value = "Patient Directed";
-    donorExtra.style.display = "inline-block";
-  }
+  if (v === "W") { donorType.value="Walk-in"; donorExtra.style.display="none"; }
+  if (v === "M") { donorType.value="MBD"; donorExtra.style.display="inline-block"; }
+  if (v === "P") { donorType.value="Patient Directed"; donorExtra.style.display="inline-block"; }
 };
 
-// Birthday + Age
+// Birthday
 bd.oninput=()=>bd.value.length===2&&bm.focus();
 bm.oninput=()=>bm.value.length===2&&by.focus();
 by.oninput=()=>{
@@ -187,11 +231,11 @@ by.oninput=()=>{
   age.value=new Date().getFullYear()-d.getFullYear();
 };
 
-// Contact auto
+// Contact
 c1.oninput=()=>c1.value.length===4&&c2.focus();
 c2.oninput=()=>c2.value.length===3&&c3.focus();
 
-// Blood type
+// Blood
 bloodType.oninput=()=>{
   const v=bloodType.value.toUpperCase();
   const map={AP:"A+",AN:"A-",BP:"B+",BN:"B-",ABP:"AB+",ABN:"AB-",OP:"O+",ON:"O-"};
@@ -203,7 +247,7 @@ bagUsed.oninput=()=>bagUsed.value=bagUsed.value.toUpperCase()==="K"?"Karmi":bagU
 bagType.oninput=()=>bagType.value={S:"Single",D:"Double",T:"Triple"}[bagType.value.toUpperCase()]||bagType.value;
 amount.oninput=()=>amount.value={4:"450mL",Q:"QNS",U:"UB"}[amount.value.toUpperCase()]||amount.value;
 
-// Time auto
+// Time
 sh.oninput=()=>sh.value.length===2&&sm.focus();
 sm.oninput=()=>sm.value.length===2&&eh.focus();
 eh.oninput=()=>eh.value.length===2&&em.focus();
