@@ -3,113 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <title>Donor List | PRC Baguio</title>
-
 <style>
-body {
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: #f8f8f8;
-  margin: 0;
-  color: #333;
-}
-
-header {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 15px 30px;
-  border-bottom: 4px solid #c62828;
-  background: #ffffff;
-}
-
-header img {
-  height: 55px;
-}
-
-header h2 {
-  color: #c62828;
-  margin: 0;
-  font-weight: 700;
-}
-
-.container {
-  max-width: 1400px;
-  margin: 25px auto;
-  padding: 20px;
-}
-
-/* FILTERS */
-.filters {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-
-.filters input, .filters select {
-  padding: 7px 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  min-width: 120px;
-}
-
-/* TABLE */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #fff;
-}
-
-table th, table td {
-  border: 1px solid #ccc;
-  padding: 8px 10px;
-  text-align: center;
-  font-size: 14px;
-}
-
-table th {
-  background: #c62828;
-  color: white;
-  font-weight: 700;
-}
-
-/* COLOR CODE BLOOD TYPES */
-.blood-A+ { background: #ff9999; }
-.blood-A- { background: #ffb3b3; }
-.blood-B+ { background: #ffcc99; }
-.blood-B- { background: #ffd9b3; }
-.blood-AB+ { background: #99ccff; }
-.blood-AB- { background: #b3d9ff; }
-.blood-O+ { background: #99ff99; }
-.blood-O- { background: #b3ffb3; }
-
-/* BUTTONS */
-button {
-  background: #c62828;
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 5px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-button:hover { background: #a91f1f; }
-
-.secondary { background: #eeeeee; color: #333; }
-.secondary:hover { background: #dddddd; }
-
-/* ICON BUTTONS */
-button.edit { background: #4caf50; }
-button.delete { background: #f44336; }
-
-/* HIDE BUTTONS ON PRINT */
+body { font-family:"Segoe UI", Arial, sans-serif; background:#f7f7f7; margin:0; color:#333;}
+header { display:flex; align-items:center; gap:15px; padding:15px 30px; border-bottom:4px solid #c62828; background:#fff;}
+header img { height:55px; }
+header h2 { color:#c62828; margin:0; font-weight:700; }
+.container { max-width:1400px; margin:25px auto; padding:20px; }
+.filters { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:15px; align-items:center; justify-content:space-between; }
+.filters-left { display:flex; gap:12px; flex-wrap:wrap; }
+.filters button { margin-left:5px; }
+table { width:100%; border-collapse:collapse; background:#fff; }
+th, td { border:1px solid #ccc; padding:8px; text-align:center; font-size:14px; }
+th { background:#c62828; color:white; font-weight:600; }
+tr:nth-child(even) { background:#f2f2f2; }
+button { cursor:pointer; border:none; border-radius:4px; padding:5px 10px; font-size:14px; }
+.edit-btn { background:#0288d1; color:white; }
+.delete-btn { background:#d32f2f; color:white; }
+.center, .bottom-buttons { display:flex; gap:10px; margin-top:12px; justify-content:center; }
+.color-A { background:#f28b82; }
+.color-B { background:#fbbc04; }
+.color-AB { background:#34a853; color:white; }
+.color-O { background:#4285f4; color:white; }
+.noPrint { display:inline-block; }
 @media print {
-  button, .filters, .skip-serial { display: none; }
-  table { page-break-after: always; }
+  .noPrint { display:none; }
+  table { width:100%; border:1px solid #000; }
+  th, td { border:1px solid #000; font-size:12px; }
 }
 </style>
 </head>
-
 <body>
 
 <header>
@@ -119,48 +41,55 @@ button.delete { background: #f44336; }
 
 <div class="container">
 
+<!-- FILTERS + ACTIONS -->
 <div class="filters">
-  <input type="text" id="search" placeholder="Search any field...">
-  <input type="date" id="filterDate">
-  <select id="filterSex">
-    <option value="">All Sex</option>
-    <option value="M">Male</option>
-    <option value="F">Female</option>
-  </select>
-  <select id="filterBlood">
-    <option value="">All Blood Types</option>
-    <option value="A+">A+</option>
-    <option value="A-">A-</option>
-    <option value="B+">B+</option>
-    <option value="B-">B-</option>
-    <option value="AB+">AB+</option>
-    <option value="AB-">AB-</option>
-    <option value="O+">O+</option>
-    <option value="O-">O-</option>
-  </select>
-  <select id="filterDonor">
-    <option value="">All Donor Types</option>
-    <option value="Walk-in">Walk-in</option>
-    <option value="MBD">MBD</option>
-    <option value="Patient Directed">Patient Directed</option>
-  </select>
-  <button onclick="exportToExcel()">Export to Excel</button>
+  <div class="filters-left">
+    <input type="text" id="searchInput" placeholder="Search All Data">
+    <input type="date" id="filterDate">
+    <select id="filterSex">
+      <option value="">All Sex</option>
+      <option value="M">Male</option>
+      <option value="F">Female</option>
+    </select>
+    <select id="filterBlood">
+      <option value="">All Blood Types</option>
+      <option value="A+">A+</option>
+      <option value="A-">A-</option>
+      <option value="B+">B+</option>
+      <option value="B-">B-</option>
+      <option value="AB+">AB+</option>
+      <option value="AB-">AB-</option>
+      <option value="O+">O+</option>
+      <option value="O-">O-</option>
+    </select>
+    <select id="filterDonorType">
+      <option value="">All Donor Types</option>
+      <option value="Walk-in">Walk-in</option>
+      <option value="MBD">MBD</option>
+      <option value="Patient Directed">Patient Directed</option>
+    </select>
+  </div>
+
+  <!-- Action buttons -->
+  <div>
+    <button class="noPrint" onclick="exportExcel()">Export to Excel</button>
+    <button class="noPrint" onclick="exportGoogleSheet()">Export to Google Sheet</button>
+    <button class="noPrint" onclick="window.print()">Print</button>
+  </div>
 </div>
 
-<div class="skip-serial">
-  <button onclick="showSkippedSerials()">Skipped Serial Numbers</button>
-</div>
-
+<!-- TABLE -->
 <table id="donorTable">
   <thead>
     <tr>
       <th>#</th>
       <th>Date</th>
       <th>Donor Type</th>
+      <th>Extra</th>
       <th>Suffix</th>
       <th>Surname</th>
-      <th>First Name</th>
-      <th>Middle Name</th>
+      <th>First</th>
+      <th>Middle</th>
       <th>Birthday</th>
       <th>Age</th>
       <th>Sex</th>
@@ -174,35 +103,55 @@ button.delete { background: #f44336; }
       <th>Bag Type</th>
       <th>Amount</th>
       <th>Time</th>
-      <th>Actions</th>
+      <th class="noPrint">Edit</th>
+      <th class="noPrint">Delete</th>
     </tr>
   </thead>
-  <tbody>
-    <!-- DATA WILL BE APPENDED HERE -->
-  </tbody>
+  <tbody></tbody>
 </table>
+
+<!-- BOTTOM NAVIGATION -->
+<div class="bottom-buttons noPrint">
+  <button onclick="location.href='dashboard.html'">Back to Homepage</button>
+  <button onclick="location.href='donor-entry.html'">Add New Donor</button>
+</div>
 
 </div>
 
 <script>
-let donors = [];
+// Load Donors
+let donors = JSON.parse(localStorage.getItem('donors')||'[]');
 
-// EXAMPLE: function to add donor (in real usage, push from donor entry)
-function addDonor(donor){
-  donors.push(donor);
-  renderTable();
-}
+function renderTable() {
+  const tbody = document.querySelector("#donorTable tbody");
+  tbody.innerHTML = "";
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const fDate = document.getElementById('filterDate').value;
+  const fSex = document.getElementById('filterSex').value;
+  const fBlood = document.getElementById('filterBlood').value;
+  const fDonor = document.getElementById('filterDonorType').value;
 
-function renderTable(){
-  const tbody = document.querySelector('#donorTable tbody');
-  tbody.innerHTML = '';
+  let count = 1;
   donors.forEach((d,i)=>{
-    const tr = document.createElement('tr');
-    const serialClass = d.bloodType.replace(/\+/g,'p').replace(/-/g,'n'); // CSS class safe
-    tr.innerHTML=`
-      <td>${i+1}</td>
+    if(fDate && d.date!==fDate) return;
+    if(fSex && d.sex!==fSex) return;
+    if(fBlood && d.bloodType!==fBlood) return;
+    if(fDonor && d.donorType!==fDonor) return;
+
+    let vals = Object.values(d).join(' ').toLowerCase();
+    if(search && !vals.includes(search)) return;
+
+    let bloodClass='';
+    if(d.bloodType.includes('A')) bloodClass='color-A';
+    else if(d.bloodType.includes('B') && !d.bloodType.includes('AB')) bloodClass='color-B';
+    else if(d.bloodType.includes('AB')) bloodClass='color-AB';
+    else if(d.bloodType.includes('O')) bloodClass='color-O';
+
+    tbody.innerHTML += `<tr>
+      <td>${count++}</td>
       <td>${d.date}</td>
       <td>${d.donorType}</td>
+      <td>${d.donorExtra}</td>
       <td>${d.suffix}</td>
       <td>${d.surname}</td>
       <td>${d.firstName}</td>
@@ -214,150 +163,67 @@ function renderTable(){
       <td>${d.city}</td>
       <td>${d.contact}</td>
       <td>${d.serial}</td>
-      <td class="blood-${d.bloodType.replace(/\+/g,'p').replace(/-/g,'n')}">${d.bloodType}</td>
+      <td class="${bloodClass}">${d.bloodType}</td>
       <td>${d.times}</td>
-      <td>${d.bagUsed.startsWith('Karmi')?'K':d.bagUsed.startsWith('Terumo')?'T':d.bagUsed}</td>
+      <td>${d.bagUsed==="Karmi"?"K":d.bagUsed==="Terumo"?"T":d.bagUsed}</td>
       <td>${d.bagType[0]}</td>
       <td>${d.amount}</td>
       <td>${d.time}</td>
-      <td>
-        <button class="edit" onclick="editDonor(${i})">✎</button>
-        <button class="delete" onclick="deleteDonor(${i})">🗑</button>
-      </td>
-    `;
-    tbody.appendChild(tr);
+      <td class="noPrint"><button class="edit-btn" onclick="editDonor(${i})">✏️</button></td>
+      <td class="noPrint"><button class="delete-btn" onclick="deleteDonor(${i})">🗑️</button></td>
+    </tr>`;
   });
 }
 
-/* DELETE */
+function editDonor(index){
+  localStorage.setItem('editIndex', index);
+  location.href='donor-entry.html';
+}
+
 function deleteDonor(index){
-  if(confirm("Are you sure to delete this donor?")){
+  if(confirm("Are you sure you want to delete this donor?")){
     donors.splice(index,1);
+    localStorage.setItem('donors', JSON.stringify(donors));
     renderTable();
   }
 }
 
-/* EDIT */
-function editDonor(index){
-  const d = donors[index];
-  // Here you can redirect to donor entry page with prefilled data
-  alert("Edit donor: "+d.firstName+" "+d.surname);
-}
+document.getElementById('searchInput').oninput = renderTable;
+document.getElementById('filterDate').onchange = renderTable;
+document.getElementById('filterSex').onchange = renderTable;
+document.getElementById('filterBlood').onchange = renderTable;
+document.getElementById('filterDonorType').onchange = renderTable;
 
-/* SEARCH & FILTER */
-document.getElementById('search').oninput = applyFilters;
-document.getElementById('filterDate').onchange = applyFilters;
-document.getElementById('filterSex').onchange = applyFilters;
-document.getElementById('filterBlood').onchange = applyFilters;
-document.getElementById('filterDonor').onchange = applyFilters;
-
-function applyFilters(){
-  const search = document.getElementById('search').value.toLowerCase();
-  const fDate = document.getElementById('filterDate').value;
-  const fSex = document.getElementById('filterSex').value;
-  const fBlood = document.getElementById('filterBlood').value;
-  const fDonor = document.getElementById('filterDonor').value;
-
-  const filtered = donors.filter(d=>{
-    const values = Object.values(d).join(' ').toLowerCase();
-    return (!search || values.includes(search)) &&
-           (!fDate || d.date===fDate) &&
-           (!fSex || d.sex===fSex) &&
-           (!fBlood || d.bloodType===fBlood) &&
-           (!fDonor || d.donorType===fDonor);
-  });
-
-  const tbody = document.querySelector('#donorTable tbody');
-  tbody.innerHTML = '';
-  filtered.forEach((d,i)=>{
-    const tr = document.createElement('tr');
-    tr.innerHTML=`
-      <td>${i+1}</td>
-      <td>${d.date}</td>
-      <td>${d.donorType}</td>
-      <td>${d.suffix}</td>
-      <td>${d.surname}</td>
-      <td>${d.firstName}</td>
-      <td>${d.middleName}</td>
-      <td>${d.birthday}</td>
-      <td>${d.age}</td>
-      <td>${d.sex}</td>
-      <td>${d.address}</td>
-      <td>${d.city}</td>
-      <td>${d.contact}</td>
-      <td>${d.serial}</td>
-      <td class="blood-${d.bloodType.replace(/\+/g,'p').replace(/-/g,'n')}">${d.bloodType}</td>
-      <td>${d.times}</td>
-      <td>${d.bagUsed.startsWith('Karmi')?'K':d.bagUsed.startsWith('Terumo')?'T':d.bagUsed}</td>
-      <td>${d.bagType[0]}</td>
-      <td>${d.amount}</td>
-      <td>${d.time}</td>
-      <td>
-        <button class="edit" onclick="editDonor(${i})">✎</button>
-        <button class="delete" onclick="deleteDonor(${i})">🗑</button>
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-/* EXPORT TO EXCEL */
-function exportToExcel(){
-  let csv = '';
-  const headers = Array.from(document.querySelectorAll('#donorTable thead th'))
-    .filter((th)=>th.innerText!=='Actions')
-    .map(th=>`"${th.innerText}"`).join(',');
-  csv += headers + '\n';
-
+function exportExcel(){
+  let csvContent = "data:text/csv;charset=utf-8,";
+  const headers = Array.from(document.querySelectorAll("#donorTable th"))
+    .filter(th=>!th.classList.contains("noPrint"))
+    .map(th=>th.textContent).join(",");
+  csvContent += headers + "\r\n";
   donors.forEach(d=>{
-    const row = [
-      d.date,d.donorType,d.suffix,d.surname,d.firstName,d.middleName,d.birthday,d.age,d.sex,d.address,d.city,
-      d.contact,d.serial,d.bloodType,d.times,
-      d.bagUsed.startsWith('Karmi')?'K':d.bagUsed.startsWith('Terumo')?'T':d.bagUsed,
+    csvContent += [
+      d.date,d.donorType,d.donorExtra,d.suffix,d.surname,d.firstName,d.middleName,
+      d.birthday,d.age,d.sex,d.address,d.city,d.contact,d.serial,d.bloodType,d.times,
+      d.bagUsed==="Karmi"?"K":d.bagUsed==="Terumo"?"T":d.bagUsed,
       d.bagType[0],d.amount,d.time
-    ];
-    csv += row.map(v=>`"${v}"`).join(',')+'\n';
+    ].join(",")+"\r\n";
   });
-
-  const blob = new Blob([csv], {type: 'text/csv'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'donor_list.csv';
-  a.click();
-  URL.revokeObjectURL(url);
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "donor_list.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
-/* SKIPPED SERIALS */
-function showSkippedSerials(){
-  const skipped = donors.filter(d=>!d.serial).map(d=>d.firstName+' '+d.surname);
-  if(skipped.length===0) alert("No skipped serial numbers.");
-  else alert("Skipped Serial Numbers:\n"+skipped.join('\n'));
+function exportGoogleSheet(){
+  alert("Google Sheet export requires API integration. CSV can be uploaded manually for now.");
 }
 
-/* SAMPLE DATA */
-addDonor({
-  date: "2026-02-08",
-  donorType:"Walk-in",
-  suffix:"",
-  surname:"Reyes",
-  firstName:"Juan",
-  middleName:"Dela",
-  birthday:"08-02-1996",
-  age:30,
-  sex:"M",
-  address:"123 Street",
-  city:"Baguio",
-  contact:"09171234567",
-  serial:"001",
-  bloodType:"A+",
-  times:"2",
-  bagUsed:"Karmi",
-  bagType:"Single",
-  amount:"450mL",
-  time:"09:00-09:30"
-});
-
+// Initial render
+renderTable();
 </script>
+
 </body>
 </html>
