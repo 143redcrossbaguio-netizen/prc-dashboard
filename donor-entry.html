@@ -74,7 +74,6 @@ button:hover { background: #a91f1f; }
 <div class="container">
 <form id="donorForm">
 
-<!-- BASIC -->
 <div class="section">
   <div class="section-title">Basic Information</div>
   <div class="row">
@@ -88,7 +87,6 @@ button:hover { background: #a91f1f; }
   </div>
 </div>
 
-<!-- NAME -->
 <div class="section">
   <div class="section-title">Donor Name</div>
   <div class="row">
@@ -99,7 +97,6 @@ button:hover { background: #a91f1f; }
   </div>
 </div>
 
-<!-- BIRTH -->
 <div class="section">
   <div class="section-title">Birth Information</div>
   <div class="row">
@@ -114,7 +111,6 @@ button:hover { background: #a91f1f; }
   </div>
 </div>
 
-<!-- CONTACT -->
 <div class="section">
   <div class="section-title">Contact Details</div>
   <div class="row">
@@ -129,7 +125,6 @@ button:hover { background: #a91f1f; }
   </div>
 </div>
 
-<!-- BLOOD -->
 <div class="section">
   <div class="section-title">Blood & Collection</div>
   <div class="row">
@@ -161,7 +156,6 @@ button:hover { background: #a91f1f; }
   </div>
 </div>
 
-<!-- BUTTONS -->
 <div class="buttons">
   <button type="button" class="secondary" onclick="location.href='dashboard.html'">
     Back to Homepage
@@ -179,11 +173,10 @@ button:hover { background: #a91f1f; }
 </div>
 
 <script>
-/* DATE TODAY */
+
 const today = new Date().toISOString().split("T")[0];
 entryDate.value = today;
 
-/* DONOR TYPE AUTO-FILL */
 donorType.oninput = () => {
   const v = donorType.value.toUpperCase();
   donorExtra.style.display = (v === "M" || v === "P") ? "inline-block" : "none";
@@ -192,7 +185,6 @@ donorType.oninput = () => {
   if(v==="P") donorType.value="Patient Directed";
 };
 
-/* BIRTHDAY & AGE */
 bd.oninput=()=>bd.value.length===2&&bm.focus();
 bm.oninput=()=>bm.value.length===2&&by.focus();
 by.oninput=()=>{
@@ -200,43 +192,119 @@ by.oninput=()=>{
   age.value=new Date().getFullYear()-new Date(by.value,bm.value-1,bd.value).getFullYear();
 };
 
-/* SEX AUTO */
 sex.oninput=()=>{sex.value=sex.value.toUpperCase()==="M"?"M":"F";};
 
-/* CONTACT AUTO-MOVE */
 c1.oninput=()=>c1.value.length===4&&c2.focus();
 c2.oninput=()=>c2.value.length===3&&c3.focus();
 
-/* BLOOD TYPE */
 bloodType.oninput=()=>{
   const map={AP:"A+",AN:"A-",BP:"B+",BN:"B-",ABP:"AB+",ABN:"AB-",OP:"O+",ON:"O-"};
   if(map[bloodType.value.toUpperCase()]) bloodType.value=map[bloodType.value.toUpperCase()];
 };
 
-/* BAG USED / TYPE / AMOUNT FIXED */
 bagUsed.oninput=()=>{
   const v = bagUsed.value.toUpperCase();
   if(v==="K") bagUsed.value="Karmi";
   else if(v==="T") bagUsed.value="Terumo";
 };
+
 bagType.oninput=()=>{
   const v = bagType.value.toUpperCase();
   bagType.value = {S:"Single",D:"Double",T:"Triple"}[v] || bagType.value;
 };
+
 amount.oninput=()=>amount.value={4:"450mL",Q:"QNS",U:"UB"}[amount.value.toUpperCase()]||amount.value;
 
-/* TIME AUTO-MOVE */
 sh.oninput=()=>sh.value.length===2&&sm.focus();
 sm.oninput=()=>sm.value.length===2&&eh.focus();
 eh.oninput=()=>eh.value.length===2&&em.focus();
 
-/* SAVE DONOR */
 function saveDonor(){
-  alert("Donor saved successfully");
+
+  let donors = JSON.parse(localStorage.getItem("donors")) || [];
+
+  let donorData = {
+    date: entryDate.value,
+    donorType: donorType.value,
+    extra: donorExtra.value,
+    suffix: suffix.value,
+    surname: surname.value,
+    firstName: firstName.value,
+    middleName: middleName.value,
+    birthday: bm.value + "/" + bd.value + "/" + by.value,
+    age: age.value,
+    sex: sex.value,
+    address: address.value,
+    city: city.value,
+    contact: c1.value + "-" + c2.value + "-" + c3.value,
+    serial: serial.value,
+    bloodType: bloodType.value,
+    times: times.value,
+    bagUsed: bagUsed.value,
+    bagType: bagType.value,
+    amount: amount.value,
+    time: sh.value + ":" + sm.value + " to " + eh.value + ":" + em.value
+  };
+
+  let editIndex = localStorage.getItem("editIndex");
+
+  if(editIndex !== null){
+    donors[editIndex] = donorData;
+    localStorage.removeItem("editIndex");
+    alert("Donor updated successfully!");
+  } else {
+    donors.push(donorData);
+    alert("Donor saved successfully!");
+  }
+
+  localStorage.setItem("donors", JSON.stringify(donors));
+
   donorForm.reset();
-  entryDate.value=today;
+  entryDate.value = today;
   donorExtra.style.display="none";
+
+  window.location.href = "donor-list.html";
 }
+
+window.onload = function(){
+
+  let editIndex = localStorage.getItem("editIndex");
+
+  if(editIndex !== null){
+
+    let donors = JSON.parse(localStorage.getItem("donors"));
+    let d = donors[editIndex];
+
+    entryDate.value = d.date;
+    donorType.value = d.donorType;
+    donorExtra.value = d.extra;
+
+    suffix.value = d.suffix;
+    surname.value = d.surname;
+    firstName.value = d.firstName;
+    middleName.value = d.middleName;
+
+    age.value = d.age;
+    sex.value = d.sex;
+
+    address.value = d.address;
+    city.value = d.city;
+
+    let c = d.contact.split("-");
+    c1.value = c[0];
+    c2.value = c[1];
+    c3.value = c[2];
+
+    serial.value = d.serial;
+    bloodType.value = d.bloodType;
+    times.value = d.times;
+
+    bagUsed.value = d.bagUsed;
+    bagType.value = d.bagType;
+    amount.value = d.amount;
+  }
+};
+
 </script>
 
 </body>
