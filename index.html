@@ -1,7 +1,78 @@
 <!DOCTYPE html>
-<html>
-  <body>
-    <h1>LOGO TEST</h1>
-    <img src="assets/logo.png">
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PRC Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background: white;
+    }
+
+    .box {
+      border: 2px solid #c62828;
+      padding: 30px;
+      width: 360px;
+      text-align: center;
+      border-radius: 10px;
+    }
+
+    img {
+      width: 120px;
+      margin-bottom: 10px;
+    }
+
+    h1, h2 {
+      color: #c62828;
+      margin: 5px 0;
+    }
+
+    input, button {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      font-size: 14px;
+    }
+
+    button {
+      background: #c62828;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="box">
+    <img src="assets/logo.png" alt="PRC Logo">
+
+    <h1>PHILIPPINE RED CROSS</h1>
+    <h2>Baguio City Chapter</h2>
+
+    <form onsubmit="login(event)">
+      <input id="user" placeholder="Username" required>
+      <input id="pass" type="password" placeholder="Password" required>
+      <button>LOGIN</button>
+    </form>
+  </div>
+
+  <script>
+    function login(e){
+      e.preventDefault();
+      if(user.value === "admin" && pass.value === "prc123"){
+        window.location.href = "dashboard.html";
+      } else {
+        alert("Invalid login");
+      }
+    }
+  </script>
+</body>
 </html>
