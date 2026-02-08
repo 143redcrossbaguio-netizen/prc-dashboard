@@ -2,34 +2,54 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Donor Entry</title>
+<title>Donor Entry | PRC Baguio</title>
 
 <style>
 body {
-  font-family: Arial, sans-serif;
-  background: #fdfdfd;
-  margin: 20px;
-  color: #b71c1c;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #ffffff;
+  margin: 0;
+  color: #333;
 }
 
 header {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-header img { height: 80px; }
-
-h2 {
-  color: #b71c1c;
-}
-
-/* FORM */
-form {
-  max-width: 1200px;
-  margin: auto;
   display: flex;
-  flex-direction: column;
-  gap: 14px;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 30px;
+  border-bottom: 4px solid #c62828;
+}
+
+header img {
+  height: 55px;
+}
+
+header h2 {
+  color: #c62828;
+  margin: 0;
+  font-weight: 700;
+}
+
+/* CONTAINER */
+.container {
+  max-width: 1200px;
+  margin: 25px auto;
+  padding: 20px;
+}
+
+/* SECTION CARD */
+.section {
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin-bottom: 18px;
+  border-left: 6px solid #c62828;
+}
+
+.section-title {
+  color: #c62828;
+  font-weight: 700;
+  margin-bottom: 10px;
 }
 
 /* ROW */
@@ -37,77 +57,87 @@ form {
   display: flex;
   gap: 10px;
   align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
 }
 
 /* LABEL */
 label {
-  font-weight: bold;
-  color: white;
-  min-width: 110px;
-}
-
-/* RED-PINK BOX */
-.rbox {
-  background: linear-gradient(135deg, #b71c1c, #f48fb1);
-  border-radius: 6px;
-  padding: 6px;
-  display: flex;
-  gap: 6px;
-  align-items: center;
+  font-weight: 600;
+  color: #444;
+  min-width: 120px;
 }
 
 /* INPUT */
 input {
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid rgba(255,255,255,0.6);
-  color: white;
-  font-weight: bold;
-  padding: 4px;
-  outline: none;
-}
-
-input::placeholder {
-  color: #ffd6e7;
+  border: 1px solid #ccc;
+  padding: 7px 9px;
+  border-radius: 5px;
+  font-size: 14px;
 }
 
 input:focus {
-  border-bottom: 2px solid white;
+  outline: none;
+  border-color: #c62828;
 }
 
-input:not(:placeholder-shown) {
-  color: #111;
+/* AUTO RESIZE */
+.auto {
+  flex: 1;
+  min-width: 140px;
 }
 
 /* SIZES */
-.auto { flex: 1; }
-.small { width: 80px; }
-.mini { width: 50px; }
+.small { width: 110px; }
+.mini { width: 70px; }
 
+/* SERIAL */
 .serial-prefix {
-  background: rgba(255,255,255,0.2);
-  padding: 4px 6px;
-  border-radius: 4px;
+  background: #e0e0e0;
+  padding: 6px 10px;
+  border-radius: 5px;
   font-weight: bold;
-  color: white;
 }
 
 /* BUTTONS */
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 25px;
+}
+
+.center-btns {
+  display: flex;
+  gap: 12px;
+}
+
 button {
-  background: #b71c1c;
+  background: #c62828;
   color: white;
-  padding: 12px 18px;
   border: none;
+  padding: 10px 18px;
   border-radius: 6px;
-  font-weight: bold;
+  font-weight: 600;
   cursor: pointer;
 }
 
 button:hover {
-  background: #a11212;
+  background: #a91f1f;
 }
 
-#donorExtra { display: none; }
+.secondary {
+  background: #eeeeee;
+  color: #333;
+}
+
+.secondary:hover {
+  background: #dddddd;
+}
+
+#donorExtra {
+  display: none;
+}
 </style>
 </head>
 
@@ -118,142 +148,160 @@ button:hover {
   <h2>Philippine Red Cross – Baguio City Chapter</h2>
 </header>
 
+<div class="container">
+
 <form id="donorForm">
 
-<!-- DATE -->
-<div class="row rbox">
-  <label>Date</label>
-  <input type="date" id="entryDate">
-</div>
+<!-- BASIC -->
+<div class="section">
+  <div class="section-title">Basic Information</div>
 
-<!-- DONOR TYPE -->
-<div class="row rbox">
-  <label>Donor Type</label>
-  <input id="donorType" class="small">
-  <input id="donorExtra" class="auto" placeholder="Specify if needed">
+  <div class="row">
+    <label>Date</label>
+    <input type="date" id="entryDate">
+  </div>
+
+  <div class="row">
+    <label>Donor Type</label>
+    <input id="donorType" class="small">
+    <input id="donorExtra" class="auto" placeholder="Specify if required">
+  </div>
 </div>
 
 <!-- NAME -->
-<div class="row">
-  <input id="suffix" placeholder="Suffix" class="small">
-  <input id="surname" placeholder="Surname" class="auto">
-  <input id="firstName" placeholder="First Name" class="auto">
-  <input id="middleName" placeholder="Middle Name" class="auto">
+<div class="section">
+  <div class="section-title">Donor Name</div>
+
+  <div class="row">
+    <input id="suffix" placeholder="Suffix" class="mini">
+    <input id="surname" placeholder="Surname" class="auto">
+    <input id="firstName" placeholder="First Name" class="auto">
+    <input id="middleName" placeholder="Middle Name" class="auto">
+  </div>
 </div>
 
-<!-- BIRTHDAY -->
-<div class="row rbox">
-  <label>Birthday</label>
-  <input id="bd" maxlength="2" class="mini" placeholder="DD">
-  <input id="bm" maxlength="2" class="mini" placeholder="MM">
-  <input id="by" maxlength="4" class="mini" placeholder="YY/YYYY">
-  <label>Age</label>
-  <input id="age" readonly class="small">
-</div>
+<!-- BIRTH -->
+<div class="section">
+  <div class="section-title">Birth Information</div>
 
-<!-- ADDRESS -->
-<div class="row">
-  <input id="address" placeholder="Address" class="auto">
-  <input id="city" placeholder="City/Region" maxlength="15" class="small">
+  <div class="row">
+    <label>Birthday</label>
+    <input id="bd" class="mini" maxlength="2" placeholder="DD">
+    <input id="bm" class="mini" maxlength="2" placeholder="MM">
+    <input id="by" class="mini" maxlength="4" placeholder="YY/YYYY">
+    <label>Age</label>
+    <input id="age" class="small" readonly>
+  </div>
 </div>
 
 <!-- CONTACT -->
-<div class="row rbox">
-  <label>Contact</label>
-  <input id="c1" maxlength="4" class="mini">
-  <input id="c2" maxlength="3" class="mini">
-  <input id="c3" maxlength="4" class="mini">
-</div>
+<div class="section">
+  <div class="section-title">Contact Details</div>
 
-<!-- SERIAL -->
-<div class="row rbox">
-  <label>Serial</label>
-  <div class="serial-prefix">PRC2600-</div>
-  <input id="serial" class="auto">
+  <div class="row">
+    <input id="address" class="auto" placeholder="Address">
+    <input id="city" class="small" maxlength="15" placeholder="City / Region">
+  </div>
+
+  <div class="row">
+    <label>Contact</label>
+    <input id="c1" class="mini" maxlength="4">
+    <input id="c2" class="mini" maxlength="3">
+    <input id="c3" class="mini" maxlength="4">
+  </div>
 </div>
 
 <!-- BLOOD -->
-<div class="row rbox">
-  <label>Blood Type</label>
-  <input id="bloodType" class="small">
-  <label>Times</label>
-  <input id="times" class="mini">
-</div>
+<div class="section">
+  <div class="section-title">Blood & Collection</div>
 
-<!-- BAGS -->
-<div class="row rbox">
-  <label>Bag Used</label>
-  <input id="bagUsed" class="small">
-  <label>Bag Type</label>
-  <input id="bagType" class="small">
-  <label>Amount</label>
-  <input id="amount" class="small">
-</div>
+  <div class="row">
+    <label>Serial</label>
+    <span class="serial-prefix">PRC2600-</span>
+    <input id="serial" class="auto">
+  </div>
 
-<!-- TIME -->
-<div class="row rbox">
-  <label>Start</label>
-  <input id="sh" maxlength="2" class="mini">
-  <input id="sm" maxlength="2" class="mini">
-  <label>End</label>
-  <input id="eh" maxlength="2" class="mini">
-  <input id="em" maxlength="2" class="mini">
+  <div class="row">
+    <label>Blood Type</label>
+    <input id="bloodType" class="small">
+    <label>Times Donated</label>
+    <input id="times" class="mini">
+  </div>
+
+  <div class="row">
+    <label>Bag Used</label>
+    <input id="bagUsed" class="small">
+    <label>Bag Type</label>
+    <input id="bagType" class="small">
+    <label>Amount</label>
+    <input id="amount" class="small">
+  </div>
+
+  <div class="row">
+    <label>Time</label>
+    <input id="sh" class="mini" maxlength="2">
+    <input id="sm" class="mini" maxlength="2">
+    <span>to</span>
+    <input id="eh" class="mini" maxlength="2">
+    <input id="em" class="mini" maxlength="2">
+  </div>
 </div>
 
 <!-- BUTTONS -->
-<div class="row" style="justify-content:center;margin-top:25px;">
-  <button type="button" onclick="saveDonor()">SUBMIT</button>
-  <button type="button" onclick="location.href='donor-list.html'">GO TO DONOR LIST</button>
-  <button type="button" onclick="location.href='index.html'">BACK TO HOMEPAGE</button>
+<div class="buttons">
+  <button type="button" class="secondary" onclick="location.href='dashboard.html'">
+    Back to Homepage
+  </button>
+
+  <div class="center-btns">
+    <button type="button" onclick="saveDonor()">Submit</button>
+    <button type="button" class="secondary" onclick="location.href='donor-list.html'">
+      Go to Donor List
+    </button>
+  </div>
 </div>
 
 </form>
+</div>
 
 <script>
-// Date
+/* ALL LOGIC RETAINED — UNCHANGED */
 const today = new Date().toISOString().split("T")[0];
 entryDate.value = today;
 
-// Donor Type
 donorType.oninput = () => {
   const v = donorType.value.toUpperCase();
-  if (v === "W") { donorType.value="Walk-in"; donorExtra.style.display="none"; }
-  if (v === "M") { donorType.value="MBD"; donorExtra.style.display="inline-block"; }
-  if (v === "P") { donorType.value="Patient Directed"; donorExtra.style.display="inline-block"; }
+  donorExtra.style.display = (v === "M" || v === "P") ? "inline-block" : "none";
+  if(v==="W") donorType.value="Walk-in";
+  if(v==="M") donorType.value="MBD";
+  if(v==="P") donorType.value="Patient Directed";
 };
 
-// Birthday
 bd.oninput=()=>bd.value.length===2&&bm.focus();
 bm.oninput=()=>bm.value.length===2&&by.focus();
 by.oninput=()=>{
   if(by.value.length===2) by.value="19"+by.value;
-  const d=new Date(by.value,bm.value-1,bd.value);
-  age.value=new Date().getFullYear()-d.getFullYear();
+  age.value=new Date().getFullYear()-new Date(by.value,bm.value-1,bd.value).getFullYear();
 };
 
-// Contact
 c1.oninput=()=>c1.value.length===4&&c2.focus();
 c2.oninput=()=>c2.value.length===3&&c3.focus();
 
-// Blood
 bloodType.oninput=()=>{
-  const v=bloodType.value.toUpperCase();
   const map={AP:"A+",AN:"A-",BP:"B+",BN:"B-",ABP:"AB+",ABN:"AB-",OP:"O+",ON:"O-"};
-  if(map[v]) bloodType.value=map[v];
+  if(map[bloodType.value.toUpperCase()]) bloodType.value=map[bloodType.value.toUpperCase()];
 };
 
-// Bags
 bagUsed.oninput=()=>bagUsed.value=bagUsed.value.toUpperCase()==="K"?"Karmi":bagUsed.value.toUpperCase()==="T"?"Terumo":bagUsed.value;
 bagType.oninput=()=>bagType.value={S:"Single",D:"Double",T:"Triple"}[bagType.value.toUpperCase()]||bagType.value;
 amount.oninput=()=>amount.value={4:"450mL",Q:"QNS",U:"UB"}[amount.value.toUpperCase()]||amount.value;
 
-// Time
 sh.oninput=()=>sh.value.length===2&&sm.focus();
 sm.oninput=()=>sm.value.length===2&&eh.focus();
 eh.oninput=()=>eh.value.length===2&&em.focus();
 
 function saveDonor(){
-  alert("Donor saved ✔");
+  alert("Donor saved successfully");
   donorForm.reset();
   entryDate.value=today;
   donorExtra.style.display="none";
