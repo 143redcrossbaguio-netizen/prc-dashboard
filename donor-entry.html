@@ -3,24 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRC Baguio - Donor Entry</title>
+<title>PRC Baguio - Dashboard / Donor Entry</title>
 <link rel="stylesheet" href="css/style.css">
 <style>
 body { font-family: Arial; background:#fff; color:#b71c1c; margin:0; }
-header { background:#b71c1c; color:white; padding:10px 20px; display:flex; align-items:center;}
-header img { height:50px; margin-right:15px; }
-h1,h2 { margin:0; }
+header { background:#b71c1c; color:white; padding:10px 20px; display:flex; align-items:center; justify-content:center;}
+header img { height:60px; margin-right:15px; }
+h1,h2 { margin:0; text-align:center; }
 .container { padding:20px; max-width:1000px; margin:auto; }
-input, select, button { padding:5px; margin:3px 0; font-size:14px; }
-input[type="text"], input[type="number"], input[type="date"] { width:120px; }
-input[type="submit"], button { padding:10px 20px; background:#b71c1c; color:white; border:none; cursor:pointer; font-size:14px;}
-label { display:inline-block; width:140px; vertical-align:top; }
-.blood-A { background-color: #add8e6; } /* Blue */
-.blood-B { background-color: #ffff99; } /* Yellow */
-.blood-AB { background-color: #ffc0cb; } /* Pink */
-.blood-O { background-color: #fff; } /* White */
-.bottom-left { position:fixed; bottom:20px; left:20px; }
-.bottom-center { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); }
+button { padding:10px 20px; margin:5px; background:#b71c1c; color:white; border:none; border-radius:5px; cursor:pointer;}
+button:hover { background:#a11212; }
 </style>
 </head>
 <body>
@@ -29,178 +21,18 @@ label { display:inline-block; width:140px; vertical-align:top; }
     <img src="assets/logo.png" alt="PRC Logo">
     <div>
         <h1>Philippine Red Cross</h1>
-        <h2>Baguio City Chapter - Donor Entry</h2>
+        <h2>Baguio City Chapter - Dashboard</h2>
     </div>
 </header>
 
-<div class="container">
-<form id="donorForm">
-    <label>Date:</label><input type="date" id="date" required><br>
-
-    <label>Donor Type:</label><input type="text" id="donorType" maxlength="1">
-    <input type="text" id="extraBox" placeholder="Extra if M/P" style="display:none;"><br>
-
-    <label>Suffix:</label><input type="text" id="suffix" maxlength="3">
-    <label>Surname:</label><input type="text" id="surname" required oninput="autoResize(this)"><br>
-
-    <label>First Name:</label><input type="text" id="fname" required oninput="autoResize(this)">
-    <label>Middle Name:</label><input type="text" id="mname" oninput="autoResize(this)"><br>
-
-    <label>Birth:</label>
-    MM <input type="number" id="bMonth" min="1" max="12" style="width:50px;">
-    DD <input type="number" id="bDay" min="1" max="31" style="width:50px;">
-    YYYY <input type="number" id="bYear" min="1900" max="2100" style="width:70px;">
-    Age: <input type="number" id="age" readonly style="width:50px;"><br>
-
-    <label>Address:</label><input type="text" id="address" oninput="autoResize(this)">
-    <label>City/Region:</label><input type="text" id="city" maxlength="15"><br>
-
-    <label>Contact:</label>
-    <input type="text" id="contact1" maxlength="4" style="width:50px;"> - 
-    <input type="text" id="contact2" maxlength="3" style="width:40px;"> - 
-    <input type="text" id="contact3" maxlength="4" style="width:50px;"><br>
-
-    <label>Serial Number:</label><input type="text" id="serialNumber" placeholder="0000"><br>
-
-    <label>Blood Type:</label><input type="text" id="bloodType"><br>
-
-    <label># Donations:</label><input type="number" id="numDonations" min="1" value="1"><br>
-
-    <label>Bag Used:</label><input type="text" id="bagUsed" maxlength="1">
-    <label>Bag Type:</label><input type="text" id="bagType" maxlength="1"><br>
-
-    <label>Amount Collected:</label><input type="text" id="amount" maxlength="1"><br>
-
-    <label>Time Started:</label>HH <input type="number" id="startHH" min="1" max="12" style="width:50px;">
-    MM <input type="number" id="startMM" min="1" max="60" style="width:50px;"><br>
-
-    <label>Time Ended:</label>HH <input type="number" id="endHH" min="1" max="12" style="width:50px;">
-    MM <input type="number" id="endMM" min="1" max="60" style="width:50px;"><br>
-
-    <input type="submit" value="Submit" style="float:right;">
-</form>
-
-<button class="bottom-left" onclick="window.history.back()">Back</button>
-<button class="bottom-center" onclick="window.location.href='donor-list.html'">Go to Donor List</button>
-
+<div class="container" style="text-align:center; margin-top:30px;">
+    <button onclick="window.location.href='donor-entry-form.html'">Donor Entry</button>
+    <button onclick="window.location.href='donor-list.html'">Donor List</button>
+    <button onclick="window.location.href='deferrals.html'">Deferrals</button>
+    <button onclick="window.location.href='blood-issuance.html'">Blood Issuance</button>
+    <button onclick="window.location.href='statistics.html'">Statistics</button>
+    <button onclick="window.location.href='lists.html'">Lists</button>
 </div>
 
-<script>
-// --- Auto resize input fields ---
-function autoResize(el){ el.style.width=((el.value.length+1)*10)+"px";}
-
-// --- Default date
-document.getElementById("date").valueAsDate=new Date();
-
-// --- Age calculation & cursor move
-function calculateAge() {
-    let y=parseInt(document.getElementById("bYear").value);
-    let m=parseInt(document.getElementById("bMonth").value)-1;
-    let d=parseInt(document.getElementById("bDay").value);
-    if(!isNaN(y)&&!isNaN(m)&&!isNaN(d)){
-        let birth=new Date(y,m,d);
-        let ageDifMs=Date.now()-birth.getTime();
-        let ageDate=new Date(ageDifMs);
-        document.getElementById("age").value=Math.abs(ageDate.getUTCFullYear()-1970);
-    }
-}
-["bMonth","bDay","bYear"].forEach(id=>{
-    document.getElementById(id).addEventListener("input", function(){
-        calculateAge();
-        if(id==="bMonth" && this.value.length>=2) document.getElementById("bDay").focus();
-        if(id==="bDay" && this.value.length>=2) document.getElementById("bYear").focus();
-        if(id==="bYear" && this.value.length>=4) document.getElementById("address").focus();
-    });
-});
-
-// Contact auto move
-document.getElementById("contact1").addEventListener("input", ()=>{if(contact1.value.length>=4) contact2.focus();});
-document.getElementById("contact2").addEventListener("input", ()=>{if(contact2.value.length>=3) contact3.focus();});
-
-// Time auto move
-document.getElementById("startHH").addEventListener("input", ()=>{if(startHH.value.length>=2) startMM.focus();});
-document.getElementById("startMM").addEventListener("input", ()=>{if(startMM.value.length>=2) endHH.focus();});
-document.getElementById("endHH").addEventListener("input", ()=>{if(endHH.value.length>=2) endMM.focus();});
-
-// Donor type auto-fill
-document.getElementById("donorType").addEventListener("input", function(){
-    let val=this.value.toUpperCase();
-    let extra=document.getElementById("extraBox");
-    if(val==="W"){ this.value="WALK-IN"; extra.value=""; extra.style.display="none"; }
-    else if(val==="M"){ this.value="MBD"; extra.style.display="inline"; }
-    else if(val==="P"){ this.value="PATIENT DIRECTED"; extra.style.display="inline"; }
-});
-
-// Blood type auto-fill
-document.getElementById("bloodType").addEventListener("input", function(){
-    let v=this.value.toUpperCase();
-    if(v==="AP") this.value="A+";
-    if(v==="AN") this.value="A-";
-    if(v==="BP") this.value="B+";
-    if(v==="BN") this.value="B-";
-    if(v==="ABP") this.value="AB+";
-    if(v==="ABN") this.value="AB-";
-    if(v==="OP") this.value="O+";
-    if(v==="ON") this.value="O-";
-});
-
-// Bag and type auto-fill
-document.getElementById("bagUsed").addEventListener("input", function(){ 
-    let v=this.value.toUpperCase();
-    if(v==="K") this.value="KARMI";
-    if(v==="T") this.value="TERUMO";
-});
-document.getElementById("bagType").addEventListener("input", function(){
-    let v=this.value.toUpperCase();
-    if(v==="S") this.value="SINGLE";
-    if(v==="D") this.value="DOUBLE";
-    if(v==="T") this.value="TRIPLE";
-    if(v==="Q") this.value="QUADRUPLE";
-});
-document.getElementById("amount").addEventListener("input", function(){
-    let v=this.value.toUpperCase();
-    if(v==="4") this.value="450mL";
-    if(v==="Q") this.value="QNS";
-    if(v==="U") this.value="UB";
-});
-
-// --- Submit ---
-document.getElementById("donorForm").addEventListener("submit", function(e){
-    e.preventDefault();
-    let donors=JSON.parse(localStorage.getItem("donors")||"[]");
-
-    let serialVal="PRC2600-"+document.getElementById("serialNumber").value;
-
-    let donorData={
-        date:document.getElementById("date").value,
-        donorType:document.getElementById("donorType").value,
-        extra:document.getElementById("extraBox").value,
-        suffix:document.getElementById("suffix").value,
-        surname:document.getElementById("surname").value,
-        fname:document.getElementById("fname").value,
-        mname:document.getElementById("mname").value,
-        age:document.getElementById("age").value,
-        address:document.getElementById("address").value,
-        city:document.getElementById("city").value,
-        contact:document.getElementById("contact1").value+"-"+document.getElementById("contact2").value+"-"+document.getElementById("contact3").value,
-        serial:serialVal,
-        bloodType:document.getElementById("bloodType").value,
-        numDonations:parseInt(document.getElementById("numDonations").value)||1,
-        bagUsed:document.getElementById("bagUsed").value,
-        bagType:document.getElementById("bagType").value,
-        amount:document.getElementById("amount").value,
-        startTime:document.getElementById("startHH").value+":"+document.getElementById("startMM").value,
-        endTime:document.getElementById("endHH").value+":"+document.getElementById("endMM").value
-    };
-
-    donors.push(donorData);
-    localStorage.setItem("donors",JSON.stringify(donors));
-
-    this.reset();
-    document.getElementById("date").valueAsDate=new Date();
-    document.getElementById("bMonth").focus();
-    alert("Donor saved! Go to Donor List to view.");
-});
-</script>
 </body>
 </html>
